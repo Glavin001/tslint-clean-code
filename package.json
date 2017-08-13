@@ -1,40 +1,9 @@
 {
-  "name": "tslint-microsoft-contrib",
-  "version": "5.0.2",
-  "description": "TSLint Rules for Microsoft",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Microsoft/tslint-microsoft-contrib"
-  },
-  "author": "Hamlet D'Arcy",
-  "contributors": [
-    {
-      "name": "Bernd Kiefer",
-      "email": "bernd.kiefer@microsoft.com"
-    },
-    {
-      "name": "Daniel Manesku",
-      "email": "daniel.manesku@microsoft.com"
-    },
-    {
-      "name": "Hamlet D'Arcy",
-      "email": "hamlet.darcy@microsoft.com"
-    }
-  ],
-  "bugs": {
-    "url": "https://github.com/Microsoft/tslint-microsoft-contrib/issues"
-  },
+  "name": "tslint-clean-code",
+  "version": "0.1.0",
+  "description": "TSLint rules for enforcing Clean Code Edit",
   "main": "tslint.json",
-  "keywords": [
-    "tslint",
-    "microsoft",
-    "typescript"
-  ],
-  "license": "MIT",
   "analyze": true,
-  "scripts": {
-    "test": "grunt all"
-  },
   "dependencies": {
     "tsutils": "^1.4.0"
   },
@@ -51,10 +20,30 @@
     "mocha": "2.2.5",
     "time-grunt": "1.2.1",
     "tslint": "5.1.0",
+    "tslint-microsoft-contrib": "^5.0.1",
     "typescript": "2.3.2",
     "underscore": "1.8.3"
   },
   "peerDependencies": {
     "tslint": ">=5.1.0"
-  }
+  },
+  "scripts": {
+    "test": "grunt all"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Glavin001/tslint-clean-code.git"
+  },
+  "keywords": [
+    "tslint",
+    "typescript",
+    "clean",
+    "code"
+  ],
+  "author": "Glavin Wiechert",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Glavin001/tslint-clean-code/issues"
+  },
+  "homepage": "https://github.com/Glavin001/tslint-clean-code#readme"
 }
