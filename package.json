@@ -1,0 +1,60 @@
+{
+  "name": "tslint-microsoft-contrib",
+  "version": "5.0.2",
+  "description": "TSLint Rules for Microsoft",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/tslint-microsoft-contrib"
+  },
+  "author": "Hamlet D'Arcy",
+  "contributors": [
+    {
+      "name": "Bernd Kiefer",
+      "email": "bernd.kiefer@microsoft.com"
+    },
+    {
+      "name": "Daniel Manesku",
+      "email": "daniel.manesku@microsoft.com"
+    },
+    {
+      "name": "Hamlet D'Arcy",
+      "email": "hamlet.darcy@microsoft.com"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/Microsoft/tslint-microsoft-contrib/issues"
+  },
+  "main": "tslint.json",
+  "keywords": [
+    "tslint",
+    "microsoft",
+    "typescript"
+  ],
+  "license": "MIT",
+  "analyze": true,
+  "scripts": {
+    "test": "grunt all"
+  },
+  "dependencies": {
+    "tsutils": "^1.4.0"
+  },
+  "devDependencies": {
+    "chai": "3.2.0",
+    "grunt": "0.4.5",
+    "grunt-contrib-clean": "0.6.0",
+    "grunt-contrib-copy": "0.8.0",
+    "grunt-contrib-watch": "0.6.1",
+    "grunt-mocha-test": "0.12.7",
+    "grunt-ts": "5.5.1",
+    "grunt-tslint": "5.0.1",
+    "load-grunt-tasks": "3.2.0",
+    "mocha": "2.2.5",
+    "time-grunt": "1.2.1",
+    "tslint": "5.1.0",
+    "typescript": "2.3.2",
+    "underscore": "1.8.3"
+  },
+  "peerDependencies": {
+    "tslint": ">=5.1.0"
+  }
+}
