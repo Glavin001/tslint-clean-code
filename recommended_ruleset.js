@@ -20,6 +20,7 @@ module.exports = {
         "label-position": true,
         "match-default-export-name": true,
         "min-class-cohesion": [true, 0.5],
+        "newspaper-order": [true, 0.5],
         "no-any": true,
         "no-arg": true,
         "no-bitwise": true,

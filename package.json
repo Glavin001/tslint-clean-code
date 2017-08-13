@@ -5,6 +5,7 @@
   "main": "tslint.json",
   "analyze": true,
   "dependencies": {
+    "toposort": "^1.0.3",
     "tsutils": "^1.4.0"
   },
   "devDependencies": {

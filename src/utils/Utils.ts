@@ -6,10 +6,10 @@ export module Utils {
     /**
      * Logical 'any' or 'exists' function.
      */
-    export function exists<T>(list : T[], predicate: (t: T) => boolean) : boolean {
-        if (list != null ) {
+    export function exists<T>(list: T[], predicate: (t: T) => boolean): boolean {
+        if (list != null) {
             for (let i = 0; i < list.length; i++) {
-                const obj : T = list[i];
+                const obj: T = list[i];
                 if (predicate(obj)) {
                     return true;
                 }
@@ -58,6 +58,21 @@ export module Utils {
             return source;
         }
         return source.substr(0, maxLength - 2) + '...';
+    }
+
+    /**
+     * Check whether two arrays are equal.
+     */
+    export function arraysShallowEqual(arr1: any[], arr2: any[]) {
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+        for (let i = arr1.length; i--; ) {
+            if (arr1[i] !== arr2[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 /* tslint:enable:no-increment-decrement */

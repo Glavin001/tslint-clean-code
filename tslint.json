@@ -74,14 +74,12 @@
     ],
     "missing-jsdoc": true,
     "missing-optional-annotation": true,
-    "min-class-cohesion": [
-      true,
-      0.4
-    ],
+    "min-class-cohesion": false,
     "mocha-avoid-only": true,
     "mocha-no-side-effect-code": true,
     "mocha-unneeded-done": true,
     "new-parens": true,
+    "newspaper-order": false,
     "no-angle-bracket-type-assertion": false,
     "no-any": false,
     "no-arg": true,
