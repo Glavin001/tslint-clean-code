@@ -3,7 +3,8 @@ import { TestHelper } from './TestHelper';
 /**
  * Unit tests.
  */
-describe('minClassCohesionRule', (): void => {
+const FAILURE_STRING: string = 'The cohesion of this class is too low. Consider splitting this class into multiple cohesive classes: ';
+ describe('minClassCohesionRule', (): void => {
     const ruleName: string = 'min-class-cohesion';
 
     it('should pass on empty class', (): void => {
@@ -45,7 +46,7 @@ describe('minClassCohesionRule', (): void => {
         `;
         TestHelper.assertViolations(ruleName, script, [
             {
-                "failure": "The cohesion of the class is too low. This indicates a failure in the object model: ClassWithoutFields",
+                "failure": FAILURE_STRING + "ClassWithoutFields",
                 "name": "file.ts",
                 "ruleName": "min-class-cohesion",
                 "startPosition": { "character": 13, "line": 3 }
@@ -104,7 +105,7 @@ describe('minClassCohesionRule', (): void => {
         `;
         TestHelper.assertViolations(ruleName, script, [
             {
-                "failure": "The cohesion of the class is too low. This indicates a failure in the object model: ThirdCohesiveClass",
+                "failure": FAILURE_STRING + "ThirdCohesiveClass",
                 "name": "file.ts",
                 "ruleName": "min-class-cohesion",
                 "startPosition": { "character": 13, "line": 2 }
@@ -171,7 +172,7 @@ describe('minClassCohesionRule', (): void => {
                 `;
                 TestHelper.assertViolationsWithOptions(ruleName, options, script, [
                     {
-                        "failure": "The cohesion of the class is too low. This indicates a failure in the object model: Stack",
+                        "failure": FAILURE_STRING + "Stack",
                         "name": "file.ts",
                         "ruleName": "min-class-cohesion",
                         "startPosition": { "character": 17, "line": 2 }

@@ -5,7 +5,7 @@ import { ErrorTolerantWalker } from './utils/ErrorTolerantWalker';
 import { AstUtils } from './utils/AstUtils';
 import { ExtendedMetadata } from './utils/ExtendedMetadata';
 
-const FAILURE_STRING: string = 'The cohesion of the class is too low. This indicates a failure in the object model: ';
+const FAILURE_STRING: string = 'The cohesion of this class is too low. Consider splitting this class into multiple cohesive classes: ';
 
 /**
  * Implementation of the min-class-cohesion rule.
@@ -93,6 +93,7 @@ class ClassDeclarationHelper {
         }
         const methodScores = methods.map(method => {
             const used = this.numberOfFieldsUsedByMethod(method);
+            console.log(method.name.getText(), 'used', used); // tslint:disable-line no-console
             return used / numFields;
         });
         const sumScores = methodScores.reduce((a, b) => a + b, 0);
