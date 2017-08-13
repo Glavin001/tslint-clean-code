@@ -76,7 +76,7 @@
     "missing-optional-annotation": true,
     "min-class-cohesion": [
       true,
-      0.1
+      0.4
     ],
     "mocha-avoid-only": true,
     "mocha-no-side-effect-code": true,

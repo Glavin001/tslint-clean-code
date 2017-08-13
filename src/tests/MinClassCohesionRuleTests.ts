@@ -4,7 +4,7 @@ import { TestHelper } from './TestHelper';
  * Unit tests.
  */
 const FAILURE_STRING: string = 'The cohesion of this class is too low. Consider splitting this class into multiple cohesive classes: ';
- describe('minClassCohesionRule', (): void => {
+describe('minClassCohesionRule', (): void => {
     const ruleName: string = 'min-class-cohesion';
 
     it('should pass on empty class', (): void => {
@@ -131,6 +131,84 @@ const FAILURE_STRING: string = 'The cohesion of this class is too low. Consider 
                     const element: number = this.elements[--this.topOfStack];
                     this.elements = this.elements.slice(this.topOfStack, 1);
                     return element;
+                }
+            }
+        `;
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    it('should pass on SubClass class', (): void => {
+        const script: string = `
+            class BaseClass {
+                private field1: number = 2;
+            }
+            class SubClass extends BaseClass {
+                private field2: number = 2;
+                private subFunction() {
+                    return this.field1 + this.field2;
+                }
+            }
+        `;
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    it('should pass on SubClass class not using instance fields', (): void => {
+        const script: string = `
+            class BaseClass {
+                private field1: number = 2;
+            }
+            class SubClass extends BaseClass {
+                private field2: number = 2;
+                private subFunction() {
+                    return this.field1;
+                }
+            }
+        `;
+        TestHelper.assertViolations(ruleName, script, [
+            // {
+            //     "failure": FAILURE_STRING + "SubClass",
+            //     "name": "file.ts",
+            //     "ruleName": "min-class-cohesion",
+            //     "ruleSeverity": "ERROR",
+            //     "startPosition": {
+            //         "character": 13,
+            //         "line": 5
+            //     }
+            // }
+        ]);
+    });
+
+    it('should pass on class with cohesive getters', (): void => {
+        const script: string = `
+            class CohesiveClass {
+                constructor(private a: number) {
+                }
+                public b: number;
+                public get sum(): number {
+                    return this.a + this.b;
+                }
+            }
+        `;
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    it('should pass on class with uncohesive static methods', (): void => {
+        const script: string = `
+            class CohesiveClass {
+                constructor(private a: number) {
+                }
+                public b: number;
+                public get sum(): number {
+                    return this.a + this.b;
+                }
+                public static bad1(): number {
+                    return 1;
+                }
+                public static bad2(): number {
+                    return 2;
+                }
+                public static bad3(): number {
+                    return 3;
                 }
             }
         `;

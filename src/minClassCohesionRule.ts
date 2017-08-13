@@ -3,6 +3,7 @@ import * as Lint from 'tslint';
 
 import { ErrorTolerantWalker } from './utils/ErrorTolerantWalker';
 import { AstUtils } from './utils/AstUtils';
+import { Utils } from './utils/Utils';
 import { ExtendedMetadata } from './utils/ExtendedMetadata';
 
 const FAILURE_STRING: string = 'The cohesion of this class is too low. Consider splitting this class into multiple cohesive classes: ';
@@ -51,6 +52,9 @@ class MinClassCohesionRuleWalker extends ErrorTolerantWalker {
 
     private isClassCohesive(node: ts.ClassDeclaration): boolean {
         const classNode = new ClassDeclarationHelper(node);
+        if (classNode.extendsSomething) {
+            return true;
+        }
         const { cohesionScore } = classNode;
         console.log('Cohesion:', cohesionScore); // tslint:disable-line no-console
         return (cohesionScore >= this.minClassCohesion);
@@ -81,6 +85,7 @@ class ClassDeclarationHelper {
 
     public get cohesionScore(): number {
         const { fieldNames, methods } = this;
+        console.log('================='); // tslint:disable-line no-console
         console.log('Class:', this.name); // tslint:disable-line no-console
         console.log('Field names:', fieldNames); // tslint:disable-line no-console
         // console.log('Methods:', methods); // tslint:disable-line no-console
@@ -92,12 +97,11 @@ class ClassDeclarationHelper {
             return 0.0;
         }
         const methodScores = methods.map(method => {
-            const used = this.numberOfFieldsUsedByMethod(method);
-            console.log(method.name.getText(), 'used', used); // tslint:disable-line no-console
+            const used = this.numberOfFieldsUsedByMethod(fieldNames, method);
             return used / numFields;
         });
         const sumScores = methodScores.reduce((a, b) => a + b, 0);
-        const avgScore = sumScores / methodScores.length;
+        const avgScore = sumScores / methods.length;
         console.log('Average score:', avgScore); // tslint:disable-line no-console
         return avgScore;
     }
@@ -142,20 +146,42 @@ class ClassDeclarationHelper {
     }
 
     private get methods(): ts.MethodDeclaration[] {
-        return <ts.MethodDeclaration[]>this.node.members.filter((classElement: ts.ClassElement): boolean =>
-            (classElement.kind === ts.SyntaxKind.MethodDeclaration)
-        );
+        return <ts.MethodDeclaration[]>this.node.members.filter((classElement: ts.ClassElement): boolean => {
+            switch (classElement.kind) {
+                case ts.SyntaxKind.MethodDeclaration:
+                case ts.SyntaxKind.GetAccessor:
+                case ts.SyntaxKind.SetAccessor:
+                    return !AstUtils.isStatic(classElement);
+                default:
+                    return false;
+            }
+        });
     }
 
-    private numberOfFieldsUsedByMethod(method: ts.MethodDeclaration): number {
-        const fields = this.fieldsUsedByMethod(method);
-        return Object.keys(fields).length;
+    private numberOfFieldsUsedByMethod(fieldNames: string[], method: ts.MethodDeclaration): number {
+        const fields = ClassDeclarationHelper.fieldsUsedByMethod(method);
+        const used = fieldNames.reduce((count, fieldName) => {
+            if (fields[fieldName]) {
+                return count + 1;
+            }
+            return count;
+        }, 0);
+        const methodFieldNames = Object.keys(fields);
+        console.log(method.name.getText(), 'used', methodFieldNames.length, methodFieldNames); // tslint:disable-line no-console
+        // return methodFieldNames.length;
+        return used;
     }
 
-    private fieldsUsedByMethod(method: ts.MethodDeclaration): FieldsUsageMap {
+    private static fieldsUsedByMethod(method: ts.MethodDeclaration): FieldsUsageMap {
         const walker = new ClassMethodWalker();
         walker.walk(method);
         return walker.fieldsUsed;
+    }
+
+    public get extendsSomething(): boolean {
+        return Utils.exists(this.node.heritageClauses, (clause: ts.HeritageClause): boolean => {
+            return clause.token === ts.SyntaxKind.ExtendsKeyword;
+        });
     }
 
 }
