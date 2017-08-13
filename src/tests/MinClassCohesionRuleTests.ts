@@ -112,4 +112,110 @@ describe('minClassCohesionRule', (): void => {
         ]);
     });
 
+    it('should pass on Stack class', (): void => {
+        const script: string = `
+            class Stack {
+                private topOfStack: number = 0;
+                private elements: number[] = [];
+                public size(): number {
+                    return this.topOfStack;
+                }
+                public push(element: number): void {
+                    this.topOfStack++;
+                    this.elements.push(element);
+                }
+                public pop(): number {
+                    if (this.topOfStack === 0)
+                        throw new Error("PoppedWhenEmpty");
+                    const element: number = this.elements[--this.topOfStack];
+                    this.elements = this.elements.slice(this.topOfStack, 1);
+                    return element;
+                }
+            }
+        `;
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    context("reading options", (): void => {
+
+        context("90% cohesion", (): void => {
+
+            let options: any[];
+
+            beforeEach((): void => {
+                options = [true,
+                    0.9
+                ];
+            });
+
+            it('should fail on Stack class', (): void => {
+                const script: string = `
+                class Stack {
+                    private topOfStack: number = 0;
+                    private elements: number[] = [];
+                    public size(): number {
+                        return this.topOfStack;
+                    }
+                    public push(element: number): void {
+                        this.topOfStack++;
+                        this.elements.push(element);
+                    }
+                    public pop(): number {
+                        if (this.topOfStack === 0)
+                            throw new Error("PoppedWhenEmpty");
+                        const element: number = this.elements[--this.topOfStack];
+                        this.elements = this.elements.slice(this.topOfStack, 1);
+                        return element;
+                    }
+                }
+                `;
+                TestHelper.assertViolationsWithOptions(ruleName, options, script, [
+                    {
+                        "failure": "The cohesion of the class is too low. This indicates a failure in the object model: Stack",
+                        "name": "file.ts",
+                        "ruleName": "min-class-cohesion",
+                        "startPosition": { "character": 17, "line": 2 }
+                    }
+                ]);
+            });
+
+        });
+
+        context("80% cohesion", (): void => {
+
+            let options: any[];
+
+            beforeEach((): void => {
+                options = [true,
+                    0.8
+                ];
+            });
+
+            it('should pass on Stack class', (): void => {
+                const script: string = `
+                            class Stack {
+                                private topOfStack: number = 0;
+                                private elements: number[] = [];
+                                public size(): number {
+                                    return this.topOfStack;
+                                }
+                                public push(element: number): void {
+                                    this.topOfStack++;
+                                    this.elements.push(element);
+                                }
+                                public pop(): number {
+                                    if (this.topOfStack === 0)
+                                        throw new Error("PoppedWhenEmpty");
+                                    const element: number = this.elements[--this.topOfStack];
+                                    this.elements = this.elements.slice(this.topOfStack, 1);
+                                    return element;
+                                }
+                            }
+                            `;
+                TestHelper.assertViolationsWithOptions(ruleName, options, script, []);
+            });
+
+        });
+    });
+
 });

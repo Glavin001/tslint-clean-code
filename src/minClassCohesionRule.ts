@@ -56,13 +56,16 @@ class MinClassCohesionRuleWalker extends ErrorTolerantWalker {
         return (cohesionScore >= this.minClassCohesion);
     }
 
-    private parseOptions() {
+    private parseOptions(): void {
         this.getOptions().forEach((opt: any) => {
+            if (typeof (opt) === 'boolean') {
+                return;
+            }
             if (typeof (opt) === 'number') {
                 this.minClassCohesion = opt;
                 return;
             }
-            throw new Error('min-class-cohesion rule only supports option of type number.');
+            throw new Error(`Rule min-class-cohesion only supports option of type number, not ${typeof opt}.`);
         });
     }
 
@@ -161,9 +164,12 @@ class ClassMethodWalker extends Lint.SyntaxWalker {
     public fieldsUsed: FieldsUsageMap = {};
 
     protected visitPropertyAccessExpression(node: ts.PropertyAccessExpression): void {
-        const field = node.name.text;
-        // console.log('visitPropertyAccessExpression:', field, node); // tslint:disable-line no-console
-        this.fieldsUsed[field] = true;
+        const isOnThis = node.expression.kind === ts.SyntaxKind.ThisKeyword;
+        if (isOnThis) {
+            const field = node.name.text;
+            // console.log('visitPropertyAccessExpression:', field, node.expression); // tslint:disable-line no-console
+            this.fieldsUsed[field] = true;
+        }
         super.visitPropertyAccessExpression(node);
     }
 
