@@ -1,10 +1,9 @@
 import { TestHelper } from './TestHelper';
+import { FAILURE_STRING } from '../newspaperOrderRule';
 
 /**
  * Unit tests.
  */
-const FAILURE_STRING: string = 'The class does not read like a Newpaper. Please reorder the methods of the class: ';
-
 describe('newspaperOrderRule', (): void => {
     const ruleName: string = 'newspaper-order';
 
@@ -38,14 +37,29 @@ describe('newspaperOrderRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
+    it('should pass on class with 2 unrelated methods using an instance field', (): void => {
+        const script: string = `
+            class UnrelatedMethodsClass {
+                private field;
+                private secondMethod() {
+                    return this.field * 2;
+                }
+                private firstMethod() {
+                    return this.field;
+                }
+            }
+        `;
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
     it('should fail on incorrectly ordered class methods', (): void => {
         const script: string = `
             class BadClass {
                 private secondMethod() {
-                    return this.firstMethod();
+                    return true;
                 }
                 private firstMethod() {
-                    return true;
+                    return this.secondMethod();
                 }
             }
         `;
@@ -63,14 +77,49 @@ describe('newspaperOrderRule', (): void => {
         const script: string = `
             class BadClass {
                 private firstMethod() {
-                    return true;
+                    return this.secondMethod();
                 }
                 private secondMethod() {
-                    return this.firstMethod();
+                    return true;
                 }
             }
         `;
         TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    it('should pass on correctly ordered class getter methods', (): void => {
+        const script: string = `
+            class BadClass {
+                private get firstMethod() {
+                    return this.secondMethod;
+                }
+                private get secondMethod() {
+                    return true;
+                }
+            }
+        `;
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    it('should fail on incorrectly ordered class getter methods', (): void => {
+        const script: string = `
+            class BadClass {
+                private get secondMethod() {
+                    return true;
+                }
+                private get firstMethod() {
+                    return this.secondMethod;
+                }
+            }
+        `;
+        TestHelper.assertViolations(ruleName, script, [
+            {
+                "failure": FAILURE_STRING + "BadClass",
+                "name": "file.ts",
+                "ruleName": ruleName,
+                "startPosition": { "character": 13, "line": 2 }
+            }
+        ]);
     });
 
     it('should pass on SubClass by ignoring calls to BaseClass methods', (): void => {
@@ -82,20 +131,39 @@ describe('newspaperOrderRule', (): void => {
             }
             class SubClass extends BaseClass {
                 private firstMethod() {
-                    return this.baseMethod();
+                    return this.secondMethod();
                 }
                 private secondMethod() {
-                    return this.firstMethod();
+                    return this.baseMethod();
+                }
+            }
+        `;
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    it('should fail on SubClass with incorrectly ordered methods and by ignoring calls to BaseClass methods', (): void => {
+        const script: string = `
+            class BaseClass {
+                protected baseMethod() {
+                    return true;
+                }
+            }
+            class SubClass extends BaseClass {
+                private secondMethod() {
+                    return this.baseMethod();
+                }
+                private firstMethod() {
+                    return this.secondMethod();
                 }
             }
         `;
         TestHelper.assertViolations(ruleName, script, [
-            // {
-            //     "failure": FAILURE_STRING + "BadClass",
-            //     "name": "file.ts",
-            //     "ruleName": ruleName,
-            //     "startPosition": { "character": 13, "line": 2 }
-            // }
+            {
+                "failure": FAILURE_STRING + "SubClass",
+                "name": "file.ts",
+                "ruleName": ruleName,
+                "startPosition": { "character": 13, "line": 7 }
+            }
         ]);
     });
 
