@@ -167,4 +167,41 @@ describe('newspaperOrderRule', (): void => {
         ]);
     });
 
+    it('should pass on class with recursive method', (): void => {
+        const script: string = `
+            class CountDownClass {
+                private startCountDown() {
+                    this.countDown(10);
+                }
+                private countDown(curr: number): void {
+                    if (curr > 0) {
+                        console.log(curr);
+                        return this.countDown(curr - 1);
+                    }
+                }
+            }
+        `;
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    it('should pass on class with unsupported indirectly recursive methods', (): void => {
+        const script: string = `
+            class CountDownClass {
+                private startCountDown() {
+                    this.countDown(10);
+                }
+                private countDown(curr: number): void {
+                    if (curr > 0) {
+                        console.log(curr);
+                        return this.step(curr);
+                    }
+                }
+                private step(curr: number): void {
+                    return this.countDown(curr - 1);
+                }
+            }
+        `;
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
 });

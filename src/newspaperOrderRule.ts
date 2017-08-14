@@ -94,7 +94,11 @@ class ClassDeclarationHelper {
     @Memoize
     public get orderedMethodNames(): string[] {
         const { methodGraph } = this;
-        return toposort(methodGraph);
+        try {
+            return toposort(methodGraph);
+        } catch (error) {
+            return [];
+        }
     }
 
     @Memoize
@@ -104,7 +108,7 @@ class ClassDeclarationHelper {
         return Object.keys(methodDependencies).sort().reduce((graph: ToposortGraph, methodName: string) => {
             const deps = Object.keys(methodDependencies[methodName]).sort();
             deps.forEach(depName => {
-                const shouldIgnore: boolean = !Boolean(methodDependencies[depName]);
+                const shouldIgnore: boolean = !Boolean(methodDependencies[depName]) || (methodName === depName);
                 if (shouldIgnore) {
                     return;
                 }
