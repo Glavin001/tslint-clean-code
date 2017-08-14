@@ -65,7 +65,8 @@ describe('newspaperOrderRule', (): void => {
         `;
         TestHelper.assertViolations(ruleName, script, [
             {
-                "failure": FAILURE_STRING + "BadClass",
+                "failure": FAILURE_STRING + "BadClass" +
+                    "\n\nMethods order:\n1. firstMethod\n2. secondMethod",
                 "name": "file.ts",
                 "ruleName": ruleName,
                 "startPosition": { "character": 13, "line": 2 }
@@ -114,7 +115,8 @@ describe('newspaperOrderRule', (): void => {
         `;
         TestHelper.assertViolations(ruleName, script, [
             {
-                "failure": FAILURE_STRING + "BadClass",
+                "failure": FAILURE_STRING + "BadClass" +
+                    "\n\nMethods order:\n1. firstMethod\n2. secondMethod",
                 "name": "file.ts",
                 "ruleName": ruleName,
                 "startPosition": { "character": 13, "line": 2 }
@@ -159,7 +161,8 @@ describe('newspaperOrderRule', (): void => {
         `;
         TestHelper.assertViolations(ruleName, script, [
             {
-                "failure": FAILURE_STRING + "SubClass",
+                "failure": FAILURE_STRING + "SubClass" +
+                    "\n\nMethods order:\n1. firstMethod\n2. secondMethod",
                 "name": "file.ts",
                 "ruleName": ruleName,
                 "startPosition": { "character": 13, "line": 7 }
@@ -182,6 +185,35 @@ describe('newspaperOrderRule', (): void => {
             }
         `;
         TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    it('should fail on class with incorrectly ordered methods with a recursive method', (): void => {
+        const script: string = `
+            class CountDownClass {
+                private countDown(curr: number): void {
+                    if (curr > 0) {
+                        console.log(curr);
+                        return this.countDown(curr - 1);
+                    }
+                }
+                private startCountDown() {
+                    this.countDown(10);
+                }
+            }
+        `;
+        TestHelper.assertViolations(ruleName, script, [
+            {
+                "failure": FAILURE_STRING + "CountDownClass" +
+                    "\n\nMethods order:\n1. startCountDown\n2. countDown",
+                "name": "file.ts",
+                "ruleName": "newspaper-order",
+                "ruleSeverity": "ERROR",
+                "startPosition": {
+                  "character": 13,
+                  "line": 2
+                }
+              }
+        ]);
     });
 
     it('should pass on class with unsupported indirectly recursive methods', (): void => {

@@ -41,15 +41,22 @@ export class Rule extends Lint.Rules.AbstractRule {
 class NewspaperOrderRuleWalker extends ErrorTolerantWalker {
 
     protected visitClassDeclaration(node: ts.ClassDeclaration): void {
-        if (!this.readsLikeNewspaper(node)) {
-            const className: string = node.name == null ? '<unknown>' : node.name.text;
-            this.addFailureAt(node.getStart(), node.getWidth(), FAILURE_STRING + className);
+        const classNode = new ClassDeclarationHelper(node);
+        if (!this.readsLikeNewspaper(classNode)) {
+            const failureMessage = this.makeFailureMessage(classNode);
+            this.addFailureAt(node.getStart(), node.getWidth(), failureMessage);
         }
         super.visitClassDeclaration(node);
     }
 
-    private readsLikeNewspaper(node: ts.ClassDeclaration): boolean {
-        const classNode = new ClassDeclarationHelper(node);
+    private makeFailureMessage(classNode: ClassDeclarationHelper): string {
+        const { name, completeOrderedMethodNames } = classNode;
+        const help: string = '\n\nMethods order:\n' +
+            completeOrderedMethodNames.map((method, index) => `${index + 1}. ${method}`).join('\n');
+        return FAILURE_STRING + name + help;
+    }
+
+    private readsLikeNewspaper(classNode: ClassDeclarationHelper): boolean {
         return classNode.readsLikeNewspaper;
     }
 
@@ -63,8 +70,7 @@ class ClassDeclarationHelper {
     public get readsLikeNewspaper(): boolean {
         console.log('====================='); // tslint:disable-line no-console
         console.log('Class: ', this.name); // tslint:disable-line no-console
-        const { methodNames, orderedMethodNames, ignoredMethods } = this;
-        const completeOrderedMethodNames = orderedMethodNames.concat(ignoredMethods);
+        const { methodNames, completeOrderedMethodNames, ignoredMethods } = this;
         const ignoringAllMethods: boolean = (ignoredMethods.length === methodNames.length);
         const hasNoDeps: boolean = completeOrderedMethodNames.length === 0;
         if (ignoringAllMethods || hasNoDeps) {
@@ -77,22 +83,23 @@ class ClassDeclarationHelper {
     }
 
     @Memoize
-    public get ignoredMethods(): string[] {
+    public get completeOrderedMethodNames(): string[] {
+        const { orderedMethodNames, ignoredMethods } = this;
+        return orderedMethodNames.concat(ignoredMethods);
+    }
+
+    @Memoize
+    private get ignoredMethods(): string[] {
         const { methodNames, orderedMethodNames } = this;
         const ignoredMethods = methodNames.filter(methodName => {
-           return !Utils.contains(orderedMethodNames, methodName);
+            return !Utils.contains(orderedMethodNames, methodName);
         }).sort();
         console.log('ignoredMethods:', ignoredMethods); // tslint:disable-line no-console
         return ignoredMethods;
     }
 
     @Memoize
-    public get methodNames(): string[] {
-        return this.methods.map(method => method.name.getText());
-    }
-
-    @Memoize
-    public get orderedMethodNames(): string[] {
+    private get orderedMethodNames(): string[] {
         const { methodGraph } = this;
         try {
             return toposort(methodGraph);
@@ -132,6 +139,11 @@ class ClassDeclarationHelper {
         const walker = new ClassMethodWalker();
         walker.walk(method);
         return walker.dependencies;
+    }
+
+    @Memoize
+    private get methodNames(): string[] {
+        return this.methods.map(method => method.name.getText());
     }
 
     @Memoize
