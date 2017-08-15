@@ -56,7 +56,7 @@ class MinClassCohesionRuleWalker extends ErrorTolerantWalker {
             return true;
         }
         const { cohesionScore } = classNode;
-        console.log('Cohesion:', cohesionScore); // tslint:disable-line no-console
+        // console.log('Cohesion:', cohesionScore); // tslint:disable-line no-console
         return (cohesionScore >= this.minClassCohesion);
     }
 
@@ -79,15 +79,11 @@ class ClassDeclarationHelper {
     constructor(private node: ts.ClassDeclaration) {
     }
 
-    private get name() {
-        return this.node.name == null ? '<unknown>' : this.node.name.text;
-    }
-
     public get cohesionScore(): number {
         const { fieldNames, methods } = this;
-        console.log('================='); // tslint:disable-line no-console
-        console.log('Class:', this.name); // tslint:disable-line no-console
-        console.log('Field names:', fieldNames); // tslint:disable-line no-console
+        // console.log('================='); // tslint:disable-line no-console
+        // console.log('Class:', this.name); // tslint:disable-line no-console
+        // console.log('Field names:', fieldNames); // tslint:disable-line no-console
         // console.log('Methods:', methods); // tslint:disable-line no-console
         if (methods.length === 0) {
             return 1.0;
@@ -101,48 +97,14 @@ class ClassDeclarationHelper {
             return used / numFields;
         });
         const sumScores = methodScores.reduce((a, b) => a + b, 0);
-        const avgScore = sumScores / methods.length;
-        console.log('Average score:', avgScore); // tslint:disable-line no-console
-        return avgScore;
+        return sumScores / methods.length;
+        // console.log('Average score:', avgScore); // tslint:disable-line no-console
     }
 
     private get fieldNames(): string[] {
         const parameterNames: string[] = this.constructorParameterNames;
         const instanceFields: string[] = this.instanceFieldNames;
         return [...parameterNames, ...instanceFields];
-    }
-
-    private get constructorParameterNames(): string[] {
-        return this.constructorParameters.map(param => param.name.getText());
-    }
-
-    private get constructorDeclaration(): ts.ConstructorDeclaration | undefined {
-        return <ts.ConstructorDeclaration>this.node.members.find((element: ts.ClassElement): boolean =>
-            (element.kind === ts.SyntaxKind.Constructor)
-        );
-    }
-
-    private get constructorParameters(): ts.ParameterDeclaration[] {
-        const ctor: ts.ConstructorDeclaration = this.constructorDeclaration;
-        if (ctor) {
-            return ctor.parameters.filter((param: ts.ParameterDeclaration): boolean => {
-                return AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.PublicKeyword)
-                    || AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.PrivateKeyword)
-                    || AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.ProtectedKeyword)
-                    || AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.ReadonlyKeyword);
-            });
-        }
-        return [];
-    }
-
-    private get instanceFieldNames(): string[] {
-        return this.instanceFields.map(param => param.name.getText());
-    }
-
-    private get instanceFields(): ts.PropertyDeclaration[] {
-        return <ts.PropertyDeclaration[]>this.node.members.filter((classElement: ts.ClassElement): boolean =>
-            (classElement.kind === ts.SyntaxKind.PropertyDeclaration)
-        );
     }
 
     private get methods(): ts.MethodDeclaration[] {
@@ -160,16 +122,45 @@ class ClassDeclarationHelper {
 
     private numberOfFieldsUsedByMethod(fieldNames: string[], method: ts.MethodDeclaration): number {
         const fields = ClassDeclarationHelper.fieldsUsedByMethod(method);
-        const used = fieldNames.reduce((count, fieldName) => {
+        return fieldNames.reduce((count, fieldName) => {
             if (fields[fieldName]) {
                 return count + 1;
             }
             return count;
         }, 0);
-        const methodFieldNames = Object.keys(fields);
-        console.log(method.name.getText(), 'used', methodFieldNames.length, methodFieldNames); // tslint:disable-line no-console
-        // return methodFieldNames.length;
-        return used;
+    }
+
+    private get constructorParameterNames(): string[] {
+        return this.constructorParameters.map(param => param.name.getText());
+    }
+
+    private get constructorParameters(): ts.ParameterDeclaration[] {
+        const ctor: ts.ConstructorDeclaration = this.constructorDeclaration;
+        if (ctor) {
+            return ctor.parameters.filter((param: ts.ParameterDeclaration): boolean => {
+                return AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.PublicKeyword)
+                    || AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.PrivateKeyword)
+                    || AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.ProtectedKeyword)
+                    || AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.ReadonlyKeyword);
+            });
+        }
+        return [];
+    }
+
+    private get constructorDeclaration(): ts.ConstructorDeclaration | undefined {
+        return <ts.ConstructorDeclaration>this.node.members.find((element: ts.ClassElement): boolean =>
+            (element.kind === ts.SyntaxKind.Constructor)
+        );
+    }
+
+    private get instanceFieldNames(): string[] {
+        return this.instanceFields.map(param => param.name.getText());
+    }
+
+    private get instanceFields(): ts.PropertyDeclaration[] {
+        return <ts.PropertyDeclaration[]>this.node.members.filter((classElement: ts.ClassElement): boolean =>
+            (classElement.kind === ts.SyntaxKind.PropertyDeclaration)
+        );
     }
 
     private static fieldsUsedByMethod(method: ts.MethodDeclaration): FieldsUsageMap {
@@ -182,6 +173,10 @@ class ClassDeclarationHelper {
         return Utils.exists(this.node.heritageClauses, (clause: ts.HeritageClause): boolean => {
             return clause.token === ts.SyntaxKind.ExtendsKeyword;
         });
+    }
+
+    private get name() {
+        return this.node.name == null ? '<unknown>' : this.node.name.text;
     }
 
 }

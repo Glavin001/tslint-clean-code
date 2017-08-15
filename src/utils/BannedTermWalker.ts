@@ -1,34 +1,47 @@
 import * as ts from 'typescript';
 import * as Lint from 'tslint';
-import {ErrorTolerantWalker} from './ErrorTolerantWalker';
+import { ErrorTolerantWalker } from './ErrorTolerantWalker';
 
 /**
  * Implementation of the banned-term rulesets.
  */
 export class BannedTermWalker extends ErrorTolerantWalker {
-    private failureString : string;
+    private failureString: string;
     private bannedTerms: string[];
     private allowQuotedProperties: boolean = false;
 
-    constructor(sourceFile: ts.SourceFile, options: Lint.IOptions, failureString : string, bannedTerms: string[]) {
+    constructor(sourceFile: ts.SourceFile, options: Lint.IOptions, failureString: string, bannedTerms: string[]) {
         super(sourceFile, options);
         this.failureString = failureString;
         this.bannedTerms = bannedTerms;
         this.getOptions().forEach((opt: any) => {
-            if (typeof(opt) === 'object') {
+            if (typeof (opt) === 'object') {
                 this.allowQuotedProperties = opt['allow-quoted-properties'] === true;
             }
         });
     }
 
-    protected visitVariableDeclaration(node: ts.VariableDeclaration): void {
-        this.validateNode(node);
-        super.visitVariableDeclaration(node);
-    }
-
     protected visitFunctionDeclaration(node: ts.FunctionDeclaration): void {
         this.validateNode(node);
         super.visitFunctionDeclaration(node);
+    }
+
+    protected visitGetAccessor(node: ts.AccessorDeclaration): void {
+        this.validateNode(node);
+        super.visitGetAccessor(node);
+    }
+
+    protected visitMethodDeclaration(node: ts.MethodDeclaration): void {
+        this.validateNode(node);
+        super.visitMethodDeclaration(node);
+    }
+
+    protected visitParameterDeclaration(node: ts.ParameterDeclaration): void {
+        // typescript 2.0 introduces function level 'this' types
+        if (node.name.getText() !== 'this') {
+            this.validateNode(node);
+        }
+        super.visitParameterDeclaration(node);
     }
 
     protected visitPropertyDeclaration(node: ts.PropertyDeclaration): void {
@@ -55,28 +68,15 @@ export class BannedTermWalker extends ErrorTolerantWalker {
         super.visitSetAccessor(node);
     }
 
-    protected visitGetAccessor(node: ts.AccessorDeclaration): void {
+    protected visitVariableDeclaration(node: ts.VariableDeclaration): void {
         this.validateNode(node);
-        super.visitGetAccessor(node);
+        super.visitVariableDeclaration(node);
     }
 
-    protected visitMethodDeclaration(node: ts.MethodDeclaration): void {
-        this.validateNode(node);
-        super.visitMethodDeclaration(node);
-    }
-
-    protected visitParameterDeclaration(node: ts.ParameterDeclaration): void {
-        // typescript 2.0 introduces function level 'this' types
-        if (node.name.getText() !== 'this') {
-            this.validateNode(node);
-        }
-        super.visitParameterDeclaration(node);
-    }
-
-    private validateNode(node: ts.Node) : void {
+    private validateNode(node: ts.Node): void {
         if ((<any>node).name) {
             if ((<any>node).name.text) {
-                const text : string = (<any>node).name.text;
+                const text: string = (<any>node).name.text;
                 if (this.isBannedTerm(text)) {
                     this.addFailureAt(node.getStart(), node.getWidth(), this.failureString + text);
                 }
@@ -84,7 +84,7 @@ export class BannedTermWalker extends ErrorTolerantWalker {
         }
     }
 
-    private isBannedTerm(text : string) : boolean {
+    private isBannedTerm(text: string): boolean {
         return this.bannedTerms.indexOf(text) !== -1;
     }
 

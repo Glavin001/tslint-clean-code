@@ -14,6 +14,23 @@ export class Scope {
         this.parent = parent;
     }
 
+    public addGlobalScope(node: ts.Node, sourceFile : ts.SourceFile, options : Lint.IOptions): void {
+        const refCollector = new GlobalReferenceCollector(sourceFile, options);
+        refCollector.visitNode(node);
+        refCollector.functionIdentifiers.forEach((identifier: string): void => { this.addFunctionSymbol(identifier); });
+        refCollector.nonFunctionIdentifiers.forEach((identifier: string): void => { this.addNonFunctionSymbol(identifier); });
+    }
+
+    public addParameters(parameters: ts.ParameterDeclaration[]): void {
+        parameters.forEach((parm: ts.ParameterDeclaration): void => {
+            if (AstUtils.isDeclarationFunctionType(parm)) {
+                this.addFunctionSymbol(parm.name.getText());
+            } else {
+                this.addNonFunctionSymbol(parm.name.getText());
+            }
+        });
+    }
+
     public addFunctionSymbol(symbolString: string): void {
         this.symbols[symbolString] = ts.SyntaxKind.FunctionType;
     }
@@ -35,22 +52,6 @@ export class Scope {
         return false;
     }
 
-    public addParameters(parameters: ts.ParameterDeclaration[]): void {
-        parameters.forEach((parm: ts.ParameterDeclaration): void => {
-            if (AstUtils.isDeclarationFunctionType(parm)) {
-                this.addFunctionSymbol(parm.name.getText());
-            } else {
-                this.addNonFunctionSymbol(parm.name.getText());
-            }
-        });
-    }
-
-    public addGlobalScope(node: ts.Node, sourceFile : ts.SourceFile, options : Lint.IOptions): void {
-        const refCollector = new GlobalReferenceCollector(sourceFile, options);
-        refCollector.visitNode(node);
-        refCollector.functionIdentifiers.forEach((identifier: string): void => { this.addFunctionSymbol(identifier); });
-        refCollector.nonFunctionIdentifiers.forEach((identifier: string): void => { this.addNonFunctionSymbol(identifier); });
-    }
 }
 
 class GlobalReferenceCollector extends ErrorTolerantWalker {

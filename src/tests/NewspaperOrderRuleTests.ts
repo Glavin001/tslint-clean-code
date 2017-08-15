@@ -66,7 +66,7 @@ describe('newspaperOrderRule', (): void => {
         TestHelper.assertViolations(ruleName, script, [
             {
                 "failure": FAILURE_STRING + "BadClass" +
-                    "\n\nMethods order:\n1. firstMethod\n2. secondMethod",
+                "\n\nMethods order:\n1. x firstMethod\n2. x secondMethod",
                 "name": "file.ts",
                 "ruleName": ruleName,
                 "startPosition": { "character": 13, "line": 2 }
@@ -116,7 +116,7 @@ describe('newspaperOrderRule', (): void => {
         TestHelper.assertViolations(ruleName, script, [
             {
                 "failure": FAILURE_STRING + "BadClass" +
-                    "\n\nMethods order:\n1. firstMethod\n2. secondMethod",
+                "\n\nMethods order:\n1. x firstMethod\n2. x secondMethod",
                 "name": "file.ts",
                 "ruleName": ruleName,
                 "startPosition": { "character": 13, "line": 2 }
@@ -162,7 +162,7 @@ describe('newspaperOrderRule', (): void => {
         TestHelper.assertViolations(ruleName, script, [
             {
                 "failure": FAILURE_STRING + "SubClass" +
-                    "\n\nMethods order:\n1. firstMethod\n2. secondMethod",
+                "\n\nMethods order:\n1. x firstMethod\n2. x secondMethod",
                 "name": "file.ts",
                 "ruleName": ruleName,
                 "startPosition": { "character": 13, "line": 7 }
@@ -204,15 +204,15 @@ describe('newspaperOrderRule', (): void => {
         TestHelper.assertViolations(ruleName, script, [
             {
                 "failure": FAILURE_STRING + "CountDownClass" +
-                    "\n\nMethods order:\n1. startCountDown\n2. countDown",
+                "\n\nMethods order:\n1. x startCountDown\n2. x countDown",
                 "name": "file.ts",
                 "ruleName": "newspaper-order",
                 "ruleSeverity": "ERROR",
                 "startPosition": {
-                  "character": 13,
-                  "line": 2
+                    "character": 13,
+                    "line": 2
                 }
-              }
+            }
         ]);
     });
 
@@ -230,6 +230,22 @@ describe('newspaperOrderRule', (): void => {
                 }
                 private step(curr: number): void {
                     return this.countDown(curr - 1);
+                }
+            }
+        `;
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    it('should pass on SubClass by ignoring undefined constructor calls', (): void => {
+        const script: string = `
+            class BaseClass {
+            }
+            class SubClass extends BaseClass {
+                private firstMethod() {
+                    return this.secondMethod();
+                }
+                private secondMethod() {
+                    return this.constructor();
                 }
             }
         `;

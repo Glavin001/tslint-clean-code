@@ -50,9 +50,15 @@ class NewspaperOrderRuleWalker extends ErrorTolerantWalker {
     }
 
     private makeFailureMessage(classNode: ClassDeclarationHelper): string {
-        const { name, completeOrderedMethodNames } = classNode;
+        const { name, completeOrderedMethodNames, methodNames } = classNode;
+        const correctSymbol = '✓';
+        const incorrectSymbol = 'x';
         const help: string = '\n\nMethods order:\n' +
-            completeOrderedMethodNames.map((method, index) => `${index + 1}. ${method}`).join('\n');
+            completeOrderedMethodNames.map((method, index) => {
+                const isCorrect = methodNames[index] === method;
+                const status = isCorrect ? correctSymbol : incorrectSymbol;
+                return `${index + 1}. ${status} ${method}`;
+            }).join('\n');
         return FAILURE_STRING + name + help;
     }
 
@@ -68,18 +74,18 @@ class ClassDeclarationHelper {
 
     @Memoize
     public get readsLikeNewspaper(): boolean {
-        console.log('====================='); // tslint:disable-line no-console
-        console.log('Class: ', this.name); // tslint:disable-line no-console
+        // console.log('====================='); // tslint:disable-line no-console
+        // console.log('Class: ', this.name); // tslint:disable-line no-console
         const { methodNames, completeOrderedMethodNames, ignoredMethods } = this;
         const ignoringAllMethods: boolean = (ignoredMethods.length === methodNames.length);
         const hasNoDeps: boolean = completeOrderedMethodNames.length === 0;
+        // console.log('ignoredMethods:', ignoredMethods); // tslint:disable-line no-console
         if (ignoringAllMethods || hasNoDeps) {
             return true;
         }
-        const isOrdered = Utils.arraysShallowEqual(methodNames, completeOrderedMethodNames);
-        console.log('methodNames:', methodNames); // tslint:disable-line no-console
-        console.log('orderedMethodNames:', completeOrderedMethodNames); // tslint:disable-line no-console
-        return isOrdered;
+        // console.log('methodNames:', methodNames); // tslint:disable-line no-console
+        // console.log('orderedMethodNames:', completeOrderedMethodNames); // tslint:disable-line no-console
+        return Utils.arraysShallowEqual(methodNames, completeOrderedMethodNames);
     }
 
     @Memoize
@@ -91,11 +97,9 @@ class ClassDeclarationHelper {
     @Memoize
     private get ignoredMethods(): string[] {
         const { methodNames, orderedMethodNames } = this;
-        const ignoredMethods = methodNames.filter(methodName => {
+        return methodNames.filter(methodName => {
             return !Utils.contains(orderedMethodNames, methodName);
         }).sort();
-        console.log('ignoredMethods:', ignoredMethods); // tslint:disable-line no-console
-        return ignoredMethods;
     }
 
     @Memoize
@@ -111,11 +115,12 @@ class ClassDeclarationHelper {
     @Memoize
     private get methodGraph(): ToposortGraph {
         const { methodDependencies } = this;
-        console.log('methodDependencies:', methodDependencies); // tslint:disable-line no-console
+        // console.log('methodDependencies:', methodDependencies); // tslint:disable-line no-console
         return Object.keys(methodDependencies).sort().reduce((graph: ToposortGraph, methodName: string) => {
             const deps = Object.keys(methodDependencies[methodName]).sort();
             deps.forEach(depName => {
-                const shouldIgnore: boolean = !Boolean(methodDependencies[depName]) || (methodName === depName);
+                const shouldIgnore: boolean = !methodDependencies.hasOwnProperty(depName) || (methodName === depName);
+                // console.log('shouldIgnore:', shouldIgnore, methodName, depName); // tslint:disable-line no-console
                 if (shouldIgnore) {
                     return;
                 }
@@ -142,7 +147,7 @@ class ClassDeclarationHelper {
     }
 
     @Memoize
-    private get methodNames(): string[] {
+    public get methodNames(): string[] {
         return this.methods.map(method => method.name.getText());
     }
 
@@ -185,7 +190,7 @@ class ClassMethodWalker extends Lint.SyntaxWalker {
         const isOnThis = node.parent.parent.initializer.kind === ts.SyntaxKind.ThisKeyword;
         if (isOnThis) {
             const field = node.name.getText();
-            console.log('visitBindingElement:', field); // tslint:disable-line no-console
+            // console.log('visitBindingElement:', field); // tslint:disable-line no-console
             this.dependencies[field] = true;
         }
         super.visitBindingElement(node);

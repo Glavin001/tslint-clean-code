@@ -1,8 +1,8 @@
 import * as ts from 'typescript';
 import * as Lint from 'tslint';
-import {ErrorTolerantWalker} from './ErrorTolerantWalker';
-import {AstUtils} from './AstUtils';
-import {Scope} from './Scope';
+import { ErrorTolerantWalker } from './ErrorTolerantWalker';
+import { AstUtils } from './AstUtils';
+import { Scope } from './Scope';
 
 /**
  * This exists so that you can try to tell the types of variables
@@ -13,7 +13,7 @@ export class ScopedSymbolTrackingWalker extends ErrorTolerantWalker {
     private typeChecker?: ts.TypeChecker;
     private scope: Scope;
 
-    constructor(sourceFile : ts.SourceFile, options : Lint.IOptions, program? : ts.Program) {
+    constructor(sourceFile: ts.SourceFile, options: Lint.IOptions, program?: ts.Program) {
         super(sourceFile, options);
 
         if (program) {
@@ -21,7 +21,7 @@ export class ScopedSymbolTrackingWalker extends ErrorTolerantWalker {
         }
     }
 
-    protected isExpressionEvaluatingToFunction(expression : ts.Expression) : boolean {
+    protected isExpressionEvaluatingToFunction(expression: ts.Expression): boolean {
         if (expression.kind === ts.SyntaxKind.ArrowFunction
             || expression.kind === ts.SyntaxKind.FunctionExpression) {
             return true; // arrow function literals and arrow functions are definitely functions
@@ -60,8 +60,8 @@ export class ScopedSymbolTrackingWalker extends ErrorTolerantWalker {
                     return true;
                 }
 
-                const signature : ts.Signature = this.typeChecker.getResolvedSignature(<ts.CallExpression>expression);
-                const expressionType : ts.Type = this.typeChecker.getReturnTypeOfSignature(signature);
+                const signature: ts.Signature = this.typeChecker.getResolvedSignature(<ts.CallExpression>expression);
+                const expressionType: ts.Type = this.typeChecker.getReturnTypeOfSignature(signature);
                 return this.isFunctionType(expressionType, this.typeChecker);
             } catch (e) {
                 // this exception is only thrown in unit tests, not the node debugger :(
@@ -76,10 +76,10 @@ export class ScopedSymbolTrackingWalker extends ErrorTolerantWalker {
         return this.isFunctionType(this.typeChecker.getTypeAtLocation(expression), this.typeChecker);
     }
 
-    private isFunctionType(expressionType : ts.Type, typeChecker : ts.TypeChecker) : boolean {
-        const signatures : ts.Signature[] = typeChecker.getSignaturesOfType(expressionType, ts.SignatureKind.Call);
+    private isFunctionType(expressionType: ts.Type, typeChecker: ts.TypeChecker): boolean {
+        const signatures: ts.Signature[] = typeChecker.getSignaturesOfType(expressionType, ts.SignatureKind.Call);
         if (signatures != null && signatures.length > 0) {
-            const signatureDeclaration : ts.SignatureDeclaration = signatures[0].declaration;
+            const signatureDeclaration: ts.SignatureDeclaration = signatures[0].declaration;
             if (signatureDeclaration.kind === ts.SyntaxKind.FunctionType) {
                 return true; // variables of type function are allowed to be passed as parameters
             }
@@ -87,17 +87,10 @@ export class ScopedSymbolTrackingWalker extends ErrorTolerantWalker {
         return false;
     }
 
-    protected visitSourceFile(node: ts.SourceFile): void {
-        this.scope = new Scope(null);
-        this.scope.addGlobalScope(node, node, this.getOptions());
-        super.visitSourceFile(node);
-        this.scope = null;
-    }
-
-    protected visitModuleDeclaration(node: ts.ModuleDeclaration): void {
+    protected visitArrowFunction(node: ts.ArrowFunction): void {
         this.scope = new Scope(this.scope);
-        this.scope.addGlobalScope(node.body, this.getSourceFile(), this.getOptions());
-        super.visitModuleDeclaration(node);
+        this.scope.addParameters(node.parameters);
+        super.visitArrowFunction(node);
         this.scope = this.scope.parent;
     }
 
@@ -125,13 +118,6 @@ export class ScopedSymbolTrackingWalker extends ErrorTolerantWalker {
         this.scope = this.scope.parent;
     }
 
-    protected visitFunctionDeclaration(node: ts.FunctionDeclaration): void {
-        this.scope = new Scope(this.scope);
-        this.scope.addParameters(node.parameters);
-        super.visitFunctionDeclaration(node);
-        this.scope = this.scope.parent;
-    }
-
     protected visitConstructorDeclaration(node: ts.ConstructorDeclaration): void {
         this.scope = new Scope(this.scope);
         this.scope.addParameters(node.parameters);
@@ -139,17 +125,10 @@ export class ScopedSymbolTrackingWalker extends ErrorTolerantWalker {
         this.scope = this.scope.parent;
     }
 
-    protected visitMethodDeclaration(node: ts.MethodDeclaration): void {
+    protected visitFunctionDeclaration(node: ts.FunctionDeclaration): void {
         this.scope = new Scope(this.scope);
         this.scope.addParameters(node.parameters);
-        super.visitMethodDeclaration(node);
-        this.scope = this.scope.parent;
-    }
-
-    protected visitArrowFunction(node: ts.ArrowFunction): void {
-        this.scope = new Scope(this.scope);
-        this.scope.addParameters(node.parameters);
-        super.visitArrowFunction(node);
+        super.visitFunctionDeclaration(node);
         this.scope = this.scope.parent;
     }
 
@@ -160,10 +139,31 @@ export class ScopedSymbolTrackingWalker extends ErrorTolerantWalker {
         this.scope = this.scope.parent;
     }
 
+    protected visitMethodDeclaration(node: ts.MethodDeclaration): void {
+        this.scope = new Scope(this.scope);
+        this.scope.addParameters(node.parameters);
+        super.visitMethodDeclaration(node);
+        this.scope = this.scope.parent;
+    }
+
+    protected visitModuleDeclaration(node: ts.ModuleDeclaration): void {
+        this.scope = new Scope(this.scope);
+        this.scope.addGlobalScope(node.body, this.getSourceFile(), this.getOptions());
+        super.visitModuleDeclaration(node);
+        this.scope = this.scope.parent;
+    }
+
     protected visitSetAccessor(node: ts.AccessorDeclaration): void {
         this.scope = new Scope(this.scope);
         this.scope.addParameters(node.parameters);
         super.visitSetAccessor(node);
         this.scope = this.scope.parent;
+    }
+
+    protected visitSourceFile(node: ts.SourceFile): void {
+        this.scope = new Scope(null);
+        this.scope.addGlobalScope(node, node, this.getOptions());
+        super.visitSourceFile(node);
+        this.scope = null;
     }
 }
