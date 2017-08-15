@@ -8,7 +8,8 @@ import { ExtendedMetadata } from './utils/ExtendedMetadata';
 import * as toposort from 'toposort';
 import * as Memoize from 'memoize-decorator';
 
-export const FAILURE_STRING: string = 'The class does not read like a Newpaper. Please reorder the methods of the class: ';
+export const FAILURE_CLASS_STRING: string = 'The class does not read like a Newspaper. Reorder the methods of the class: ';
+export const FAILURE_FILE_STRING: string = 'The functions of the file do not read like a Newspaper. Reorder the functions in the file: ';
 
 /**
  * Implementation of the newspaper-order rule.
@@ -42,15 +43,25 @@ class NewspaperOrderRuleWalker extends ErrorTolerantWalker {
 
     protected visitClassDeclaration(node: ts.ClassDeclaration): void {
         const classNode = new ClassDeclarationHelper(node);
-        if (!this.readsLikeNewspaper(classNode)) {
-            const failureMessage = this.makeFailureMessage(classNode);
-            this.addFailureAt(node.getStart(), node.getWidth(), failureMessage);
-        }
+        this.checkAndReportFailure(classNode, FAILURE_CLASS_STRING);
         super.visitClassDeclaration(node);
     }
 
-    private makeFailureMessage(classNode: ClassDeclarationHelper): string {
-        const { name, completeOrderedMethodNames, methodNames } = classNode;
+    protected visitSourceFile(node: ts.SourceFile): void {
+        const sourceNode = new SourceFileHelper(node);
+        this.checkAndReportFailure(sourceNode, FAILURE_FILE_STRING);
+        super.visitSourceFile(node);
+    }
+
+    private checkAndReportFailure(nodeHelper: NewspaperHelper, failureString: string) {
+        if (!this.readsLikeNewspaper(nodeHelper)) {
+            const failureMessage = this.makeClassFailureMessage(nodeHelper, failureString);
+            this.addFailureAt(nodeHelper.start, nodeHelper.width, failureMessage);
+        }
+    }
+
+    private makeClassFailureMessage(nodeHelper: NewspaperHelper, failureString: string): string {
+        const { nodeName, completeOrderedMethodNames, methodNames } = nodeHelper;
         const correctSymbol = '✓';
         const incorrectSymbol = 'x';
         const help: string = '\n\nMethods order:\n' +
@@ -59,32 +70,51 @@ class NewspaperOrderRuleWalker extends ErrorTolerantWalker {
                 const status = isCorrect ? correctSymbol : incorrectSymbol;
                 return `${index + 1}. ${status} ${method}`;
             }).join('\n');
-        return FAILURE_STRING + name + help;
+        return failureString + nodeName + help;
     }
 
-    private readsLikeNewspaper(classNode: ClassDeclarationHelper): boolean {
-        return classNode.readsLikeNewspaper;
+    private readsLikeNewspaper(nodeHelper: NewspaperHelper): boolean {
+        return nodeHelper.readsLikeNewspaper;
     }
 
 }
 
-class ClassDeclarationHelper {
-    constructor(private node: ts.ClassDeclaration) {
+abstract class NewspaperHelper {
+
+    @Memoize
+    protected get incorrectMethodNames(): string[] {
+        const { completeOrderedMethodNames, methodNames } = this;
+        return methodNames.filter((methodName, index) => {
+            return methodName !== completeOrderedMethodNames[index];
+        });
+    }
+
+    protected methodForName(methodName: string): ts.FunctionLikeDeclaration {
+        return this.methodsIndex[methodName];
+    }
+
+    @Memoize
+    protected get methodsIndex(): { [methodName: string]: ts.FunctionLikeDeclaration } {
+        return this.methods.reduce((index, method) => {
+            const name = method.name.getText();
+            index[name] = method;
+            return index;
+        }, {});
     }
 
     @Memoize
     public get readsLikeNewspaper(): boolean {
         // console.log('====================='); // tslint:disable-line no-console
-        // console.log('Class: ', this.name); // tslint:disable-line no-console
+        // console.log('Node: ', nodeName); // tslint:disable-line no-console
         const { methodNames, completeOrderedMethodNames, ignoredMethods } = this;
         const ignoringAllMethods: boolean = (ignoredMethods.length === methodNames.length);
         const hasNoDeps: boolean = completeOrderedMethodNames.length === 0;
         // console.log('ignoredMethods:', ignoredMethods); // tslint:disable-line no-console
+        // console.log('methodNames:', methodNames); // tslint:disable-line no-console
+        // console.log('orderedMethodNames:', completeOrderedMethodNames); // tslint:disable-line no-console
         if (ignoringAllMethods || hasNoDeps) {
             return true;
         }
-        // console.log('methodNames:', methodNames); // tslint:disable-line no-console
-        // console.log('orderedMethodNames:', completeOrderedMethodNames); // tslint:disable-line no-console
         return Utils.arraysShallowEqual(methodNames, completeOrderedMethodNames);
     }
 
@@ -95,7 +125,7 @@ class ClassDeclarationHelper {
     }
 
     @Memoize
-    private get ignoredMethods(): string[] {
+    protected get ignoredMethods(): string[] {
         const { methodNames, orderedMethodNames } = this;
         return methodNames.filter(methodName => {
             return !Utils.contains(orderedMethodNames, methodName);
@@ -140,19 +170,36 @@ class ClassDeclarationHelper {
         }, <MethodDependenciesMap>{});
     }
 
-    private dependenciesForMethod(method: ts.MethodDeclaration): MethodDependencies {
-        const walker = new ClassMethodWalker();
-        walker.walk(method);
-        return walker.dependencies;
-    }
+    protected abstract dependenciesForMethod(method: ts.FunctionLikeDeclaration): MethodDependencies;
 
     @Memoize
     public get methodNames(): string[] {
         return this.methods.map(method => method.name.getText());
     }
 
+    protected abstract get methods(): ts.FunctionLikeDeclaration[];
+
+    abstract get nodeName(): string;
+
+    public abstract get start(): number;
+
+    public abstract get width(): number;
+
+}
+
+class ClassDeclarationHelper extends NewspaperHelper {
+    constructor(private node: ts.ClassDeclaration) {
+        super();
+    }
+
+    protected dependenciesForMethod(method: ts.MethodDeclaration): MethodDependencies {
+        const walker = new ClassMethodWalker();
+        walker.walk(method);
+        return walker.dependencies;
+    }
+
     @Memoize
-    private get methods(): ts.MethodDeclaration[] {
+    protected get methods(): ts.MethodDeclaration[] {
         return <ts.MethodDeclaration[]>this.node.members.filter((classElement: ts.ClassElement): boolean => {
             switch (classElement.kind) {
                 case ts.SyntaxKind.MethodDeclaration:
@@ -166,8 +213,71 @@ class ClassDeclarationHelper {
     }
 
     @Memoize
-    public get name() {
+    public get nodeName() {
         return this.node.name == null ? '<unknown>' : this.node.name.text;
+    }
+
+    public get start() {
+        return this.node.getStart();
+    }
+
+    public get width() {
+        return this.node.getWidth();
+    }
+
+}
+
+class SourceFileHelper extends NewspaperHelper {
+    constructor(private node: ts.SourceFile) {
+        super();
+    }
+
+    public get width(): number {
+        return this.end - this.start;
+    }
+
+    @Memoize
+    private get end(): number {
+        const len = this.incorrectMethodNames.length;
+        const lastIncorrectFunctionName: string | undefined = len > 0 ? this.incorrectMethodNames[len - 1] : undefined;
+        if (lastIncorrectFunctionName) {
+            const lastIncorrectFunction = this.methodForName(lastIncorrectFunctionName);
+            return lastIncorrectFunction.getEnd();
+        }
+        return this.node.getEnd();
+    }
+
+    @Memoize
+    public get start(): number {
+        const firstIncorrectFunctionName: string | undefined = this.incorrectMethodNames[0];
+        if (firstIncorrectFunctionName) {
+            const firstIncorrectFunction = this.methodForName(firstIncorrectFunctionName);
+            return firstIncorrectFunction.getStart();
+        }
+        return this.node.getStart();
+    }
+
+    protected dependenciesForMethod(method: ts.FunctionDeclaration): MethodDependencies {
+        const walker = new FunctionWalker();
+        walker.walk(method);
+        return walker.dependencies;
+    }
+
+    @Memoize
+    protected get methods(): ts.FunctionDeclaration[] {
+        return <ts.FunctionDeclaration[]>this.node.statements.filter((node: ts.FunctionDeclaration): boolean => {
+            switch (node.kind) {
+                case ts.SyntaxKind.FunctionDeclaration:
+                    return true;
+                default:
+                    return false;
+            }
+        });
+    }
+
+    @Memoize
+    public get nodeName() {
+        return this.node.fileName == null ? '<unknown>' : this.node.fileName;
     }
 
 }
@@ -194,6 +304,19 @@ class ClassMethodWalker extends Lint.SyntaxWalker {
             this.dependencies[field] = true;
         }
         super.visitBindingElement(node);
+    }
+
+}
+
+class FunctionWalker extends Lint.SyntaxWalker {
+
+    public dependencies: MethodDependencies = {};
+
+    protected visitCallExpression(node: ts.CallExpression): void {
+        const field = node.expression.getText();
+        // console.log('visitPropertyAccessExpression:', field, node.expression); // tslint:disable-line no-console
+        this.dependencies[field] = true;
+        super.visitCallExpression(node);
     }
 
 }
