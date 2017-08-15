@@ -80,26 +80,7 @@ class NewspaperOrderRuleWalker extends ErrorTolerantWalker {
 }
 
 abstract class NewspaperHelper {
-
-    @Memoize
-    protected get incorrectMethodNames(): string[] {
-        const { completeOrderedMethodNames, methodNames } = this;
-        return methodNames.filter((methodName, index) => {
-            return methodName !== completeOrderedMethodNames[index];
-        });
-    }
-
-    protected methodForName(methodName: string): ts.FunctionLikeDeclaration {
-        return this.methodsIndex[methodName];
-    }
-
-    @Memoize
-    protected get methodsIndex(): { [methodName: string]: ts.FunctionLikeDeclaration } {
-        return this.methods.reduce((index, method) => {
-            const name = method.name.getText();
-            index[name] = method;
-            return index;
-        }, {});
+    constructor(protected node: ts.Node) {
     }
 
     @Memoize
@@ -116,6 +97,39 @@ abstract class NewspaperHelper {
             return true;
         }
         return Utils.arraysShallowEqual(methodNames, completeOrderedMethodNames);
+    }
+
+    public get width(): number {
+        return this.end - this.start;
+    }
+
+    @Memoize
+    private get end(): number {
+        const len = this.incorrectMethodNames.length;
+        const lastIncorrectFunctionName: string | undefined = len > 0 ? this.incorrectMethodNames[len - 1] : undefined;
+        if (lastIncorrectFunctionName) {
+            const lastIncorrectFunction = this.methodForName(lastIncorrectFunctionName);
+            return lastIncorrectFunction.getEnd();
+        }
+        return this.node.getEnd();
+    }
+
+    @Memoize
+    public get start(): number {
+        const firstIncorrectFunctionName: string | undefined = this.incorrectMethodNames[0];
+        if (firstIncorrectFunctionName) {
+            const firstIncorrectFunction = this.methodForName(firstIncorrectFunctionName);
+            return firstIncorrectFunction.getStart();
+        }
+        return this.node.getStart();
+    }
+
+    @Memoize
+    protected get incorrectMethodNames(): string[] {
+        const { completeOrderedMethodNames, methodNames } = this;
+        return methodNames.filter((methodName, index) => {
+            return methodName !== completeOrderedMethodNames[index];
+        });
     }
 
     @Memoize
@@ -177,19 +191,28 @@ abstract class NewspaperHelper {
         return this.methods.map(method => method.name.getText());
     }
 
+    protected methodForName(methodName: string): ts.FunctionLikeDeclaration {
+        return this.methodsIndex[methodName];
+    }
+
+    @Memoize
+    protected get methodsIndex(): { [methodName: string]: ts.FunctionLikeDeclaration } {
+        return this.methods.reduce((index, method) => {
+            const name = method.name.getText();
+            index[name] = method;
+            return index;
+        }, {});
+    }
+
     protected abstract get methods(): ts.FunctionLikeDeclaration[];
 
     abstract get nodeName(): string;
 
-    public abstract get start(): number;
-
-    public abstract get width(): number;
-
 }
 
 class ClassDeclarationHelper extends NewspaperHelper {
-    constructor(private node: ts.ClassDeclaration) {
-        super();
+    constructor(protected node: ts.ClassDeclaration) {
+        super(node);
     }
 
     protected dependenciesForMethod(method: ts.MethodDeclaration): MethodDependencies {
@@ -217,44 +240,11 @@ class ClassDeclarationHelper extends NewspaperHelper {
         return this.node.name == null ? '<unknown>' : this.node.name.text;
     }
 
-    public get start() {
-        return this.node.getStart();
-    }
-
-    public get width() {
-        return this.node.getWidth();
-    }
-
 }
 
 class SourceFileHelper extends NewspaperHelper {
-    constructor(private node: ts.SourceFile) {
-        super();
-    }
-
-    public get width(): number {
-        return this.end - this.start;
-    }
-
-    @Memoize
-    private get end(): number {
-        const len = this.incorrectMethodNames.length;
-        const lastIncorrectFunctionName: string | undefined = len > 0 ? this.incorrectMethodNames[len - 1] : undefined;
-        if (lastIncorrectFunctionName) {
-            const lastIncorrectFunction = this.methodForName(lastIncorrectFunctionName);
-            return lastIncorrectFunction.getEnd();
-        }
-        return this.node.getEnd();
-    }
-
-    @Memoize
-    public get start(): number {
-        const firstIncorrectFunctionName: string | undefined = this.incorrectMethodNames[0];
-        if (firstIncorrectFunctionName) {
-            const firstIncorrectFunction = this.methodForName(firstIncorrectFunctionName);
-            return firstIncorrectFunction.getStart();
-        }
-        return this.node.getStart();
+    constructor(protected node: ts.SourceFile) {
+        super(node);
     }
 
     protected dependenciesForMethod(method: ts.FunctionDeclaration): MethodDependencies {
@@ -290,7 +280,6 @@ class ClassMethodWalker extends Lint.SyntaxWalker {
         const isOnThis = node.expression.kind === ts.SyntaxKind.ThisKeyword;
         if (isOnThis) {
             const field = node.name.text;
-            // console.log('visitPropertyAccessExpression:', field, node.expression); // tslint:disable-line no-console
             this.dependencies[field] = true;
         }
         super.visitPropertyAccessExpression(node);
@@ -300,7 +289,6 @@ class ClassMethodWalker extends Lint.SyntaxWalker {
         const isOnThis = node.parent.parent.initializer.kind === ts.SyntaxKind.ThisKeyword;
         if (isOnThis) {
             const field = node.name.getText();
-            // console.log('visitBindingElement:', field); // tslint:disable-line no-console
             this.dependencies[field] = true;
         }
         super.visitBindingElement(node);
@@ -314,7 +302,6 @@ class FunctionWalker extends Lint.SyntaxWalker {
 
     protected visitCallExpression(node: ts.CallExpression): void {
         const field = node.expression.getText();
-        // console.log('visitPropertyAccessExpression:', field, node.expression); // tslint:disable-line no-console
         this.dependencies[field] = true;
         super.visitCallExpression(node);
     }

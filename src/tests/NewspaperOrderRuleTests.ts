@@ -7,7 +7,7 @@ import { FAILURE_CLASS_STRING, FAILURE_FILE_STRING } from '../newspaperOrderRule
 describe('newspaperOrderRule', (): void => {
     const ruleName: string = 'newspaper-order';
 
-    context("class methods", () => {
+    context("ClassDeclaration", () => {
 
         it('should pass on empty class', (): void => {
             const script: string = `
@@ -71,7 +71,7 @@ describe('newspaperOrderRule', (): void => {
                     "\n\nMethods order:\n1. x firstMethod\n2. x secondMethod",
                     "name": "file.ts",
                     "ruleName": ruleName,
-                    "startPosition": { "character": 13, "line": 2 }
+                    "startPosition": { "character": 17, "line": 3 }
                 }
             ]);
         });
@@ -121,7 +121,7 @@ describe('newspaperOrderRule', (): void => {
                     "\n\nMethods order:\n1. x firstMethod\n2. x secondMethod",
                     "name": "file.ts",
                     "ruleName": ruleName,
-                    "startPosition": { "character": 13, "line": 2 }
+                    "startPosition": { "character": 17, "line": 3 }
                 }
             ]);
         });
@@ -167,7 +167,7 @@ describe('newspaperOrderRule', (): void => {
                     "\n\nMethods order:\n1. x firstMethod\n2. x secondMethod",
                     "name": "file.ts",
                     "ruleName": ruleName,
-                    "startPosition": { "character": 13, "line": 7 }
+                    "startPosition": { "character": 17, "line": 8 }
                 }
             ]);
         });
@@ -211,8 +211,8 @@ describe('newspaperOrderRule', (): void => {
                     "ruleName": "newspaper-order",
                     "ruleSeverity": "ERROR",
                     "startPosition": {
-                        "character": 13,
-                        "line": 2
+                        "character": 17,
+                        "line": 3
                     }
                 }
             ]);
@@ -254,9 +254,34 @@ describe('newspaperOrderRule', (): void => {
             TestHelper.assertViolations(ruleName, script, []);
         });
 
+        it('should fail on subset of incorrectly ordered class methods', (): void => {
+            const script: string = `
+            class BadClass {
+                private firstMethod() {
+                    return this.secondMethod();
+                }
+                private thirdMethod() {
+                    true;
+                }
+                private secondMethod() {
+                    return this.thirdMethod();
+                }
+            }
+        `;
+            TestHelper.assertViolations(ruleName, script, [
+                {
+                    "failure": FAILURE_CLASS_STRING + "BadClass" +
+                    "\n\nMethods order:\n1. ✓ firstMethod\n2. x secondMethod\n3. x thirdMethod",
+                    "name": "file.ts",
+                    "ruleName": ruleName,
+                    "startPosition": { "character": 17, "line": 6 }
+                }
+            ]);
+        });
+
     });
 
-    context("functions", () => {
+    context("SourceFile", () => {
 
         it('should pass on correctly ordered functions', (): void => {
             const script: string = `
