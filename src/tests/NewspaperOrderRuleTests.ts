@@ -1,5 +1,5 @@
 import { TestHelper } from './TestHelper';
-import { FAILURE_CLASS_STRING, FAILURE_FILE_STRING } from '../newspaperOrderRule';
+import { FAILURE_CLASS_STRING, FAILURE_FILE_STRING, FAILURE_BLOCK_STRING } from '../newspaperOrderRule';
 
 /**
  * Unit tests.
@@ -341,6 +341,62 @@ describe('newspaperOrderRule', (): void => {
                     "startPosition": {
                         "character": 13,
                         "line": 5
+                    }
+                }
+            ]);
+        });
+
+    });
+
+    context("Block", () => {
+
+        it('should fail on incorrectly ordered functions within named function', (): void => {
+            const script: string = `
+                    function doStuff() {
+                        function secondMethod(): number {
+                            return 2;
+                        }
+                        function firstMethod(): number {
+                            return 2 + secondMethod();
+                        }
+                    }
+                    `;
+            TestHelper.assertViolations(ruleName, script, [
+                {
+                    "failure": FAILURE_BLOCK_STRING + "doStuff" +
+                    "\n\nMethods order:\n1. x firstMethod\n2. x secondMethod",
+                    "name": "file.ts",
+                    "ruleName": "newspaper-order",
+                    "ruleSeverity": "ERROR",
+                    "startPosition": {
+                        "character": 25,
+                        "line": 3
+                    }
+                }
+            ]);
+        });
+
+        it('should fail on incorrectly ordered functions within anonymous function', (): void => {
+            const script: string = `
+                    function () {
+                        function secondMethod(): number {
+                            return 2;
+                        }
+                        function firstMethod(): number {
+                            return 2 + secondMethod();
+                        }
+                    }
+                    `;
+            TestHelper.assertViolations(ruleName, script, [
+                {
+                    "failure": FAILURE_BLOCK_STRING + "<anonymous>" +
+                    "\n\nMethods order:\n1. x firstMethod\n2. x secondMethod",
+                    "name": "file.ts",
+                    "ruleName": "newspaper-order",
+                    "ruleSeverity": "ERROR",
+                    "startPosition": {
+                        "character": 25,
+                        "line": 3
                     }
                 }
             ]);

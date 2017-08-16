@@ -9,7 +9,8 @@ import * as toposort from 'toposort';
 import * as Memoize from 'memoize-decorator';
 
 export const FAILURE_CLASS_STRING: string = 'The class does not read like a Newspaper. Reorder the methods of the class: ';
-export const FAILURE_FILE_STRING: string = 'The functions of the file do not read like a Newspaper. Reorder the functions in the file: ';
+export const FAILURE_FILE_STRING: string = 'The functions in the file do not read like a Newspaper. Reorder the functions in the file: ';
+export const FAILURE_BLOCK_STRING: string = 'The functions in the block do not read like a Newspaper. Reorder the functions in the block: ';
 
 /**
  * Implementation of the newspaper-order rule.
@@ -40,6 +41,12 @@ export class Rule extends Lint.Rules.AbstractRule {
 }
 
 class NewspaperOrderRuleWalker extends ErrorTolerantWalker {
+
+    protected visitBlock(node: ts.Block): void {
+        const blockNode = new BlockHelper(node);
+        this.checkAndReportFailure(blockNode, FAILURE_BLOCK_STRING);
+        super.visitBlock(node);
+    }
 
     protected visitClassDeclaration(node: ts.ClassDeclaration): void {
         const classNode = new ClassDeclarationHelper(node);
@@ -242,8 +249,8 @@ class ClassDeclarationHelper extends NewspaperHelper {
 
 }
 
-class SourceFileHelper extends NewspaperHelper {
-    constructor(protected node: ts.SourceFile) {
+abstract class BlockLikeHelper extends NewspaperHelper {
+    constructor(protected node: ts.BlockLike) {
         super(node);
     }
 
@@ -265,9 +272,34 @@ class SourceFileHelper extends NewspaperHelper {
         });
     }
 
+}
+
+class SourceFileHelper extends BlockLikeHelper {
+    constructor(protected node: ts.SourceFile) {
+        super(node);
+    }
+
     @Memoize
     public get nodeName() {
         return this.node.fileName == null ? '<unknown>' : this.node.fileName;
+    }
+
+}
+
+class BlockHelper extends BlockLikeHelper {
+    constructor(protected node: ts.Block) {
+        super(node);
+    }
+
+    @Memoize
+    public get nodeName() {
+        const { node } = this;
+        if (node.parent) {
+            if (node.parent.kind === ts.SyntaxKind.FunctionDeclaration) {
+                return (<ts.FunctionDeclaration> node.parent).name.getText() || '<anonymous>';
+            }
+        }
+        return '<anonymous>';
     }
 
 }
