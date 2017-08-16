@@ -1,4 +1,4 @@
-// tslint:disable no-flag-args
+// tslint:disable no-flag-args max-func-args
 import * as Lint from 'tslint';
 import * as fs from 'fs';
 import * as chai from 'chai';

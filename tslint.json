@@ -68,6 +68,10 @@
       true,
       140
     ],
+    "max-func-args": [
+      true,
+      3
+    ],
     "member-access": true,
     "member-ordering": [
       false

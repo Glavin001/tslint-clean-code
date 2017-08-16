@@ -29,6 +29,8 @@ match-default-export-name,Requires that a default import have the same name as t
 max-classes-per-file,A file may not contain more than the specified number of classes,TSLINT1DB5DER,tslint,Non-SDL,Warning,Low,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,,
 max-file-line-count,Requires files to remain under a certain number of lines,TSLINT1RKDRG1,tslint,Non-SDL,Warning,Moderate,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
 CWE 710 - Coding Standards Violation"
+max-func-args,The ideal number of arguments for a function is zero (niladic).,TSLINT1V3N452,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
+CWE 710 - Coding Standards Violation"
 max-line-length,Requires lines to be under a certain max length.,TSLINT728UFN,tslint,Non-SDL,Warning,Low,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
 CWE 710 - Coding Standards Violation"
 member-access,Requires explicit visibility declarations for class members.,TSLINT1ME2GE8,tslint,Non-SDL,Warning,Low,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality

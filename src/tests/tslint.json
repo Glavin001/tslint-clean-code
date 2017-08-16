@@ -1,0 +1,8 @@
+{
+    "extends": [
+        "../../tslint.json"
+    ],
+    "rules": {
+        "no-multiline-string": false
+    }
+}
