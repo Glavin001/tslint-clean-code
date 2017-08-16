@@ -5,7 +5,7 @@ import { ErrorTolerantWalker } from './utils/ErrorTolerantWalker';
 import { AstUtils } from './utils/AstUtils';
 import { Utils } from './utils/Utils';
 import { ExtendedMetadata } from './utils/ExtendedMetadata';
-import * as toposort from 'toposort';
+import { DirectedAcyclicGraph } from './utils/DirectedAcyclicGraph';
 import * as Memoize from 'memoize-decorator';
 
 export const FAILURE_CLASS_STRING: string = 'The class does not read like a Newspaper. Reorder the methods of the class: ';
@@ -155,19 +155,20 @@ abstract class NewspaperHelper {
 
     @Memoize
     private get orderedMethodNames(): string[] {
-        const { methodGraph } = this;
+        const { methodGraph, methodNames } = this;
         try {
-            return toposort(methodGraph);
+            const top = new TopologicalSortUtil(methodGraph);
+            return top.closestList(methodNames);
         } catch (error) {
             return [];
         }
     }
 
     @Memoize
-    private get methodGraph(): ToposortGraph {
+    private get methodGraph(): DependencyGraph {
         const { methodDependencies } = this;
         // console.log('methodDependencies:', methodDependencies); // tslint:disable-line no-console
-        return Object.keys(methodDependencies).sort().reduce((graph: ToposortGraph, methodName: string) => {
+        return Object.keys(methodDependencies).sort().reduce((graph: DependencyGraph, methodName: string) => {
             const deps = Object.keys(methodDependencies[methodName]).sort();
             deps.forEach(depName => {
                 const shouldIgnore: boolean = !methodDependencies.hasOwnProperty(depName) || (methodName === depName);
@@ -180,7 +181,7 @@ abstract class NewspaperHelper {
             });
             // console.log('graph:', graph); // tslint:disable-line no-console
             return graph;
-        }, <ToposortGraph>[]);
+        }, <DependencyGraph>[]);
     }
 
     @Memoize
@@ -296,7 +297,7 @@ class BlockHelper extends BlockLikeHelper {
         const { node } = this;
         if (node.parent) {
             if (node.parent.kind === ts.SyntaxKind.FunctionDeclaration) {
-                return (<ts.FunctionDeclaration> node.parent).name.getText() || '<anonymous>';
+                return (<ts.FunctionDeclaration>node.parent).name.getText() || '<anonymous>';
             }
         }
         return '<anonymous>';
@@ -348,4 +349,86 @@ interface MethodDependencies {
     [dependencyMethodName: string]: true;
 }
 
-type ToposortGraph = string[][];
+type DependencyGraph = string[][];
+
+class TopologicalSortUtil {
+    constructor(private graph: DependencyGraph) {
+    }
+
+    public closestList(currentList: string[]): string[] {
+        if (currentList.length === 0) {
+            return [];
+        }
+        const { allLists } = this;
+        if (allLists.length === 0) {
+            return [];
+        }
+        let bestList: string[] = [];
+        let bestDistance: number = Infinity;
+        allLists.forEach(list => {
+            const dist = this.distanceBetweenLists(currentList, list);
+            if (dist < bestDistance) {
+                bestDistance = dist;
+                bestList = list;
+            }
+        });
+        // console.log('closestList', bestList, bestDistance, currentList, allLists, this.graph); // tslint:disable-line no-console
+        return bestList;
+    }
+
+    private distanceBetweenLists(srcList: string[], destList: string[]): number {
+        const positionMap = destList.reduce((result, key, index) => {
+            result[key] = index;
+            return result;
+        }, {});
+        return srcList.reduce((total, key, index) => {
+            const destIndex: number | undefined = positionMap[key];
+            if (destIndex) {
+                return total + Math.abs(destIndex - index);
+            }
+            return total;
+        }, 0);
+    }
+
+    @Memoize
+    private get allLists(): string[][] {
+        const { dag, list } = this;
+        // console.log('list', list); // tslint:disable-line no-console
+        const indexMap: { [index: number]: string; } = list.reduce((result, key, index) => {
+            result[index] = key;
+            return result;
+        }, {});
+        return dag.alltopologicalSort()
+            .map(currList => {
+                return currList.map(index => indexMap[index]);
+            });
+    }
+
+    @Memoize
+    private get dag(): DirectedAcyclicGraph {
+        const { graph, list } = this;
+        const positionMap = list.reduce((result, key, index) => {
+            result[key] = index;
+            return result;
+        }, {});
+        const dag: DirectedAcyclicGraph = new DirectedAcyclicGraph(list.length);
+        graph.forEach(([a, b]) => {
+            const ai = positionMap[a];
+            const bi = positionMap[b];
+            dag.addEdge(ai, bi);
+        });
+        return dag;
+    }
+
+    @Memoize
+    private get list() {
+        const { graph } = this;
+        const index: { [key: string]: true } = {};
+        graph.forEach(([a, b]) => {
+            index[a] = true;
+            index[b] = true;
+        });
+        return Object.keys(index);
+    }
+
+}

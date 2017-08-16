@@ -218,7 +218,7 @@ describe('newspaperOrderRule', (): void => {
             ]);
         });
 
-        it('should pass on class with unsupported indirectly recursive methods', (): void => {
+        it('should pass on class with correctly ordered methods and indirectly recursive methods', (): void => {
             const script: string = `
             class CountDownClass {
                 private startCountDown() {
@@ -236,6 +236,58 @@ describe('newspaperOrderRule', (): void => {
             }
         `;
             TestHelper.assertViolations(ruleName, script, []);
+        });
+
+        it('should pass on class with correctly ordered methods and with indirectly recursive methods', (): void => {
+            const script: string = `
+            class CountDownClass {
+                private startCountDown() {
+                    this.countDown(10);
+                }
+                private step(curr: number): void {
+                    return this.countDown(curr - 1);
+                }
+                private countDown(curr: number): void {
+                    if (curr > 0) {
+                        console.log(curr);
+                        return this.step(curr);
+                    }
+                }
+            }
+        `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
+        it('should fail on class with incorrectly ordered methods and indirectly recursive methods', (): void => {
+            const script: string = `
+            class CountDownClass {
+                private step(curr: number): void {
+                    return this.countDown(curr - 1);
+                }
+                private countDown(curr: number): void {
+                    if (curr > 0) {
+                        console.log(curr);
+                        return this.step(curr);
+                    }
+                }
+                private startCountDown() {
+                    this.countDown(10);
+                }
+            }
+        `;
+            TestHelper.assertViolations(ruleName, script, [
+                {
+                    "failure": FAILURE_CLASS_STRING + "CountDownClass" +
+                    "\n\nMethods order:\n1. x startCountDown\n2. ✓ countDown\n3. x step",
+                    "name": "file.ts",
+                    "ruleName": "newspaper-order",
+                    "ruleSeverity": "ERROR",
+                    "startPosition": {
+                        "character": 17,
+                        "line": 3
+                    }
+                }
+            ]);
         });
 
         it('should pass on SubClass by ignoring undefined constructor calls', (): void => {
@@ -289,6 +341,36 @@ describe('newspaperOrderRule', (): void => {
                 return 2 + secondMethod();
             }
             function secondMethod(): number {
+                return 2;
+            }
+            `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
+        it('should pass on correctly ordered functions', (): void => {
+            const script: string = `
+            function firstMethod(): number {
+                return 1 + thirdMethod();
+            }
+            function secondMethod(): number {
+                return 2 + thirdMethod();
+            }
+            function thirdMethod(): number {
+                return 2;
+            }
+            `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
+        it('should pass on correctly ordered functions', (): void => {
+            const script: string = `
+            function secondMethod(): number {
+                return 2 + thirdMethod();
+            }
+            function firstMethod(): number {
+                return 1 + thirdMethod();
+            }
+            function thirdMethod(): number {
                 return 2;
             }
             `;
@@ -349,6 +431,20 @@ describe('newspaperOrderRule', (): void => {
     });
 
     context("Block", () => {
+
+        it('should pass on correctly ordered functions within named function', (): void => {
+            const script: string = `
+                    function doStuff() {
+                        function firstMethod(): number {
+                            return 2 + secondMethod();
+                        }
+                        function secondMethod(): number {
+                            return 2;
+                        }
+                    }
+                    `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
 
         it('should fail on incorrectly ordered functions within named function', (): void => {
             const script: string = `
