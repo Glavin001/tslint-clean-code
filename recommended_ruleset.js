@@ -30,6 +30,7 @@ module.exports = {
         "no-duplicate-super": true,
         "no-duplicate-variable": true,
         "no-empty": true,
+        "no-flag-args": [true, 0.5],
         "no-floating-promises": true,
         "no-for-in-array": true,
         "no-import-side-effect": true,
