@@ -1,4 +1,4 @@
-tslint-clean-code
+tslint-clean-code [![Build Status](https://travis-ci.org/Glavin001/tslint-clean-code.svg?branch=master)](https://travis-ci.org/Glavin001/tslint-clean-code)
 ======
 
 A set of [TSLint](https://github.com/palantir/tslint) rules used to enforce [Clean Code](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) practices. Inspired by [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882).
