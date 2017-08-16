@@ -15,7 +15,7 @@ export class Rule extends Lint.Rules.AbstractRule {
         ruleName: 'no-flag-args',
         type: 'maintainability',
         description: 'Passing a boolean into a function is a truly terrible practice. ' +
-            'It immediately complicates the signature of the method, loudly proclaiming that this function does more than one thing.',
+        'It immediately complicates the signature of the method, loudly proclaiming that this function does more than one thing.',
         options: null,
         optionsDescription: '',
         typescriptOnly: true,
@@ -46,8 +46,22 @@ class NoFlagArgsRuleWalker extends ErrorTolerantWalker {
     }
 
     private makeFailureMessage(node: ts.ParameterDeclaration, failureString: string): string {
-        const name = node.name.getText();
-        return failureString + name;
+        const paramName = node.name.getText();
+        const pascalCaseParamName = this.toPascalCase(paramName);
+        const functionName: string | undefined = node.parent.name && node.parent.name.getText();
+        const recommendation = functionName ? (
+            '\nSplit the function into two, such as ' +
+            `${functionName}When${pascalCaseParamName}` + ' and ' +
+            `${functionName}WhenNot${pascalCaseParamName}.`
+        ) : '\nSplit the function into two.';
+        return failureString + paramName + recommendation;
+    }
+
+    private toPascalCase(str: string) {
+        if (typeof str !== 'string' || str.length === 0) {
+            return str;
+        }
+        return str[0].toUpperCase() + str.slice(1);
     }
 
 }
