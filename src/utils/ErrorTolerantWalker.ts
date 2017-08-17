@@ -12,13 +12,13 @@ export class ErrorTolerantWalker extends Lint.RuleWalker {
     protected visitNode(node: ts.Node): void {
         try {
             super.visitNode(node);
-        } catch (e) {
+        } catch (error) {
             // turn this on when trying out new rules on foreign codebases
             if (ErrorTolerantWalker.DEBUG) {
                 const msg: string = 'An error occurred visiting a node.'
                     + '\nWalker: ' + this.getClassName()
                     + '\nNode: ' + (node.getFullText ? node.getFullText() : '<unknown>')
-                    + '\n' + e;
+                    + '\n' + error;
 
                 this.addFailureAt(
                     node.getStart ? node.getStart() : 0,

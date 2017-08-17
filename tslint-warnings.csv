@@ -15,6 +15,8 @@ CWE 710 - Coding Standards Violation"
 cyclomatic-complexity,Enforces a threshold of cyclomatic complexity.,TSLINT1F0UAB2,tslint,Non-SDL,Warning,Low,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,,
 forin,Requires a `for ... in` statement to be filtered with an `if` statement.,TSLINTTBFHNF,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
 CWE 710 - Coding Standards Violation"
+id-length,This rule enforces a minimum and/or maximum identifier length convention.,TSLINT1N4PKP,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
+CWE 710 - Coding Standards Violation"
 import-spacing,Ensures proper spacing between import statement keywords,TSLINTUMSN06,tslint,Non-SDL,Warning,Low,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,,
 indent,Enforces indentation with tabs or spaces.,TSLINTGKM7CB,tslint,Non-SDL,Warning,Low,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
 CWE 710 - Coding Standards Violation"
@@ -146,7 +148,7 @@ CWE 710 - Coding Standards Violation"
 trailing-comma,"Requires or disallows trailing commas in array and object literals, destructuring assignments, function typings, named imports and exports and function parameters.",TSLINT1R9EG1T,tslint,Non-SDL,Warning,Low,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,710,"CWE 710 - Coding Standards Violation"
 triple-equals,Requires `===` and `!==` in place of `==` and `!=`.,TSLINT1A3MGIF,tslint,Non-SDL,Warning,Moderate,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
 CWE 710 - Coding Standards Violation"
-try-catch-first,,TSLINT17T3GD,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
+try-catch-first,"Try-catch blocks must be first within the scope. Try-catch blocks are transactions and should leave your program in a consistent state, no matter what happens in the try.",TSLINT17T3GD,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
 CWE 710 - Coding Standards Violation"
 typedef,Requires type definitions to exist.,TSLINT1GMMOCC,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
 CWE 710 - Coding Standards Violation"

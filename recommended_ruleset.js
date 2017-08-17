@@ -17,6 +17,7 @@ module.exports = {
          */
         "await-promise": true,
         "forin": true,
+        "id-length": true,
         "label-position": true,
         "match-default-export-name": true,
         "max-func-args": [true, 3],

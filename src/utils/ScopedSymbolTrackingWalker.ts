@@ -64,7 +64,7 @@ export class ScopedSymbolTrackingWalker extends ErrorTolerantWalker {
                 const signature: ts.Signature = this.typeChecker.getResolvedSignature(<ts.CallExpression>expression);
                 const expressionType: ts.Type = this.typeChecker.getReturnTypeOfSignature(signature);
                 return this.isFunctionType(expressionType, this.typeChecker);
-            } catch (e) {
+            } catch (error) {
                 // this exception is only thrown in unit tests, not the node debugger :(
                 return false;
             }

@@ -1,3 +1,4 @@
+// tslint:disable id-length
 import * as ts from 'typescript';
 import { getJsxAttributesFromJsxElement } from '../JsxAttribute';
 

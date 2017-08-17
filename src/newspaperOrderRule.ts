@@ -412,9 +412,9 @@ class TopologicalSortUtil {
             return result;
         }, {});
         const dag: DirectedAcyclicGraph = new DirectedAcyclicGraph(list.length);
-        graph.forEach(([a, b]) => {
-            const ai = positionMap[a];
-            const bi = positionMap[b];
+        graph.forEach(([from, to]) => {
+            const ai = positionMap[from];
+            const bi = positionMap[to];
             dag.addEdge(ai, bi);
         });
         return dag;
@@ -424,9 +424,9 @@ class TopologicalSortUtil {
     private get list() {
         const { graph } = this;
         const index: { [key: string]: true } = {};
-        graph.forEach(([a, b]) => {
-            index[a] = true;
-            index[b] = true;
+        graph.forEach(([from, to]) => {
+            index[from] = true;
+            index[to] = true;
         });
         return Object.keys(index);
     }

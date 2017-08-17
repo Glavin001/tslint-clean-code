@@ -4,13 +4,13 @@
  * Original C++ source code from http://www.geeksforgeeks.org/all-topological-sorts-of-a-directed-acyclic-graph/
  */
 export class DirectedAcyclicGraph {
-    private V: number;    // No. of vertices
+    private numVertices: number;    // No. of vertices
 
-    constructor(V: number) {
-        this.V = V;
+    constructor(numVertices: number) {
+        this.numVertices = numVertices;
 
         // Initialising all indegree with 0
-        for (let i: number = 0; i < V; i = i + 1) {
+        for (let curr: number = 0; curr < numVertices; curr = curr + 1) {
             this.inDegree.push(0);
             this.adj.push([]);
         }
@@ -26,10 +26,10 @@ export class DirectedAcyclicGraph {
     //  The function does all Topological Sort.
     //  It uses recursive alltopologicalSortUtil()
     public alltopologicalSort(): number[][] {
-        const { V } = this;
+        const { numVertices } = this;
         // Mark all the vertices as not visited
         const visited: boolean[] = [];
-        for (let i: number = 0; i < V; i = i + 1) {
+        for (let curr: number = 0; curr < numVertices; curr = curr + 1) {
             visited.push(false);
         }
         const res: number[] = [];
@@ -42,7 +42,7 @@ export class DirectedAcyclicGraph {
     //  topological sorts
     private alltopologicalSortUtil(res: number[], visited: boolean[]): number[][] {
         // console.log('topSort', res, visited); // tslint:disable-line no-console
-        const { V, inDegree, adj } = this;
+        const { numVertices, inDegree, adj } = this;
         // To indicate whether all topological are found
         // or not
         let flag: boolean = false;
@@ -56,29 +56,29 @@ export class DirectedAcyclicGraph {
         }, Infinity);
         // console.log('floor', floor); // tslint:disable-line no-console
 
-        for (let i: number = 0; i < V; i++) {
+        for (let vertex: number = 0; vertex < numVertices; vertex++) {
             //  If indegree is 0 and not yet visited then
             //  only choose that vertex
             // console.log('i', i, inDegree[i], visited[i]); // tslint:disable-line no-console
-            if (inDegree[i] === floor && !visited[i]) {
+            if (inDegree[vertex] === floor && !visited[vertex]) {
                 // console.log('visit', i, inDegree[i], visited[i]); // tslint:disable-line no-console
 
                 //  reducing indegree of adjacent vertices
-                let j: number;
-                for (j = 0; j < adj[i].length; j++) {
-                    const jv = adj[i][j];
+                let adjIndex: number;
+                for (adjIndex = 0; adjIndex < adj[vertex].length; adjIndex++) {
+                    const jv = adj[vertex][adjIndex];
                     inDegree[jv]--;
                 }
 
                 //  including in result
-                visited[i] = true;
-                allSorts.push(...this.alltopologicalSortUtil(res.concat(i), visited));
+                visited[vertex] = true;
+                allSorts.push(...this.alltopologicalSortUtil(res.concat(vertex), visited));
 
                 // resetting visited, res and indegree for
                 // backtracking
-                visited[i] = false;
-                for (j = 0; j < adj[i].length; j++) {
-                    const jv = adj[i][j];
+                visited[vertex] = false;
+                for (adjIndex = 0; adjIndex < adj[vertex].length; adjIndex++) {
+                    const jv = adj[vertex][adjIndex];
                     inDegree[jv]++;
                 }
 
@@ -97,10 +97,10 @@ export class DirectedAcyclicGraph {
 
     // function to add an edge to graph
     // Utility function to add edge
-    public addEdge(v: number, w: number): void {
-        this.adj[v].push(w); // Add w to v's list.
+    public addEdge(src: number, dest: number): void {
+        this.adj[src].push(dest); // Add w to v's list.
         // increasing inner degree of w by 1
-        this.inDegree[w]++;
+        this.inDegree[dest]++;
     }
 
 }

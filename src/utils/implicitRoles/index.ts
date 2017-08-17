@@ -1,3 +1,4 @@
+// tslint:disable id-length
 import { a } from './a';
 import { area } from './area';
 import { article } from './article';

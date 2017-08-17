@@ -1,7 +1,7 @@
 /**
  * Control flow functions.
  */
-/* tslint:disable:no-increment-decrement */
+/* tslint:disable:no-increment-decrement id-length */
 export module Utils {
     /**
      * Logical 'any' or 'exists' function.

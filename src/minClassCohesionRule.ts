@@ -96,7 +96,7 @@ class ClassDeclarationHelper {
             const used = this.numberOfFieldsUsedByMethod(fieldNames, method);
             return used / numFields;
         });
-        const sumScores = methodScores.reduce((a, b) => a + b, 0);
+        const sumScores = methodScores.reduce((total, current) => total + current, 0);
         return sumScores / methods.length;
         // console.log('Average score:', avgScore); // tslint:disable-line no-console
     }

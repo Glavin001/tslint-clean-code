@@ -46,6 +46,7 @@ Supported Rules
 
 Rule Name   | Description | Since
 :---------- | :------------ | -------------
+`id-length` | Enforces a minimum and/or maximum identifier length convention. | 0.1.0
 `try-catch-first` | Try-catch blocks must be first within the scope. Try-catch blocks are transactions and should leave your program in a consistent state, no matter what happens in the try. | 0.1.0
 `max-func-args` | Limit the number of input arguments for a function. The ideal number of arguments for a function is zero (niladic). | 0.1.0
 `min-class-cohesion` | The more variables a method manipulates the more cohesive that method is to its class. A class in which each variable is used by each method is maximally cohesive. We would like cohesion to be high. When cohesion is high, it means that the methods and variables of the class are co-dependent and hang together as a logical whole. | 0.1.0
