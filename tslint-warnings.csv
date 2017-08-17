@@ -146,6 +146,8 @@ CWE 710 - Coding Standards Violation"
 trailing-comma,"Requires or disallows trailing commas in array and object literals, destructuring assignments, function typings, named imports and exports and function parameters.",TSLINT1R9EG1T,tslint,Non-SDL,Warning,Low,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,710,"CWE 710 - Coding Standards Violation"
 triple-equals,Requires `===` and `!==` in place of `==` and `!=`.,TSLINT1A3MGIF,tslint,Non-SDL,Warning,Moderate,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
 CWE 710 - Coding Standards Violation"
+try-catch-first,,TSLINT17T3GD,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
+CWE 710 - Coding Standards Violation"
 typedef,Requires type definitions to exist.,TSLINT1GMMOCC,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
 CWE 710 - Coding Standards Violation"
 typedef-whitespace,Requires or disallows whitespace for type definitions.,TSLINTGCDJL2,tslint,Non-SDL,Warning,Low,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality

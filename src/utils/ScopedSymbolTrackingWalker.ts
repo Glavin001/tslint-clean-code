@@ -1,3 +1,4 @@
+// tslint:disable try-catch-first
 import * as ts from 'typescript';
 import * as Lint from 'tslint';
 import { ErrorTolerantWalker } from './ErrorTolerantWalker';

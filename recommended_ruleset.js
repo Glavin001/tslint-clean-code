@@ -55,6 +55,7 @@ module.exports = {
         "strict-boolean-expressions": true,
         "switch-default": true,
         "triple-equals": [true, "allow-null-check"],
+        "try-catch-first": true,
         "use-isnan": true,
 
         /**

@@ -266,6 +266,7 @@
       true,
       "allow-null-check"
     ],
+    "try-catch-first": true,
     "typedef": [
       true,
       "parameter",
