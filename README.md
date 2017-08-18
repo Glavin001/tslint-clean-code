@@ -36,9 +36,9 @@ The tslint.json file does not change format when using this package. Just add ou
 
 ##### Which Rules Should I Turn On?
 There certainly are a lot of options! Here are some links to get you started.
-* Easiest Option - Our recommended ruleset is here: [recommended_ruleset.js](recommended_ruleset.js). You can also easily extend the ruleset by adding `"extends": "tslint-microsoft-contrib"` to your configuration. Please note, the default rules require the `--type-check` and `--project` TSLint options. Also, please note that adding a rule to the recommended ruleset is considered backwards compatible. If you reply on version ranges in your dependencies then you may find that new rules being added to the product create violations and fail your build.
+* Easiest Option - Our recommended ruleset is here: [recommended_ruleset.js](recommended_ruleset.js). You can also easily extend the ruleset by adding `"extends": "tslint-clean-code"` to your configuration. Please note, the default rules require the `--type-check` and `--project` TSLint options. Also, please note that adding a rule to the recommended ruleset is considered backwards compatible. If you reply on version ranges in your dependencies then you may find that new rules being added to the product create violations and fail your build.
 * A nice blog post on the MSDN secure development blog can be found here: [Automating Secure Development Lifecycle Checks in TypeScript with TSLint](https://blogs.msdn.microsoft.com/secdevblog/2016/05/11/automating-secure-development-lifecycle-checks-in-typescript-with-tslint/)
-* A wiki briefly describing the SDL and related rules is here: [TSLint and the Microsoft Security Development Lifecycle](https://github.com/Microsoft/tslint-microsoft-contrib/wiki/TSLint-and-the-Microsoft-Security-Development-Lifecycle)
+* A wiki briefly describing the SDL and related rules is here: [TSLint and the Microsoft Security Development Lifecycle](https://github.com/Microsoft/tslint-clean-code/wiki/TSLint-and-the-Microsoft-Security-Development-Lifecycle)
 * And our configuration file with all options is available here: [tslint.json](tslint.json)
 
 Supported Rules
@@ -52,6 +52,7 @@ Rule Name   | Description | Since
 `min-class-cohesion` | The more variables a method manipulates the more cohesive that method is to its class. A class in which each variable is used by each method is maximally cohesive. We would like cohesion to be high. When cohesion is high, it means that the methods and variables of the class are co-dependent and hang together as a logical whole. | 0.1.0
 `newspaper-order` | We would like a source file to be like a newspaper article. Detail should increase as we move downward, until at the end we find the lowest level functions and details in the source file. | 0.1.0
 `no-flag-args` | Functions should only do one thing, therefore passing a boolean into a function is a bad practice. The function does one thing if the flag is true and another if the flag is false! | 0.1.0
+`no-for-each-push` | Enforce using Array.map instead of Array.forEach and Array.push. | 0.1.0
 
 Supported Formatters
 -----
@@ -66,10 +67,10 @@ Formatter Name          | Description | Since
 Development
 -----------
 
-To develop tslint-microsoft-contrib simply clone the repository, install dependencies and run grunt:
+To develop tslint-clean-code simply clone the repository, install dependencies and run grunt:
 
-    git clone git@github.com:Microsoft/tslint-microsoft-contrib.git --config core.autocrlf=input --config core.eol=lf
-    cd tslint-microsoft-contrib
+    git clone git@github.com:Glavin001/tslint-clean-code.git --config core.autocrlf=input --config core.eol=lf
+    cd tslint-clean-code
     npm install
     grunt all
     grunt create-rule --rule-name=no-something-or-other
@@ -91,7 +92,7 @@ Set a breakpoint somewhere in your code and resume execution. Your breakpoint sh
 Creating a new Release
 ----------------------
 
-Refer to the [Releases Wiki Page](https://github.com/Microsoft/tslint-microsoft-contrib/wiki/Releases)
+Refer to the [Releases Wiki Page](https://github.com/Microsoft/tslint-clean-code/wiki/Releases)
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.

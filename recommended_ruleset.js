@@ -34,6 +34,7 @@ module.exports = {
         "no-empty": true,
         "no-flag-args": true,
         "no-floating-promises": true,
+        "no-for-each-push": true,
         "no-for-in-array": true,
         "no-import-side-effect": true,
         "no-invalid-template-strings": true,

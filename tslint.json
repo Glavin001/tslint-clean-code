@@ -132,6 +132,7 @@
     "no-floating-promises": false,
     "no-for-in": true,
     "no-for-in-array": false,
+    "no-for-each-push": true,
     "no-function-constructor-with-string-args": true,
     "no-function-expression": true,
     "no-http-string": [
