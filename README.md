@@ -55,6 +55,7 @@ Rule Name   | Description | Since
 `no-for-each-push` | Enforce using Array.map instead of Array.forEach and Array.push. | 0.1.0
 `no-map-without-assignment` | Ensure results of Array.map is either assigned to variable or returned | 0.1.0
 `no-complex-conditionals` | Enforce the maximum complexity of conditional expressions. | 0.1.0
+`prefer-dry-conditionals` | Don't-Repeat-Yourself in if statement conditionals, instead use Switch statements. | 0.1.0
 
 Development
 -----------

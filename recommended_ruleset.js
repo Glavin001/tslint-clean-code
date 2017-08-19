@@ -98,6 +98,7 @@ module.exports = {
         "only-arrow-functions": false,  // there are many valid reasons to declare a function
         "ordered-imports": true,
         "prefer-const": true,
+        "prefer-dry-conditionals": true,
         "prefer-for-of": true,
         "prefer-method-signature": true,
         "prefer-template": true,

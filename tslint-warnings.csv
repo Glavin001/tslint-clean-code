@@ -118,6 +118,7 @@ CWE 710 - Coding Standards Violation"
 prefer-const,Requires that variable declarations use `const` instead of `let` and `var` if possible.,TSLINTGOC17R,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 705, 710","CWE 398 - Indicator of Poor Code Quality
 CWE 705 - Incorrect Control Flow Scoping
 CWE 710 - Coding Standards Violation"
+prefer-dry-conditionals,"Don't-Repeat-Yourself in if statement conditionals, instead use Switch statements.",TSLINT1SD4NAJ,tslint,Non-SDL,Warning,Low,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,,
 prefer-for-of,Recommends a 'for-of' loop over a standard 'for' loop if the index is only used to access the array being iterated.,TSLINT51MHG7,tslint,Non-SDL,Warning,Low,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,,
 prefer-method-signature,Prefer `foo(): void` over `foo: () => void` in interfaces and types.,TSLINT1LVIQFA,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,,
 prefer-template,Prefer a template expression over string literal concatenation.,TSLINT1BUICJ8,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,710,"CWE 710 - Coding Standards Violation"
