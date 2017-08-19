@@ -39,6 +39,7 @@ module.exports = {
         "no-import-side-effect": true,
         "no-invalid-template-strings": true,
         "no-invalid-this": true,
+        "no-map-without-assignment": true,
         "no-misused-new": true,
         "no-non-null-assertion": true,
         "no-reference-import": true,

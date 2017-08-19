@@ -53,16 +53,7 @@ Rule Name   | Description | Since
 `newspaper-order` | We would like a source file to be like a newspaper article. Detail should increase as we move downward, until at the end we find the lowest level functions and details in the source file. | 0.1.0
 `no-flag-args` | Functions should only do one thing, therefore passing a boolean into a function is a bad practice. The function does one thing if the flag is true and another if the flag is false! | 0.1.0
 `no-for-each-push` | Enforce using Array.map instead of Array.forEach and Array.push. | 0.1.0
-
-Supported Formatters
------
-
-These formatters assume that you use the UTF-8 file encoding. They may not work if you have a different encoding, especially if your encoding uses a 2-byte line ending (such as \r\n on Windows).
-
-Formatter Name          | Description | Since
-:----------             | :------------ | -------------
-`fix-no-require-imports`| This formatter automatically converts imports from the require syntax to the ES6 syntax. For example `import Utils = require('Utils');` becomes `import {Utils} from 'Utils';`. However, be warned that the fix assumes that your imported module exports the correct thing. If anything goes wrong with your exports then you'll get a compiler failure saying there is no default export. | 2.0.8
-`fix-no-var-keyword`    | This formatter automatically converts var variable declarations into let variable declarations found by the no-var-keyword rule. | 2.0.8
+`no-map-without-assignment` | Ensure results of Array.map is either assigned to variable or returned | 0.1.0
 
 Development
 -----------

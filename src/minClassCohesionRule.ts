@@ -26,7 +26,7 @@ export class Rule extends Lint.Rules.AbstractRule {
         level: 'Opportunity for Excellence',
         group: 'Correctness',
         recommendation: '[true, 0.5],',
-        commonWeaknessEnumeration: '398, 710'
+        commonWeaknessEnumeration: ''
     };
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {

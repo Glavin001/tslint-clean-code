@@ -4,7 +4,10 @@
     "dist/src"
   ],
   "rules": {
-    "array-type": [true, "array"],
+    "array-type": [
+      true,
+      "array"
+    ],
     "arrow-return-shorthand": false,
     "await-promise": false,
     "adjacent-overload-signatures": false,
@@ -36,7 +39,9 @@
     "function-name": true,
     "id-length": [
       true,
-      [ "T" ]
+      [
+        "T"
+      ]
     ],
     "import-blacklist": false,
     "import-name": true,
@@ -154,7 +159,9 @@
     "no-mergeable-namespace": false,
     "no-missing-visibility-modifiers": true,
     "no-misused-new": true,
-    "no-multiline-string": [ true ],
+    "no-multiline-string": [
+      true
+    ],
     "no-multiple-var-decl": true,
     "no-namespace": false,
     "no-null-keyword": false,
@@ -212,7 +219,11 @@
       "check-whitespace"
     ],
     "one-variable-per-declaration": true,
-    "only-arrow-functions": [true, "allow-declarations", "allow-named-functions"],
+    "only-arrow-functions": [
+      true,
+      "allow-declarations",
+      "allow-named-functions"
+    ],
     "ordered-imports": [
       false
     ],
@@ -296,6 +307,7 @@
       "check-separator",
       "check-type"
     ],
-    "no-useless-files": true
+    "no-useless-files": true,
+    "no-map-without-assignment": true
   }
 }
