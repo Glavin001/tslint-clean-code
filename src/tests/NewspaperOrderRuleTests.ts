@@ -1,3 +1,4 @@
+// tslint:disable max-func-body-length
 import { TestHelper } from './TestHelper';
 import { FAILURE_CLASS_STRING, FAILURE_FILE_STRING, FAILURE_BLOCK_STRING } from '../newspaperOrderRule';
 
@@ -7,7 +8,7 @@ import { FAILURE_CLASS_STRING, FAILURE_FILE_STRING, FAILURE_BLOCK_STRING } from 
 describe('newspaperOrderRule', (): void => {
     const ruleName: string = 'newspaper-order';
 
-    context("ClassDeclaration", () => {
+    context('ClassDeclaration', () => {
 
         it('should pass on empty class', (): void => {
             const script: string = `

@@ -54,6 +54,14 @@ describe('noMapWithoutAssignmentRule', () : void => {
         TestHelper.assertViolations(ruleName, script, [ ]);
     });
 
+    it('should pass on Array.map with results used in parent call', () : void => {
+        const script : string = `
+        doStuff(arr.map(item => doStuff(item)))
+        `;
+
+        TestHelper.assertViolations(ruleName, script, [ ]);
+    });
+
     it('should fail on Array.map without assignment', () : void => {
         const script : string = `
         arr.map(item => doStuff(item));

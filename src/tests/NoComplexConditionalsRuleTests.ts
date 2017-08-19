@@ -9,13 +9,19 @@ describe('noComplexConditionalsRule', () : void => {
 
     const ruleName : string = 'no-complex-conditionals';
 
-    it('should pass on xxx', () : void => {
+    it('should pass on single variable as conditional expression', () : void => {
         const script : string = `
         const shouldDoStuff = (((status === 1 || status === 2 || status === 3) || isSkyBlue) && isRightDay);
         if (shouldDoStuff) {
           doStuff();
         }
-        // OR (when in Class)
+        `;
+
+        TestHelper.assertViolations(ruleName, script, [ ]);
+    });
+
+    it('should pass on function call as conditional expression', () : void => {
+        const script : string = `
         class StuffDoer {
           doTheThing() {
             if (this.shouldDoStuff()) {
@@ -31,7 +37,7 @@ describe('noComplexConditionalsRule', () : void => {
         TestHelper.assertViolations(ruleName, script, [ ]);
     });
 
-    it('should fail on xxx', () : void => {
+    it('should fail on complex conditional expression in if statement', () : void => {
         const script : string = `
         // Test
         if (((status === 1 || status === 2 || status === 3) || isSkyBlue) && isRightDay) {
