@@ -1,6 +1,5 @@
 import {TestHelper} from './TestHelper';
 import { Rule } from '../noMapWithoutAssignmentRule';
-
 const { FAILURE_STRING } = Rule;
 
 /**

@@ -54,6 +54,7 @@ Rule Name   | Description | Since
 `no-flag-args` | Functions should only do one thing, therefore passing a boolean into a function is a bad practice. The function does one thing if the flag is true and another if the flag is false! | 0.1.0
 `no-for-each-push` | Enforce using Array.map instead of Array.forEach and Array.push. | 0.1.0
 `no-map-without-assignment` | Ensure results of Array.map is either assigned to variable or returned | 0.1.0
+`no-complex-conditionals` | Enforce the maximum complexity of conditional expressions. | 0.1.0
 
 Development
 -----------

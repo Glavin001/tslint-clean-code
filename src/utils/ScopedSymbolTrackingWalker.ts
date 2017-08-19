@@ -28,11 +28,13 @@ export class ScopedSymbolTrackingWalker extends ErrorTolerantWalker {
             return true; // arrow function literals and arrow functions are definitely functions
         }
 
-        if (expression.kind === ts.SyntaxKind.StringLiteral
+        const isString = (
+            expression.kind === ts.SyntaxKind.StringLiteral
             || expression.kind === ts.SyntaxKind.NoSubstitutionTemplateLiteral
             || expression.kind === ts.SyntaxKind.TemplateExpression
             || expression.kind === ts.SyntaxKind.TaggedTemplateExpression
-            || expression.kind === ts.SyntaxKind.BinaryExpression) {
+        );
+        if (isString || expression.kind === ts.SyntaxKind.BinaryExpression) {
             return false; // strings and binary expressions are definitely not functions
         }
 

@@ -308,6 +308,7 @@
       "check-type"
     ],
     "no-useless-files": true,
-    "no-map-without-assignment": true
+    "no-map-without-assignment": true,
+    "no-complex-conditionals": [true, 2]
   }
 }
