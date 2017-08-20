@@ -313,6 +313,10 @@
       true,
       2
     ],
-    "prefer-dry-conditionals": [true, 2]
+    "prefer-dry-conditionals": [
+      true,
+      2
+    ],
+    "no-return-promise-mixed-type": true
   }
 }
