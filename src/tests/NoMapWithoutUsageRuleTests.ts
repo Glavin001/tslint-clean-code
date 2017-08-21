@@ -25,6 +25,15 @@ describe('noMapWithoutUsageRule', () : void => {
         TestHelper.assertViolations(ruleName, script, [ ]);
     });
 
+    it('should pass on Array.map with assignment to an existing variable', () : void => {
+        const script : string = `
+        let results;
+        results = arr.map(item => doStuff(item));
+        `;
+
+        TestHelper.assertViolations(ruleName, script, [ ]);
+    });
+
     it('should pass on Array.map with assignment to object property', () : void => {
         const script : string = `
         const obj = {

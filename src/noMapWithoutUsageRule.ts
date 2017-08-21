@@ -60,10 +60,12 @@ class NoMapWithoutAssignmentRuleWalker extends ErrorTolerantWalker {
         const { parent: parent1 } = node;
         if (parent1 && ts.isCallExpression(parent1)) {
             const { parent: parent2 } = parent1;
-            if (parent2 && (
-                ts.isPropertyAssignment(parent2) ||
-                ts.isVariableDeclaration(parent2)
-            )) {
+            const parentIsAssignment = (
+                    ts.isPropertyAssignment(parent2) ||
+                    ts.isVariableDeclaration(parent2) ||
+                    (ts.isBinaryExpression(parent2) && parent2.operatorToken.kind === ts.SyntaxKind.FirstAssignment)
+                );
+            if (parentIsAssignment) {
                 return true;
             }
         }
