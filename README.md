@@ -89,3 +89,8 @@ Refer to the [Releases Wiki Page](https://github.com/Microsoft/tslint-clean-code
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+Thank you
+---------
+
+Thank you to maintainers of [tslint-microsoft-contrib](https://github.com/Microsoft/tslint-microsoft-contrib), from which this repository was forked. The initial structure was kept and new rules were added, this would not have been possible without Microsoft's awesome work!
