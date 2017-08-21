@@ -5,14 +5,14 @@ import { ErrorTolerantWalker } from './utils/ErrorTolerantWalker';
 import { ExtendedMetadata } from './utils/ExtendedMetadata';
 
 /**
- * Implementation of the no-map-without-assignment rule.
+ * Implementation of the no-map-without-usage rule.
  */
 export class Rule extends Lint.Rules.AbstractRule {
 
     public static metadata: ExtendedMetadata = {
-        ruleName: 'no-map-without-assignment',
+        ruleName: 'no-map-without-usage',
         type: 'maintainability',    // one of: 'functionality' | 'maintainability' | 'style' | 'typescript'
-        description: '... add a meaningful one line description',
+        description: 'Prevent Array.map from being called and results not used.',
         options: null,
         optionsDescription: '',
         optionExamples: [],         //Remove this property if the rule has no options
@@ -77,7 +77,8 @@ class NoMapWithoutAssignmentRuleWalker extends ErrorTolerantWalker {
             const parentUsesNode = (parent2 && (
                 ts.isPropertyAccessExpression(parent2) ||
                 ts.isReturnStatement(parent2) ||
-                ts.isCallExpression(parent2)
+                ts.isCallExpression(parent2) ||
+                ts.isSpreadElement(parent2)
             ));
             if (parentUsesNode) {
                 return true;

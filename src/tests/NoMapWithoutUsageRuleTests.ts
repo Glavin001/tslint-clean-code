@@ -1,13 +1,13 @@
 import {TestHelper} from './TestHelper';
-import { Rule } from '../noMapWithoutAssignmentRule';
+import { Rule } from '../noMapWithoutUsageRule';
 const { FAILURE_STRING } = Rule;
 
 /**
  * Unit tests.
  */
-describe('noMapWithoutAssignmentRule', () : void => {
+describe('noMapWithoutUsageRule', () : void => {
 
-    const ruleName : string = 'no-map-without-assignment';
+    const ruleName : string = 'no-map-without-usage';
 
     it('should pass on Array.forEach', () : void => {
         const script : string = `
@@ -57,6 +57,14 @@ describe('noMapWithoutAssignmentRule', () : void => {
     it('should pass on Array.map with results used in parent call', () : void => {
         const script : string = `
         doStuff(arr.map(item => doStuff(item)))
+        `;
+
+        TestHelper.assertViolations(ruleName, script, [ ]);
+    });
+
+    it('should pass on Array.map with spread', () : void => {
+        const script : string = `
+        doOtherStuff(...arr.map(item => doStuff(item)))
         `;
 
         TestHelper.assertViolations(ruleName, script, [ ]);
