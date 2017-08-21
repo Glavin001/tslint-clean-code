@@ -1,7 +1,7 @@
 {
   "name": "tslint-clean-code",
-  "version": "0.1.0",
-  "description": "TSLint rules for enforcing Clean Code Edit",
+  "version": "0.1.1",
+  "description": "TSLint rules for enforcing Clean Code",
   "main": "tslint.json",
   "analyze": true,
   "dependencies": {
@@ -30,7 +30,8 @@
   },
   "scripts": {
     "test": "grunt all",
-    "build": "grunt ts"
+    "build": "grunt ts",
+    "prepublish": "npm run test"
   },
   "repository": {
     "type": "git",
