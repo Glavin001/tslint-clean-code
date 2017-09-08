@@ -103,6 +103,22 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
+    it('should pass on Array.map within Binary Expression after &&', (): void => {
+        const script: string = `
+        arr && arr.map(curr => curr * 2);
+        `;
+
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    it('should pass on Array.map within Binary Expression after ||', (): void => {
+        const script: string = `
+        b && firstThing() || arr.map(curr => curr * 2);
+        `;
+
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
     it('should fail on Array.map without assignment', (): void => {
         const script: string = `
         arr.map(item => doStuff(item));
