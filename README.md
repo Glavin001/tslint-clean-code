@@ -3,7 +3,7 @@ tslint-clean-code [![Build Status](https://travis-ci.org/Glavin001/tslint-clean-
 
 A set of [TSLint](https://github.com/palantir/tslint) rules used to enforce [Clean Code](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) practices. Inspired by [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882).
 
-Version 0.1.3 (In-Development)
+Version 0.1.4 (In-Development)
 -------------
 The [Latest Development Version](https://github.com/Glavin001/tslint-clean-code/tree/releases) is available online.
 To use the nightly build set your npm version to `git://github.com/Glavin001/tslint-clean-code.git#releases`
