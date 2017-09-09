@@ -2,11 +2,12 @@
  * Control flow functions.
  */
 /* tslint:disable:no-increment-decrement id-length */
+import * as ts from 'typescript';
 export module Utils {
     /**
      * Logical 'any' or 'exists' function.
      */
-    export function exists<T>(list: T[], predicate: (t: T) => boolean): boolean {
+    export function exists<T extends ts.Node>(list: ts.NodeArray<T>, predicate: (t: T) => boolean): boolean {
         if (list != null) {
             for (let i = 0; i < list.length; i++) {
                 const obj: T = list[i];
@@ -21,7 +22,7 @@ export module Utils {
     /**
      * A contains function.
      */
-    export function contains<T>(list: T[], element: T): boolean {
+    export function contains<T extends ts.Node>(list: ts.NodeArray<T>, element: T): boolean {
         return exists(list, (item: T): boolean => {
             return item === element;
         });
@@ -30,7 +31,7 @@ export module Utils {
     /**
      * A removeAll function.
      */
-    export function removeAll<T>(source: T[], elementsToRemove: T[]): T[] {
+    export function removeAll<T extends ts.Node>(source: ts.NodeArray<T>, elementsToRemove: ts.NodeArray<T>): T[] {
         if (source == null || source.length === 0) {
             return [];
         }
@@ -46,8 +47,8 @@ export module Utils {
     /**
      * A remove() function.
      */
-    export function remove<T>(source: T[], elementToRemove: T): T[] {
-        return removeAll(source, [elementToRemove]);
+    export function remove<T extends ts.Node>(source: ts.NodeArray<T>, elementToRemove: T): T[] {
+        return removeAll(source, <any> [elementToRemove]);
     }
 
     export function trimTo(source: string, maxLength: number): string {

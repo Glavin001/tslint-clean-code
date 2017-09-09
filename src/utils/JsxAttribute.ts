@@ -39,7 +39,7 @@ export function getAllAttributesFromJsxElement(node: ts.Node): ts.NodeArray<ts.J
     let attributes: ts.NodeArray<ts.JsxAttributeLike>;
 
     if (node == null) {
-        return <ts.NodeArray<ts.JsxAttributeLike>>[];
+        return <ts.NodeArray<ts.JsxAttributeLike>> (<any> []);
     } else if (isJsxElement(node)) {
         attributes = node.openingElement.attributes.properties;
     } else if (isJsxSelfClosingElement(node)) {

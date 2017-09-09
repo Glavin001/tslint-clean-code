@@ -3760,7 +3760,7 @@ interface UnderscoreStatic {
      * @param object Check if this object is an Array.
      * @return True if `object` is an Array, otherwise false.
      **/
-    isArray(object: any): object is [];
+    isArray(object: any): object is any[];
 
     /**
      * Returns true if object is an Array.

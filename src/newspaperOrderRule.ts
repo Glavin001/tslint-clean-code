@@ -149,7 +149,7 @@ abstract class NewspaperHelper {
     protected get ignoredMethods(): string[] {
         const { methodNames, orderedMethodNames } = this;
         return methodNames.filter(methodName => {
-            return !Utils.contains(orderedMethodNames, methodName);
+            return orderedMethodNames.indexOf(methodName) === -1;
         }).sort();
     }
 

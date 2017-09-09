@@ -21,7 +21,7 @@ export class Scope {
         refCollector.nonFunctionIdentifiers.forEach((identifier: string): void => { this.addNonFunctionSymbol(identifier); });
     }
 
-    public addParameters(parameters: ts.ParameterDeclaration[]): void {
+    public addParameters(parameters: ts.NodeArray<ts.ParameterDeclaration>): void {
         parameters.forEach((parm: ts.ParameterDeclaration): void => {
             if (AstUtils.isDeclarationFunctionType(parm)) {
                 this.addFunctionSymbol(parm.name.getText());
