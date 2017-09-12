@@ -1,6 +1,6 @@
 {
   "name": "tslint-clean-code",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "TSLint rules for enforcing Clean Code",
   "main": "tslint.json",
   "analyze": true,
