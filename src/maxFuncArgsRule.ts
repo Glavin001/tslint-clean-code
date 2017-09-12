@@ -56,8 +56,12 @@ class MaxFunctionArgsRuleWalker extends ErrorTolerantWalker {
         super.visitArrowFunction(node);
     }
 
-    private checkAndReport(node: ts.FunctionLikeDeclaration) {
-        // console.log('checkAndReport', node.name.getText(), node.parameters.length); // tslint:disable-line no-console
+    protected visitMethodDeclaration(node: ts.MethodDeclaration): void {
+        this.checkAndReport(node);
+        super.visitMethodDeclaration(node);
+    }
+
+    private checkAndReport(node: ts.SignatureDeclaration) {
         if (node.parameters.length > this.maxArgs) {
             const failureMessage = this.makeFailureMessage();
             this.addFailureAt(node.getStart(), node.getWidth(), failureMessage);

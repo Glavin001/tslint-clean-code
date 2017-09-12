@@ -77,4 +77,46 @@ describe('maxFuncArgsRule', (): void => {
 
     });
 
+    context('Class method', () => {
+
+        const maxLength = DEFAULT_MAX_ARGS_LENGTH;
+
+        it('should pass on function with 0 arguments', (): void => {
+            const script: string = `
+            class MyClass {
+                private myFunc(): string {
+                  // ...
+                }
+              }
+            `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
+        it('should fail on function with 5 arguments', (): void => {
+            const script: string = `
+            class MyClass {
+                private myFunc(
+                  arg1: Date | string | void, arg2: boolean,
+                  arg3?: Date | string | void, arg4?: boolean,
+                  arg5: string = "en"
+                ): string {
+                  // ...
+                }
+              }
+            `;
+            TestHelper.assertViolations(ruleName, script, [
+                {
+                    failure: FAILURE_STRING + maxLength + FAILURE_RECOMMENDATION_STRING,
+                    name: 'file.ts',
+                    ruleName: 'max-func-args',
+                    ruleSeverity: 'ERROR',
+                    startPosition: {
+                        character: 17,
+                        line: 3
+                    }
+                }
+            ]);
+        });
+    });
+
 });
