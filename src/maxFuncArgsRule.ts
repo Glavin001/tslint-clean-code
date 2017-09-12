@@ -6,9 +6,9 @@ import { ExtendedMetadata } from './utils/ExtendedMetadata';
 
 export const FAILURE_STRING: string = 'Exceeds maximum function argument list length of ';
 export const FAILURE_RECOMMENDATION_STRING: string = '\nConsider these two solutions for refactoring:\n' +
-'1) Create a Class and pass common arguments into the constructor as instance properties. ' +
-'Move this function to the new Class with a reduced arguments list.\n' +
-'2) Instantiate an object containing each of the arguments and pass in the object instance as a single argument.';
+    '1) Create a Class and pass common arguments into the constructor as instance properties. ' +
+    'Move this function to the new Class with a reduced arguments list.\n' +
+    '2) Instantiate an object containing each of the arguments and pass in the object instance as a single argument.';
 export const DEFAULT_MAX_ARGS_LENGTH: number = 3;
 
 /**
@@ -64,8 +64,19 @@ class MaxFunctionArgsRuleWalker extends ErrorTolerantWalker {
     private checkAndReport(node: ts.SignatureDeclaration) {
         if (node.parameters.length > this.maxArgs) {
             const failureMessage = this.makeFailureMessage();
-            this.addFailureAt(node.getStart(), node.getWidth(), failureMessage);
+            const { start, width } = this.getStartAndWidth(node.parameters);
+            this.addFailureAt(start, width, failureMessage);
         }
+    }
+
+    private getStartAndWidth(nodes: ts.NodeArray<any>) {
+        const { pos, end } = nodes;
+        const start = pos;
+        const width = end - pos;
+        return {
+            start,
+            width
+        };
     }
 
     private makeFailureMessage(): string {

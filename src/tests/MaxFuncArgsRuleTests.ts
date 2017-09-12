@@ -35,7 +35,7 @@ describe('maxFuncArgsRule', (): void => {
                     ruleName: 'max-func-args',
                     ruleSeverity: 'ERROR',
                     startPosition: {
-                        character: 21,
+                        character: 31,
                         line: 2
                     }
                 }
@@ -68,7 +68,7 @@ describe('maxFuncArgsRule', (): void => {
                     ruleName: 'max-func-args',
                     ruleSeverity: 'ERROR',
                     startPosition: {
-                        character: 29,
+                        character: 30,
                         line: 2
                     }
                 }
@@ -111,7 +111,7 @@ describe('maxFuncArgsRule', (): void => {
                     ruleName: 'max-func-args',
                     ruleSeverity: 'ERROR',
                     startPosition: {
-                        character: 17,
+                        character: 32,
                         line: 3
                     }
                 }
