@@ -64,6 +64,7 @@ no-eval,Disallows `eval` function invocations.,TSLINT7KB919,tslint,SDL,Error,Cri
 CWE 676 - Use of Potentially Dangerous Function
 CWE 242 - Use of Inherently Dangerous Function
 CWE 116 - Improper Encoding or Escaping of Output"
+no-feature-envy,A method accesses the data of another object more than its own data.,TSLINT76VF1G,tslint,Non-SDL,Warning,Moderate,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,,
 no-flag-args,"Passing a boolean into a function is a truly terrible practice. It immediately complicates the signature of the method, loudly proclaiming that this function does more than one thing.",TSLINT1A2VSPH,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,,
 no-floating-promises,Promises returned by functions must be handled appropriately.,TSLINT5KOUEE,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,,
 no-for-each-push,Enforce using Array.map instead of Array.forEach and Array.push.,TSLINT1I7TCB,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,,

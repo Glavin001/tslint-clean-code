@@ -84,6 +84,7 @@ module.exports = {
         "no-construct": true,
         "no-default-export": true,
         "no-empty-interface": true,
+        "no-feature-envy": [true, 1, ["_"]],
         "no-inferrable-types": false, // turn no-inferrable-types off in order to make the code consistent in its use of type decorations
         "no-null-keyword": false, // turn no-null-keyword off and use undefined to mean not initialized and null to mean without a value
         "no-parameter-properties": true,

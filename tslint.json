@@ -313,6 +313,10 @@
       true,
       2
     ],
-    "prefer-dry-conditionals": [true, 2]
+    "prefer-dry-conditionals": [
+      true,
+      2
+    ],
+    "no-feature-envy": [true, 5, ["_", "ts"]]
   }
 }
