@@ -4,7 +4,6 @@ import * as Lint from 'tslint';
 import { ErrorTolerantWalker } from './utils/ErrorTolerantWalker';
 import { ExtendedMetadata } from './utils/ExtendedMetadata';
 import { AstUtils } from './utils/AstUtils';
-import { flatten } from 'underscore';
 
 /**
  * Implementation of the no-feature-envy rule.
@@ -18,6 +17,7 @@ export class Rule extends Lint.Rules.AbstractRule {
         options: null,
         optionsDescription: '',
         optionExamples: [],         //Remove this property if the rule has no options
+        recommendation: '[true, 1, ["_"]],',
         typescriptOnly: false,
         issueClass: 'Non-SDL',      // one of: 'SDL' | 'Non-SDL' | 'Ignored'
         issueType: 'Warning',       // one of: 'Error' | 'Warning'
@@ -41,26 +41,59 @@ export class Rule extends Lint.Rules.AbstractRule {
 
 class NoFeatureEnvyRuleWalker extends ErrorTolerantWalker {
 
+    private threshold: number = 0;
+    private exclude: string[] = [];
+
+    constructor(sourceFile: ts.SourceFile, options: Lint.IOptions) {
+        super(sourceFile, options);
+        this.parseOptions();
+    }
+
     protected visitClassDeclaration(node: ts.ClassDeclaration): void {
         this.checkAndReport(node);
         super.visitClassDeclaration(node);
     }
 
     private checkAndReport(node: ts.ClassDeclaration): void {
-        this.getEnviousMethodsForClass(node)
+        this.getFeatureMethodsForClass(node)
             .forEach(feature => {
                 const failureMessage = Rule.FAILURE_STRING(feature);
                 this.addFailureAtNode(feature.methodNode, failureMessage);
             });
     }
 
-    private getEnviousMethodsForClass(classNode: ts.ClassDeclaration): MethodFeature[] {
+    private getFeatureMethodsForClass(classNode: ts.ClassDeclaration): MethodFeature[] {
         const methods = this.methodsForClass(classNode);
-        const methodFeatures = methods.map(method => {
+        return <any[]> methods.map(method => {
             const walker = new ClassMethodWalker(classNode, method);
-            return walker.enviousFeatures();
+            return walker.features();
+        })
+            .map(features => this.getTopFeature(features))
+            .filter(feature => feature !== undefined)
+            ;
+    }
+
+    private getTopFeature(features: MethodFeature[]): MethodFeature | void {
+        const filteredFeatures = this.filterFeatures(features);
+        return filteredFeatures.reduce((best, current) => {
+                if (!best) {
+                    return current;
+                }
+                if (current.featureEnvy() > best.featureEnvy()) {
+                    return current;
+                }
+                return best;
+            }, undefined);
+    }
+
+    private filterFeatures(features: MethodFeature[]): MethodFeature[] {
+        return features.filter(feature => {
+            const isExcluded = this.exclude.indexOf(feature.otherClassName) !== -1;
+            if (isExcluded) {
+                return false;
+            }
+            return feature.featureEnvy() > this.threshold;
         });
-        return flatten(methodFeatures);
     }
 
     protected methodsForClass(classNode: ts.ClassDeclaration): ts.MethodDeclaration[] {
@@ -76,6 +109,22 @@ class NoFeatureEnvyRuleWalker extends ErrorTolerantWalker {
         });
     }
 
+    private parseOptions(): void {
+        this.getOptions().forEach((opt: any) => {
+            if (typeof (opt) === 'boolean') {
+                return;
+            }
+            if (typeof (opt) === 'number') {
+                this.threshold = opt;
+                return;
+            }
+            if (Array.isArray(opt)) {
+                this.exclude = opt;
+                return;
+            }
+        });
+    }
+
 }
 
 class ClassMethodWalker extends Lint.SyntaxWalker {
@@ -87,13 +136,7 @@ class ClassMethodWalker extends Lint.SyntaxWalker {
         this.walk(this.methodNode);
     }
 
-    public enviousFeatures(): MethodFeature[] {
-        return this.features().filter(feature => feature.featureEnvy() > 0);
-    }
-
     public features(): MethodFeature[] {
-        // tslint:disable-next-line:no-console
-        console.log('envyMap', this.featureEnvyMap);
         const thisClassAccesses = this.getCountForClass('this');
         return this.classesUsed.map(className => {
             const otherClassAccesses = this.getCountForClass(className);
