@@ -3,7 +3,7 @@ tslint-clean-code [![Build Status](https://travis-ci.org/Glavin001/tslint-clean-
 
 A set of [TSLint](https://github.com/palantir/tslint) rules used to enforce [Clean Code](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) practices. Inspired by [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882).
 
-Version 0.1.7 (In-Development)
+Version 0.1.8 (In-Development)
 -------------
 The [Latest Development Version](https://github.com/Glavin001/tslint-clean-code/tree/releases) is available online.
 To use the nightly build set your npm version to `git://github.com/Glavin001/tslint-clean-code.git#releases`
@@ -53,7 +53,7 @@ Rule Name   | Description | Since
 `newspaper-order` | We would like a source file to be like a newspaper article. Detail should increase as we move downward, until at the end we find the lowest level functions and details in the source file. | 0.1.0
 `no-flag-args` | Functions should only do one thing, therefore passing a boolean into a function is a bad practice. The function does one thing if the flag is true and another if the flag is false! | 0.1.0
 `no-for-each-push` | Enforce using Array.map instead of Array.forEach and Array.push. | 0.1.0
-`no-feature-envy` | A method accesses the data of another object more than its own data. | 0.1.7
+`no-feature-envy` | A method accesses the data of another object more than its own data. | 0.1.8
 `no-map-without-usage` | Ensure results of Array.map is either assigned to variable or returned | 0.1.0
 `no-complex-conditionals` | Enforce the maximum complexity of conditional expressions. | 0.1.0
 `prefer-dry-conditionals` | Don't-Repeat-Yourself in if statement conditionals, instead use Switch statements. | 0.1.0
