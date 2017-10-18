@@ -150,7 +150,7 @@ abstract class NewspaperHelper {
         const { methodNames, orderedMethodNames } = this;
         return methodNames.filter(methodName => {
             return orderedMethodNames.indexOf(methodName) === -1;
-        }).sort();
+        });
     }
 
     @Memoize
