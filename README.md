@@ -3,7 +3,7 @@ tslint-clean-code [![Build Status](https://travis-ci.org/Glavin001/tslint-clean-
 
 A set of [TSLint](https://github.com/palantir/tslint) rules used to enforce [Clean Code](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) practices. Inspired by [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882).
 
-Version 0.1.8 (In-Development)
+Version 0.2.0 (In-Development)
 -------------
 The [Latest Development Version](https://github.com/Glavin001/tslint-clean-code/tree/releases) is available online.
 To use the nightly build set your npm version to `git://github.com/Glavin001/tslint-clean-code.git#releases`
@@ -57,7 +57,7 @@ Rule Name   | Description | Since
 `no-map-without-usage` | Ensure results of Array.map is either assigned to variable or returned | 0.1.0
 `no-complex-conditionals` | Enforce the maximum complexity of conditional expressions. | 0.1.0
 `prefer-dry-conditionals` | Don't-Repeat-Yourself in if statement conditionals, instead use Switch statements. | 0.1.0
-`no-commented-out-code` | Code must not be commented out. | 0.1.9
+`no-commented-out-code` | Code must not be commented out. | 0.2.0
 
 Development
 -----------
