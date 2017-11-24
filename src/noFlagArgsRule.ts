@@ -36,13 +36,21 @@ export class Rule extends Lint.Rules.AbstractRule {
 class NoFlagArgsRuleWalker extends ErrorTolerantWalker {
 
     protected visitParameterDeclaration(node: ts.ParameterDeclaration): void {
-        const { type } = node;
-        const isBooleanParameter = (type && type.kind === ts.SyntaxKind.BooleanKeyword);
-        if (isBooleanParameter) {
+        if (this.isBooleanParameter(node) && !this.belongsToSetAssessor(node)) {
             const failureMessage = this.makeFailureMessage(node, FAILURE_STRING);
             this.addFailureAt(node.getStart(), node.getWidth(), failureMessage);
         }
         super.visitParameterDeclaration(node);
+    }
+
+    private isBooleanParameter(node: ts.ParameterDeclaration): boolean {
+        const { type } = node;
+        return (type && type.kind === ts.SyntaxKind.BooleanKeyword);
+    }
+
+    private belongsToSetAssessor(node: ts.ParameterDeclaration): boolean {
+        const { parent } = node;
+        return (parent && parent.kind === ts.SyntaxKind.SetAccessor);
     }
 
     private makeFailureMessage(node: ts.ParameterDeclaration, failureString: string): string {
