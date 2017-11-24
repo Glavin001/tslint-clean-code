@@ -136,4 +136,32 @@ describe('noFlagArgsRule', (): void => {
 
     });
 
+    context('Class Methods', () => {
+
+        it('should pass on setter method', (): void => {
+            const script: string = `
+            class MyClass {
+                private value: boolean;
+                public set myValue(newValue: boolean) {
+                    this.value = newValue;
+                }
+            }
+            `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
+        it('should pass on getter method', (): void => {
+            const script: string = `
+            class MyClass {
+                private value: boolean;
+                public get myValue() {
+                    return this.value;
+                }
+            }
+            `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
+    });
+
 });
