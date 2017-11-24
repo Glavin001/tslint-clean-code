@@ -57,6 +57,7 @@ Rule Name   | Description | Since
 `no-map-without-usage` | Ensure results of Array.map is either assigned to variable or returned | 0.1.0
 `no-complex-conditionals` | Enforce the maximum complexity of conditional expressions. | 0.1.0
 `prefer-dry-conditionals` | Don't-Repeat-Yourself in if statement conditionals, instead use Switch statements. | 0.1.0
+`no-commented-out-code` | Code must not be commented out. | 0.1.9
 
 Development
 -----------
