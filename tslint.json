@@ -317,6 +317,14 @@
       true,
       2
     ],
-    "no-feature-envy": [true, 5, ["_", "ts"]]
+    "no-feature-envy": [
+      true,
+      5,
+      [
+        "_",
+        "ts"
+      ]
+    ],
+    "no-commented-out-code": false
   }
 }

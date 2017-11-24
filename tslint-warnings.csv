@@ -46,6 +46,7 @@ CWE 710 - Coding Standards Violation"
 no-arg,Disallows use of `arguments.callee`.,TSLINTKSGO99,tslint,Non-SDL,Error,Critical,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"398, 710","CWE 398 - Indicator of Poor Code Quality
 CWE 710 - Coding Standards Violation"
 no-bitwise,Disallows bitwise operators.,TSLINT1T99MRS,tslint,Non-SDL,Warning,Low,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,710,"CWE 710 - Coding Standards Violation"
+no-commented-out-code,Code must not be commented out.,TSLINTCQEN3O,tslint,Non-SDL,Warning,Low,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,,
 no-complex-conditionals,Enforce the maximum complexity of conditional expressions.,TSLINTO53DE9,tslint,Non-SDL,Warning,Moderate,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,,
 no-conditional-assignment,Disallows any type of assignment in conditionals.,TSLINT1MA2BM1,tslint,Non-SDL,Warning,Important,Opportunity for Excellence,See description on the tslint or tslint-microsoft-contrib website,TSLint Procedure,"480, 481, 710","CWE 480 - Use of Incorrect Operator
 CWE 481 - Assigning instead of Comparing

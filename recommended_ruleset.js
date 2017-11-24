@@ -80,6 +80,7 @@ module.exports = {
         "member-access": true,
         "member-ordering": [true, { "order": "fields-first" }],
         "new-parens": true,
+        "no-commented-out-code": true,
         "no-complex-conditionals": true,
         "no-construct": true,
         "no-default-export": true,
