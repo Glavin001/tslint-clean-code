@@ -16,6 +16,24 @@ Installation
 Configuration
 -------------
 
+##### Configure `tslint.json`
+
+In your `tslint.json` file, extend this package.
+For example:
+
+```json
+{
+  "extends": [
+    "tslint-clean-code"
+  ],
+  "rules": {
+    "newspaper-order": true
+  }
+}
+```
+
+You can also extend other tslint config packages to combine this plugin with other community custom rules.
+
 ##### Configure your Grunt build task
 
 Add the new rulesDirectory to your tslint task:
@@ -23,7 +41,7 @@ Add the new rulesDirectory to your tslint task:
     grunt.initConfig({
       tslint: {
         options: {
-          rulesDirectory: 'node_modules/tslint-clean-code',
+          rulesDirectory: 'node_modules/tslint-clean-code/dist/src',
           configuration: grunt.file.readJSON("tslint.json")
         },
         files: {
@@ -33,13 +51,6 @@ Add the new rulesDirectory to your tslint task:
     })
 
 The tslint.json file does not change format when using this package. Just add our rule definitions to your existing tslint.json file.
-
-##### Which Rules Should I Turn On?
-There certainly are a lot of options! Here are some links to get you started.
-* Easiest Option - Our recommended ruleset is here: [recommended_ruleset.js](recommended_ruleset.js). You can also easily extend the ruleset by adding `"extends": "tslint-clean-code"` to your configuration. Please note, the default rules require the `--type-check` and `--project` TSLint options. Also, please note that adding a rule to the recommended ruleset is considered backwards compatible. If you reply on version ranges in your dependencies then you may find that new rules being added to the product create violations and fail your build.
-* A nice blog post on the MSDN secure development blog can be found here: [Automating Secure Development Lifecycle Checks in TypeScript with TSLint](https://blogs.msdn.microsoft.com/secdevblog/2016/05/11/automating-secure-development-lifecycle-checks-in-typescript-with-tslint/)
-* A wiki briefly describing the SDL and related rules is here: [TSLint and the Microsoft Security Development Lifecycle](https://github.com/Microsoft/tslint-clean-code/wiki/TSLint-and-the-Microsoft-Security-Development-Lifecycle)
-* And our configuration file with all options is available here: [tslint.json](tslint.json)
 
 Supported Rules
 -----
