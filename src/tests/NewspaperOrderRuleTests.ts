@@ -429,6 +429,21 @@ describe('newspaperOrderRule', (): void => {
             ]);
         });
 
+        it('should pass on correctly ordered functions with a function passed as an argument', (): void => {
+            const script: string = `
+            function first(): Promise<number> {
+                return Promise.resolve(2)
+                    .then(second);
+            }
+            function second(n: number) {
+                return third() * n;
+            }
+            function third(): number {
+                return 2;
+            }`;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
     });
 
     context("Block", () => {

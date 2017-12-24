@@ -334,8 +334,17 @@ class FunctionWalker extends Lint.SyntaxWalker {
     public dependencies: MethodDependencies = {};
 
     protected visitCallExpression(node: ts.CallExpression): void {
-        const field = node.expression.getText();
-        this.dependencies[field] = true;
+        if (node.expression.kind === ts.SyntaxKind.Identifier) {
+            const field = node.expression.getText();
+            this.dependencies[field] = true;
+        }
+        if (Array.isArray(node.arguments)) {
+            node.arguments.forEach(arg => {
+                if (arg.kind === ts.SyntaxKind.Identifier) {
+                    this.dependencies[arg.getText()] = true;
+                }
+            });
+        }
         super.visitCallExpression(node);
     }
 
