@@ -444,6 +444,33 @@ describe('newspaperOrderRule', (): void => {
             TestHelper.assertViolations(ruleName, script, []);
         });
 
+        it('should fail on incorrrectly ordered functions with a function as a variable', (): void => {
+            const script: string = `
+            const myFunc3 = function() {
+                return "Hello";
+            }
+            function myFunc2() {
+                return "World";
+            }
+            function myFunc1() {
+                return myFunc2() + " " + myFunc3();
+            }
+            `;
+            TestHelper.assertViolations(ruleName, script, [
+                {
+                    "failure": FAILURE_FILE_STRING + "file.ts" +
+                    "\n\nMethods order:\n1. x myFunc1\n2. x myFunc2\n3. ✓ myFunc3",
+                    "name": "file.ts",
+                    "ruleName": "newspaper-order",
+                    "ruleSeverity": "ERROR",
+                    "startPosition": {
+                        "character": 13,
+                        "line": 5
+                    }
+                }
+            ]);
+        });
+
     });
 
     context("Block", () => {

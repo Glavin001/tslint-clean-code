@@ -255,22 +255,38 @@ abstract class BlockLikeHelper extends NewspaperHelper {
         super(node);
     }
 
+    @Memoize
+    protected get methods(): ts.FunctionDeclaration[] {
+        const functionDeclarations = <ts.FunctionDeclaration[]>this.node.statements
+            .filter((node: ts.Statement): boolean => ts.isFunctionDeclaration(node));
+        const variableStatements = <ts.VariableStatement[]>this.node.statements
+            .filter((node: ts.Statement): boolean => ts.isVariableStatement(node));
+        const variableFunctionDeclarations: ts.FunctionDeclaration[] = variableStatements
+            .map(node => node.declarationList.declarations)
+            .map(declarations =>
+                declarations.map(this.createFuncDeclarFromVarDeclar)
+                    .filter(node => node)
+            )
+            .reduce((result, item) => [...result, ...item], [])
+            ;
+        return [...functionDeclarations, ...variableFunctionDeclarations];
+    }
+
+    private createFuncDeclarFromVarDeclar(declaration: ts.VariableDeclaration): ts.FunctionDeclaration | null {
+        const { name, initializer } = declaration;
+        if (ts.isIdentifier(name) && ts.isFunctionExpression(initializer)) {
+            const node = ts.createFunctionDeclaration([], [], undefined, name, [], [], undefined, initializer.body);
+            node.pos = declaration.pos;
+            node.end = declaration.end;
+            return node;
+        }
+        return null;
+    }
+
     protected dependenciesForMethod(method: ts.FunctionDeclaration): MethodDependencies {
         const walker = new FunctionWalker();
         walker.walk(method);
         return walker.dependencies;
-    }
-
-    @Memoize
-    protected get methods(): ts.FunctionDeclaration[] {
-        return <ts.FunctionDeclaration[]>this.node.statements.filter((node: ts.FunctionDeclaration): boolean => {
-            switch (node.kind) {
-                case ts.SyntaxKind.FunctionDeclaration:
-                    return true;
-                default:
-                    return false;
-            }
-        });
     }
 
 }
