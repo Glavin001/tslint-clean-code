@@ -1,6 +1,6 @@
 {
   "rulesDirectory": [
-    "node_modules/tslint-microsoft-contrib",
+    "tslint-microsoft-contrib",
     "dist/src"
   ],
   "rules": {
