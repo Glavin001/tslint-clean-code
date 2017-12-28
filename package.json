@@ -2,7 +2,7 @@
   "name": "tslint-clean-code",
   "version": "0.2.1",
   "description": "TSLint rules for enforcing Clean Code",
-  "main": "tslint.json",
+  "main": "index.js",
   "analyze": true,
   "dependencies": {
     "memoize-decorator": "^1.0.2",
