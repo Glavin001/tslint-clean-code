@@ -92,7 +92,8 @@ class NoMapWithoutAssignmentRuleWalker extends ErrorTolerantWalker {
             ts.isJsxExpression(parent) ||
             ts.isConditionalExpression(parent) ||
             ts.isArrayLiteralExpression(parent) ||
-            ts.isBinaryExpression(parent)
+            ts.isBinaryExpression(parent) ||
+            ts.isArrowFunction(parent)
         );
     }
 

@@ -119,13 +119,35 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map returning to shorthand arrow function', (): void => {
+    it('should pass on Array.map within arrow function return shorthand', (): void => {
         const script: string = `
         this.getFiles()
             .then(files => files.map(file => path.join(this.basePath, file)))
         `;
 
         TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    it('should fail on Array.map within arrow function block without return statement', (): void => {
+        const script: string = `
+        this.getFiles()
+            .then(files => {
+                files.map(file => path.join(this.basePath, file));
+            })
+        `;
+
+        TestHelper.assertViolations(ruleName, script, [
+            {
+                failure: FAILURE_STRING,
+                name: 'file.ts',
+                ruleName: ruleName,
+                ruleSeverity: 'ERROR',
+                startPosition: {
+                    character: 17,
+                    line: 4
+                }
+            }
+        ]);
     });
 
     it('should fail on Array.map without assignment', (): void => {
