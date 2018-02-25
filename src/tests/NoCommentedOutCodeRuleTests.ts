@@ -40,6 +40,29 @@ describe('noCommentedOutCodeRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
+    it('should pass on long single line', (): void => {
+        const script: string = `
+        /**
+        Beautifier
+        */
+        `;
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    it('should pass on tslint:disable comment', (): void => {
+        const script: string = `
+        // tslint:disable:no-reserved-keywords
+        `;
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
+    it('should pass on tslint:enable comment', (): void => {
+        const script: string = `
+        // tslint:enable:no-reserved-keywords
+        `;
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
     it('should pass on code with inline comments', (): void => {
         const script: string = `
         const obj = {

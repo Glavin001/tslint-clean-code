@@ -56,7 +56,11 @@ class NoCommentedOutCodeRuleWalker extends ErrorTolerantWalker {
     }
 
     private textIsCode(text: string): boolean {
+        text = text.trim();
         if (this.textIsSingleWord(text)) {
+            return false;
+        }
+        if (this.textIsTslintFlag(text)) {
             return false;
         }
         const sourceFile = ts.createSourceFile('', text, ts.ScriptTarget.ES5, true);
@@ -71,6 +75,10 @@ class NoCommentedOutCodeRuleWalker extends ErrorTolerantWalker {
     private textIsSingleWord(text: string): boolean {
         const pattern = new RegExp('^[\\w-]*$');
         return pattern.test(text);
+    }
+
+    private textIsTslintFlag(text: string): boolean {
+        return text.startsWith('tslint:');
     }
 
     private cleanComment(text: string): string {
