@@ -128,6 +128,15 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
+    it('should pass on Array.map with assignment to a property initializer', (): void => {
+        const script: string = `
+        class Example {
+            items = [1, 2].map(item => doStuff(item));
+        }`;
+
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
     it('should fail on Array.map within arrow function block without return statement', (): void => {
         const script: string = `
         this.getFiles()
