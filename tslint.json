@@ -240,7 +240,8 @@
     "promise-must-complete": true,
     "quotemark": [
       true,
-      "single"
+      "single",
+      "avoid-escape"
     ],
     "radix": false,
     "react-a11y-anchors": true,
