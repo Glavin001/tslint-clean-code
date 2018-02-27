@@ -1,7 +1,5 @@
 import { TestHelper } from './TestHelper';
-import {
-    FAILURE_STRING,
-} from '../tryCatchFirstRule';
+import { FAILURE_STRING } from '../tryCatchFirstRule';
 
 /**
  * Unit tests.
@@ -126,5 +124,4 @@ describe('tryCatchFirstRule', (): void => {
             },
         ]);
     });
-
 });

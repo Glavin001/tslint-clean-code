@@ -3,7 +3,7 @@
  */
 /* tslint:disable:no-increment-decrement id-length */
 import * as ts from 'typescript';
-export module Utils {
+export namespace Utils {
     /**
      * Logical 'any' or 'exists' function.
      */
@@ -48,7 +48,7 @@ export module Utils {
      * A remove() function.
      */
     export function remove<T extends ts.Node>(source: ts.NodeArray<T>, elementToRemove: T): T[] {
-        return removeAll(source, <any> [elementToRemove]);
+        return removeAll(source, <any>[elementToRemove]);
     }
 
     export function trimTo(source: string, maxLength: number): string {

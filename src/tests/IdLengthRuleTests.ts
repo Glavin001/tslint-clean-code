@@ -1,7 +1,5 @@
 import { TestHelper } from './TestHelper';
-import {
-    FAILURE_MIN_STRING,
-} from '../idLengthRule';
+import { FAILURE_MIN_STRING } from '../idLengthRule';
 
 /**
  * Unit tests.
@@ -10,7 +8,6 @@ describe('idLengthRule', (): void => {
     const ruleName: string = 'id-length';
 
     context('default options', () => {
-
         it('should pass on identifiers with length 2', (): void => {
             const script: string = `
                 let x1;
@@ -71,22 +68,19 @@ describe('idLengthRule', (): void => {
                 },
             ]);
         });
-
     });
 
     context('change options', () => {
-
         let options: any[];
         beforeEach((): void => {
             options = [true];
         });
 
         context('object option', () => {
-
             context('exceptions', () => {
-
                 beforeEach((): void => {
-                    options = [true,
+                    options = [
+                        true,
                         {
                             exceptions: ['x', 'y', 'f', 'c'],
                         },
@@ -102,13 +96,12 @@ describe('idLengthRule', (): void => {
                     `;
                     TestHelper.assertViolationsWithOptions(ruleName, options, script, []);
                 });
-
             });
 
             context('min = 0', () => {
-
                 beforeEach((): void => {
-                    options = [true,
+                    options = [
+                        true,
                         {
                             min: 0,
                         },
@@ -124,13 +117,10 @@ describe('idLengthRule', (): void => {
                                     `;
                     TestHelper.assertViolationsWithOptions(ruleName, options, script, []);
                 });
-
             });
-
         });
 
         context('array option (exception)', () => {
-
             beforeEach((): void => {
                 options = [true, ['x', 'y', 'f', 'c']];
             });
@@ -144,13 +134,10 @@ describe('idLengthRule', (): void => {
                                 `;
                 TestHelper.assertViolationsWithOptions(ruleName, options, script, []);
             });
-
         });
 
         context('number option (minimum)', () => {
-
             context('option = 0', () => {
-
                 beforeEach((): void => {
                     options = [true, 0];
                 });
@@ -164,11 +151,7 @@ describe('idLengthRule', (): void => {
                     `;
                     TestHelper.assertViolationsWithOptions(ruleName, options, script, []);
                 });
-
             });
-
         });
-
     });
-
 });
