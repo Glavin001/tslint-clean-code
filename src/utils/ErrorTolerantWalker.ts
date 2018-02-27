@@ -6,7 +6,6 @@ import * as Lint from 'tslint';
  * Errors are often thrown when the TypeChecker is invoked.
  */
 export class ErrorTolerantWalker extends Lint.RuleWalker {
-
     public static DEBUG: boolean = false;
 
     protected visitNode(node: ts.Node): void {
@@ -15,15 +14,16 @@ export class ErrorTolerantWalker extends Lint.RuleWalker {
         } catch (error) {
             // turn this on when trying out new rules on foreign codebases
             if (ErrorTolerantWalker.DEBUG) {
-                const msg: string = 'An error occurred visiting a node.'
-                    + '\nWalker: ' + this.getClassName()
-                    + '\nNode: ' + (node.getFullText ? node.getFullText() : '<unknown>')
-                    + '\n' + error;
+                const msg: string =
+                    'An error occurred visiting a node.' +
+                    '\nWalker: ' +
+                    this.getClassName() +
+                    '\nNode: ' +
+                    (node.getFullText ? node.getFullText() : '<unknown>') +
+                    '\n' +
+                    error;
 
-                this.addFailureAt(
-                    node.getStart ? node.getStart() : 0,
-                    node.getWidth ? node.getWidth() : 0,
-                    msg);
+                this.addFailureAt(node.getStart ? node.getStart() : 0, node.getWidth ? node.getWidth() : 0, msg);
             }
         }
     }
@@ -37,5 +37,4 @@ export class ErrorTolerantWalker extends Lint.RuleWalker {
         }
         return result;
     }
-
 }

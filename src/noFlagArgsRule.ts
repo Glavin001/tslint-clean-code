@@ -10,12 +10,12 @@ export const FAILURE_STRING: string = 'Flag (boolean) arguments are not allowed:
  * Implementation of the newspaper-order rule.
  */
 export class Rule extends Lint.Rules.AbstractRule {
-
     public static metadata: ExtendedMetadata = {
         ruleName: 'no-flag-args',
         type: 'maintainability',
-        description: 'Passing a boolean into a function is a truly terrible practice. ' +
-        'It immediately complicates the signature of the method, loudly proclaiming that this function does more than one thing.',
+        description:
+            'Passing a boolean into a function is a truly terrible practice. ' +
+            'It immediately complicates the signature of the method, loudly proclaiming that this function does more than one thing.',
         options: null,
         optionsDescription: '',
         typescriptOnly: true,
@@ -34,7 +34,6 @@ export class Rule extends Lint.Rules.AbstractRule {
 }
 
 class NoFlagArgsRuleWalker extends ErrorTolerantWalker {
-
     protected visitParameterDeclaration(node: ts.ParameterDeclaration): void {
         if (this.isBooleanParameter(node) && !this.belongsToSetAssessor(node)) {
             const failureMessage = this.makeFailureMessage(node, FAILURE_STRING);
@@ -45,23 +44,24 @@ class NoFlagArgsRuleWalker extends ErrorTolerantWalker {
 
     private isBooleanParameter(node: ts.ParameterDeclaration): boolean {
         const { type } = node;
-        return (type && type.kind === ts.SyntaxKind.BooleanKeyword);
+        return type && type.kind === ts.SyntaxKind.BooleanKeyword;
     }
 
     private belongsToSetAssessor(node: ts.ParameterDeclaration): boolean {
         const { parent } = node;
-        return (parent && parent.kind === ts.SyntaxKind.SetAccessor);
+        return parent && parent.kind === ts.SyntaxKind.SetAccessor;
     }
 
     private makeFailureMessage(node: ts.ParameterDeclaration, failureString: string): string {
         const paramName = node.name.getText();
         const pascalCaseParamName = this.toPascalCase(paramName);
         const functionName: string | undefined = node.parent.name && node.parent.name.getText();
-        const recommendation = functionName ? (
-            '\nSplit the function into two, such as ' +
-            `${functionName}When${pascalCaseParamName}` + ' and ' +
-            `${functionName}WhenNot${pascalCaseParamName}.`
-        ) : '\nSplit the function into two.';
+        const recommendation = functionName
+            ? '\nSplit the function into two, such as ' +
+              `${functionName}When${pascalCaseParamName}` +
+              ' and ' +
+              `${functionName}WhenNot${pascalCaseParamName}.`
+            : '\nSplit the function into two.';
         return failureString + paramName + recommendation;
     }
 
@@ -71,5 +71,4 @@ class NoFlagArgsRuleWalker extends ErrorTolerantWalker {
         }
         return str[0].toUpperCase() + str.slice(1);
     }
-
 }

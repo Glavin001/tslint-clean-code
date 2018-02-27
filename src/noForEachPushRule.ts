@@ -8,7 +8,6 @@ import { ExtendedMetadata } from './utils/ExtendedMetadata';
  * Implementation of the id-length rule.
  */
 export class Rule extends Lint.Rules.AbstractRule {
-
     public static metadata: ExtendedMetadata = {
         ruleName: 'no-for-each-push',
         type: 'maintainability',
@@ -30,12 +29,10 @@ export class Rule extends Lint.Rules.AbstractRule {
     }
 
     public static FAILURE_STRING: string = 'Do not use Array.prototype.push inside of Array.prototype.forEach. ' +
-    'Use Array.prototype.map instead to replace both.';
-
+        'Use Array.prototype.map instead to replace both.';
 }
 
 class NoForeachPushRuleWalker extends ErrorTolerantWalker {
-
     protected visitPropertyAccessExpression(node: ts.PropertyAccessExpression): void {
         this.checkAndReport(node);
         super.visitPropertyAccessExpression(node);
@@ -57,11 +54,9 @@ class NoForeachPushRuleWalker extends ErrorTolerantWalker {
         walker.walk(node.parent);
         return walker.isFound;
     }
-
 }
 
 class PushCallWalker extends Lint.SyntaxWalker {
-
     private foundPush: boolean = false;
     private foundIf: boolean = false;
 
@@ -84,5 +79,4 @@ class PushCallWalker extends Lint.SyntaxWalker {
     public get isFound(): boolean {
         return !this.foundIf && this.foundPush;
     }
-
 }

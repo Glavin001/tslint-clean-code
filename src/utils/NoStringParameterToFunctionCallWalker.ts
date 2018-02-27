@@ -1,20 +1,17 @@
 import * as ts from 'typescript';
 import * as Lint from 'tslint';
-import {ScopedSymbolTrackingWalker} from './ScopedSymbolTrackingWalker';
+import { ScopedSymbolTrackingWalker } from './ScopedSymbolTrackingWalker';
 
-import {AstUtils} from './AstUtils';
+import { AstUtils } from './AstUtils';
 
 /**
  * A walker that creates failures whenever it detects a string parameter is being passed to a certain constructor. .
  */
 export class NoStringParameterToFunctionCallWalker extends ScopedSymbolTrackingWalker {
-    private failureString : string;
-    private targetFunctionName : string;
+    private failureString: string;
+    private targetFunctionName: string;
 
-    public constructor(sourceFile : ts.SourceFile,
-                       targetFunctionName : string,
-                       options : Lint.IOptions,
-                       program? : ts.Program) {
+    public constructor(sourceFile: ts.SourceFile, targetFunctionName: string, options: Lint.IOptions, program?: ts.Program) {
         super(sourceFile, options, program);
         this.targetFunctionName = targetFunctionName;
         this.failureString = 'Forbidden ' + targetFunctionName + ' string parameter: ';
@@ -25,12 +22,17 @@ export class NoStringParameterToFunctionCallWalker extends ScopedSymbolTrackingW
         super.visitCallExpression(node);
     }
 
-    private validateExpression(node : ts.CallExpression) : void {
-        const functionName : string = AstUtils.getFunctionName(node);
-        const firstArg : ts.Expression = node.arguments[0];
+    private validateExpression(node: ts.CallExpression): void {
+        const functionName: string = AstUtils.getFunctionName(node);
+        const firstArg: ts.Expression = node.arguments[0];
         if (functionName === this.targetFunctionName && firstArg != null) {
             if (!this.isExpressionEvaluatingToFunction(firstArg)) {
-                const msg : string = this.failureString + firstArg.getFullText().trim().substring(0, 40);
+                const msg: string =
+                    this.failureString +
+                    firstArg
+                        .getFullText()
+                        .trim()
+                        .substring(0, 40);
                 this.addFailureAt(node.getStart(), node.getWidth(), msg);
             }
         }

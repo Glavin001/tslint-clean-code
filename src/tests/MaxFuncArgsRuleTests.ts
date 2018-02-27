@@ -1,9 +1,5 @@
 import { TestHelper } from './TestHelper';
-import {
-    FAILURE_STRING,
-    FAILURE_RECOMMENDATION_STRING,
-    DEFAULT_MAX_ARGS_LENGTH,
-} from '../maxFuncArgsRule';
+import { FAILURE_STRING, FAILURE_RECOMMENDATION_STRING, DEFAULT_MAX_ARGS_LENGTH } from '../maxFuncArgsRule';
 
 /**
  * Unit tests.
@@ -12,7 +8,6 @@ describe('maxFuncArgsRule', (): void => {
     const ruleName: string = 'max-func-args';
 
     context('Anonymous Function', () => {
-
         const maxLength = DEFAULT_MAX_ARGS_LENGTH;
 
         it('should pass on function with 0 arguments', (): void => {
@@ -41,11 +36,9 @@ describe('maxFuncArgsRule', (): void => {
                 },
             ]);
         });
-
     });
 
     context('Arrow Function', () => {
-
         const maxLength = DEFAULT_MAX_ARGS_LENGTH;
 
         it('should pass on function with 0 arguments', (): void => {
@@ -74,11 +67,9 @@ describe('maxFuncArgsRule', (): void => {
                 },
             ]);
         });
-
     });
 
     context('Class method', () => {
-
         const maxLength = DEFAULT_MAX_ARGS_LENGTH;
 
         it('should pass on function with 0 arguments', (): void => {
@@ -118,5 +109,4 @@ describe('maxFuncArgsRule', (): void => {
             ]);
         });
     });
-
 });

@@ -9,22 +9,21 @@ import { AstUtils } from './utils/AstUtils';
  * Implementation of the no-feature-envy rule.
  */
 export class Rule extends Lint.Rules.AbstractRule {
-
     public static metadata: ExtendedMetadata = {
         ruleName: 'no-feature-envy',
-        type: 'maintainability',    // one of: 'functionality' | 'maintainability' | 'style' | 'typescript'
+        type: 'maintainability', // one of: 'functionality' | 'maintainability' | 'style' | 'typescript'
         description: 'A method accesses the data of another object more than its own data.',
         options: null,
         optionsDescription: '',
-        optionExamples: [],         //Remove this property if the rule has no options
+        optionExamples: [], //Remove this property if the rule has no options
         recommendation: '[true, 1, ["_"]],',
         typescriptOnly: false,
-        issueClass: 'Non-SDL',      // one of: 'SDL' | 'Non-SDL' | 'Ignored'
-        issueType: 'Warning',       // one of: 'Error' | 'Warning'
-        severity: 'Moderate',            // one of: 'Critical' | 'Important' | 'Moderate' | 'Low'
-        level: 'Opportunity for Excellence',  // one of 'Mandatory' | 'Opportunity for Excellence'
+        issueClass: 'Non-SDL', // one of: 'SDL' | 'Non-SDL' | 'Ignored'
+        issueType: 'Warning', // one of: 'Error' | 'Warning'
+        severity: 'Moderate', // one of: 'Critical' | 'Important' | 'Moderate' | 'Low'
+        level: 'Opportunity for Excellence', // one of 'Mandatory' | 'Opportunity for Excellence'
         group: 'Clarity', // one of 'Ignored' | 'Security' | 'Correctness' | 'Clarity' | 'Whitespace' | 'Configurable' | 'Deprecated'
-        commonWeaknessEnumeration: '',   // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
+        commonWeaknessEnumeration: '', // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
     };
 
     public static FAILURE_STRING(feature: MethodFeature): string {
@@ -40,7 +39,6 @@ export class Rule extends Lint.Rules.AbstractRule {
 }
 
 class NoFeatureEnvyRuleWalker extends ErrorTolerantWalker {
-
     private threshold: number = 0;
     private exclude: string[] = [];
 
@@ -55,35 +53,34 @@ class NoFeatureEnvyRuleWalker extends ErrorTolerantWalker {
     }
 
     private checkAndReport(node: ts.ClassDeclaration): void {
-        this.getFeatureMethodsForClass(node)
-            .forEach(feature => {
-                const failureMessage = Rule.FAILURE_STRING(feature);
-                this.addFailureAtNode(feature.methodNode, failureMessage);
-            });
+        this.getFeatureMethodsForClass(node).forEach(feature => {
+            const failureMessage = Rule.FAILURE_STRING(feature);
+            this.addFailureAtNode(feature.methodNode, failureMessage);
+        });
     }
 
     private getFeatureMethodsForClass(classNode: ts.ClassDeclaration): MethodFeature[] {
         const methods = this.methodsForClass(classNode);
-        return <any[]> methods.map(method => {
-            const walker = new ClassMethodWalker(classNode, method);
-            return walker.features();
-        })
+        return <any[]>methods
+            .map(method => {
+                const walker = new ClassMethodWalker(classNode, method);
+                return walker.features();
+            })
             .map(features => this.getTopFeature(features))
-            .filter(feature => feature !== undefined)
-            ;
+            .filter(feature => feature !== undefined);
     }
 
     private getTopFeature(features: MethodFeature[]): MethodFeature | void {
         const filteredFeatures = this.filterFeatures(features);
         return filteredFeatures.reduce((best, current) => {
-                if (!best) {
-                    return current;
-                }
-                if (current.featureEnvy() > best.featureEnvy()) {
-                    return current;
-                }
-                return best;
-            }, undefined);
+            if (!best) {
+                return current;
+            }
+            if (current.featureEnvy() > best.featureEnvy()) {
+                return current;
+            }
+            return best;
+        }, undefined);
     }
 
     private filterFeatures(features: MethodFeature[]): MethodFeature[] {
@@ -111,10 +108,10 @@ class NoFeatureEnvyRuleWalker extends ErrorTolerantWalker {
 
     private parseOptions(): void {
         this.getOptions().forEach((opt: any) => {
-            if (typeof (opt) === 'boolean') {
+            if (typeof opt === 'boolean') {
                 return;
             }
-            if (typeof (opt) === 'number') {
+            if (typeof opt === 'number') {
                 this.threshold = opt;
                 return;
             }
@@ -124,11 +121,9 @@ class NoFeatureEnvyRuleWalker extends ErrorTolerantWalker {
             }
         });
     }
-
 }
 
 class ClassMethodWalker extends Lint.SyntaxWalker {
-
     private featureEnvyMap: EnvyMap = {};
 
     constructor(private classNode: ts.ClassDeclaration, private methodNode: ts.MethodDeclaration) {
@@ -194,18 +189,18 @@ class ClassMethodWalker extends Lint.SyntaxWalker {
         }
         return expression.getText();
     }
-
 }
 
 export class MethodFeature {
-    constructor(private data: {
-        classNode: ts.ClassDeclaration;
-        methodNode: ts.MethodDeclaration;
-        otherClassName: string;
-        thisClassAccesses: number;
-        otherClassAccesses: number;
-    }) {
-    }
+    constructor(
+        private data: {
+            classNode: ts.ClassDeclaration;
+            methodNode: ts.MethodDeclaration;
+            otherClassName: string;
+            thisClassAccesses: number;
+            otherClassAccesses: number;
+        }
+    ) {}
 
     public get className(): string {
         return this.classNode.name.text;
@@ -229,7 +224,6 @@ export class MethodFeature {
     public get otherClassName(): string {
         return this.data.otherClassName;
     }
-
 }
 
 interface EnvyMap {

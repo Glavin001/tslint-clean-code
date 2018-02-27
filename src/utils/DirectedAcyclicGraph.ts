@@ -4,7 +4,7 @@
  * Original C++ source code from http://www.geeksforgeeks.org/all-topological-sorts-of-a-directed-acyclic-graph/
  */
 export class DirectedAcyclicGraph {
-    private numVertices: number;    // No. of vertices
+    private numVertices: number; // No. of vertices
 
     constructor(numVertices: number) {
         this.numVertices = numVertices;
@@ -14,7 +14,6 @@ export class DirectedAcyclicGraph {
             this.inDegree.push(0);
             this.adj.push([]);
         }
-
     }
 
     // Pointer to an array containing adjacency list
@@ -102,7 +101,6 @@ export class DirectedAcyclicGraph {
         // increasing inner degree of w by 1
         this.inDegree[dest]++;
     }
-
 }
 
 /*

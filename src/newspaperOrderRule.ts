@@ -16,13 +16,13 @@ export const FAILURE_BLOCK_STRING: string = 'The functions in the block do not r
  * Implementation of the newspaper-order rule.
  */
 export class Rule extends Lint.Rules.AbstractRule {
-
     public static metadata: ExtendedMetadata = {
         ruleName: 'newspaper-order',
         type: 'maintainability',
-        description: 'We would like a source file to be like a newspaper article. ' +
-        'Detail should increase as we move downward, ' +
-        'until at the end we find the lowest level functions and details in the source file.',
+        description:
+            'We would like a source file to be like a newspaper article. ' +
+            'Detail should increase as we move downward, ' +
+            'until at the end we find the lowest level functions and details in the source file.',
         options: null,
         optionsDescription: '',
         typescriptOnly: true,
@@ -41,7 +41,6 @@ export class Rule extends Lint.Rules.AbstractRule {
 }
 
 class NewspaperOrderRuleWalker extends ErrorTolerantWalker {
-
     protected visitBlock(node: ts.Block): void {
         const blockNode = new BlockHelper(node);
         this.checkAndReportFailure(blockNode, FAILURE_BLOCK_STRING);
@@ -71,31 +70,32 @@ class NewspaperOrderRuleWalker extends ErrorTolerantWalker {
         const { nodeName, completeOrderedMethodNames, methodNames } = nodeHelper;
         const correctSymbol = '✓';
         const incorrectSymbol = 'x';
-        const help: string = '\n\nMethods order:\n' +
-            completeOrderedMethodNames.map((method, index) => {
-                const isCorrect = methodNames[index] === method;
-                const status = isCorrect ? correctSymbol : incorrectSymbol;
-                return `${index + 1}. ${status} ${method}`;
-            }).join('\n');
+        const help: string =
+            '\n\nMethods order:\n' +
+            completeOrderedMethodNames
+                .map((method, index) => {
+                    const isCorrect = methodNames[index] === method;
+                    const status = isCorrect ? correctSymbol : incorrectSymbol;
+                    return `${index + 1}. ${status} ${method}`;
+                })
+                .join('\n');
         return failureString + nodeName + help;
     }
 
     private readsLikeNewspaper(nodeHelper: NewspaperHelper): boolean {
         return nodeHelper.readsLikeNewspaper;
     }
-
 }
 
 abstract class NewspaperHelper {
-    constructor(protected node: ts.Node) {
-    }
+    constructor(protected node: ts.Node) {}
 
     @Memoize
     public get readsLikeNewspaper(): boolean {
         // console.log('====================='); // tslint:disable-line no-console
         // console.log('Node: ', nodeName); // tslint:disable-line no-console
         const { methodNames, completeOrderedMethodNames, ignoredMethods } = this;
-        const ignoringAllMethods: boolean = (ignoredMethods.length === methodNames.length);
+        const ignoringAllMethods: boolean = ignoredMethods.length === methodNames.length;
         const hasNoDeps: boolean = completeOrderedMethodNames.length === 0;
         // console.log('ignoredMethods:', ignoredMethods); // tslint:disable-line no-console
         // console.log('methodNames:', methodNames); // tslint:disable-line no-console
@@ -168,28 +168,36 @@ abstract class NewspaperHelper {
     private get methodGraph(): DependencyGraph {
         const { methodDependencies } = this;
         // console.log('methodDependencies:', methodDependencies); // tslint:disable-line no-console
-        return Object.keys(methodDependencies).sort().reduce((graph: DependencyGraph, methodName: string) => {
-            const deps = Object.keys(methodDependencies[methodName]).sort();
-            deps.forEach(depName => {
-                const shouldIgnore: boolean = !methodDependencies.hasOwnProperty(depName) || (methodName === depName);
-                // console.log('shouldIgnore:', shouldIgnore, methodName, depName); // tslint:disable-line no-console
-                if (shouldIgnore) {
-                    return;
-                }
-                const edge = [methodName, depName];
-                graph.push(edge);
-            });
-            // console.log('graph:', graph); // tslint:disable-line no-console
-            return graph;
-        }, <DependencyGraph>[]);
+        return Object.keys(methodDependencies)
+            .sort()
+            .reduce(
+                (graph: DependencyGraph, methodName: string) => {
+                    const deps = Object.keys(methodDependencies[methodName]).sort();
+                    deps.forEach(depName => {
+                        const shouldIgnore: boolean = !methodDependencies.hasOwnProperty(depName) || methodName === depName;
+                        // console.log('shouldIgnore:', shouldIgnore, methodName, depName); // tslint:disable-line no-console
+                        if (shouldIgnore) {
+                            return;
+                        }
+                        const edge = [methodName, depName];
+                        graph.push(edge);
+                    });
+                    // console.log('graph:', graph); // tslint:disable-line no-console
+                    return graph;
+                },
+                <DependencyGraph>[]
+            );
     }
 
     @Memoize
     private get methodDependencies(): MethodDependenciesMap {
-        return this.methods.reduce((result, method) => {
-            result[method.name.getText()] = this.dependenciesForMethod(method);
-            return result;
-        }, <MethodDependenciesMap>{});
+        return this.methods.reduce(
+            (result, method) => {
+                result[method.name.getText()] = this.dependenciesForMethod(method);
+                return result;
+            },
+            <MethodDependenciesMap>{}
+        );
     }
 
     protected abstract dependenciesForMethod(method: ts.FunctionLikeDeclaration): MethodDependencies;
@@ -215,7 +223,6 @@ abstract class NewspaperHelper {
     protected abstract get methods(): ts.FunctionLikeDeclaration[];
 
     abstract get nodeName(): string;
-
 }
 
 class ClassDeclarationHelper extends NewspaperHelper {
@@ -247,7 +254,6 @@ class ClassDeclarationHelper extends NewspaperHelper {
     public get nodeName() {
         return this.node.name == null ? '<unknown>' : this.node.name.text;
     }
-
 }
 
 abstract class BlockLikeHelper extends NewspaperHelper {
@@ -257,18 +263,16 @@ abstract class BlockLikeHelper extends NewspaperHelper {
 
     @Memoize
     protected get methods(): ts.FunctionDeclaration[] {
-        const functionDeclarations = <ts.FunctionDeclaration[]>this.node.statements
-            .filter((node: ts.Statement): boolean => ts.isFunctionDeclaration(node));
-        const variableStatements = <ts.VariableStatement[]>this.node.statements
-            .filter((node: ts.Statement): boolean => ts.isVariableStatement(node));
+        const functionDeclarations = <ts.FunctionDeclaration[]>this.node.statements.filter((node: ts.Statement): boolean =>
+            ts.isFunctionDeclaration(node)
+        );
+        const variableStatements = <ts.VariableStatement[]>this.node.statements.filter((node: ts.Statement): boolean =>
+            ts.isVariableStatement(node)
+        );
         const variableFunctionDeclarations: ts.FunctionDeclaration[] = variableStatements
             .map(node => node.declarationList.declarations)
-            .map(declarations =>
-                declarations.map(this.createFuncDeclarFromVarDeclar)
-                    .filter(node => node),
-            )
-            .reduce((result, item) => [...result, ...item], [])
-            ;
+            .map(declarations => declarations.map(this.createFuncDeclarFromVarDeclar).filter(node => node))
+            .reduce((result, item) => [...result, ...item], []);
         return [...functionDeclarations, ...variableFunctionDeclarations];
     }
 
@@ -288,7 +292,6 @@ abstract class BlockLikeHelper extends NewspaperHelper {
         walker.walk(method);
         return walker.dependencies;
     }
-
 }
 
 class SourceFileHelper extends BlockLikeHelper {
@@ -300,7 +303,6 @@ class SourceFileHelper extends BlockLikeHelper {
     public get nodeName() {
         return this.node.fileName == null ? '<unknown>' : this.node.fileName;
     }
-
 }
 
 class BlockHelper extends BlockLikeHelper {
@@ -318,11 +320,9 @@ class BlockHelper extends BlockLikeHelper {
         }
         return '<anonymous>';
     }
-
 }
 
 class ClassMethodWalker extends Lint.SyntaxWalker {
-
     public dependencies: MethodDependencies = {};
 
     protected visitPropertyAccessExpression(node: ts.PropertyAccessExpression): void {
@@ -342,11 +342,9 @@ class ClassMethodWalker extends Lint.SyntaxWalker {
         }
         super.visitBindingElement(node);
     }
-
 }
 
 class FunctionWalker extends Lint.SyntaxWalker {
-
     public dependencies: MethodDependencies = {};
 
     protected visitCallExpression(node: ts.CallExpression): void {
@@ -363,7 +361,6 @@ class FunctionWalker extends Lint.SyntaxWalker {
         }
         super.visitCallExpression(node);
     }
-
 }
 
 interface MethodDependenciesMap {
@@ -377,8 +374,7 @@ interface MethodDependencies {
 type DependencyGraph = string[][];
 
 class TopologicalSortUtil {
-    constructor(private graph: DependencyGraph) {
-    }
+    constructor(private graph: DependencyGraph) {}
 
     public closestList(currentList: string[]): string[] {
         if (currentList.length === 0) {
@@ -419,14 +415,13 @@ class TopologicalSortUtil {
     private get allLists(): string[][] {
         const { dag, list } = this;
         // console.log('list', list); // tslint:disable-line no-console
-        const indexMap: { [index: number]: string; } = list.reduce((result, key, index) => {
+        const indexMap: { [index: number]: string } = list.reduce((result, key, index) => {
             result[index] = key;
             return result;
         }, {});
-        return dag.alltopologicalSort()
-            .map(currList => {
-                return currList.map(index => indexMap[index]);
-            });
+        return dag.alltopologicalSort().map(currList => {
+            return currList.map(index => indexMap[index]);
+        });
     }
 
     @Memoize
@@ -455,5 +450,4 @@ class TopologicalSortUtil {
         });
         return Object.keys(index);
     }
-
 }

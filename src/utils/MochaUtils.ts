@@ -1,13 +1,12 @@
 import * as ts from 'typescript';
 
-import {AstUtils} from './AstUtils';
-import {Utils} from './Utils';
+import { AstUtils } from './AstUtils';
+import { Utils } from './Utils';
 
 /**
  * Common functions for Mocha AST.
  */
-export module MochaUtils {
-
+export namespace MochaUtils {
     export function isMochaTest(node: ts.SourceFile): boolean {
         return Utils.exists(node.statements, (statement: ts.Statement): boolean => {
             return isStatementDescribeCall(statement);
@@ -31,9 +30,7 @@ export module MochaUtils {
     export function isDescribe(call: ts.CallExpression): boolean {
         const functionName: string = AstUtils.getFunctionName(call);
         const callText: string = call.expression.getText();
-        return functionName === 'describe'
-            || functionName === 'context'
-            || /(describe|context)\.(only|skip|timeout)/.test(callText);
+        return functionName === 'describe' || functionName === 'context' || /(describe|context)\.(only|skip|timeout)/.test(callText);
     }
 
     /**
@@ -41,8 +38,15 @@ export module MochaUtils {
      */
     export function isLifecycleMethod(call: ts.CallExpression): boolean {
         const functionName: string = AstUtils.getFunctionName(call);
-        return functionName === 'it' || functionName === 'specify'
-            || functionName === 'before' || functionName === 'beforeEach' || functionName === 'beforeAll'
-            || functionName === 'after' || functionName === 'afterEach' || functionName === 'afterAll';
+        return (
+            functionName === 'it' ||
+            functionName === 'specify' ||
+            functionName === 'before' ||
+            functionName === 'beforeEach' ||
+            functionName === 'beforeAll' ||
+            functionName === 'after' ||
+            functionName === 'afterEach' ||
+            functionName === 'afterAll'
+        );
     }
 }

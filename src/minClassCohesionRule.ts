@@ -12,7 +12,6 @@ const FAILURE_STRING: string = 'The cohesion of this class is too low. Consider 
  * Implementation of the min-class-cohesion rule.
  */
 export class Rule extends Lint.Rules.AbstractRule {
-
     public static metadata: ExtendedMetadata = {
         ruleName: 'min-class-cohesion',
         type: 'maintainability',
@@ -57,27 +56,25 @@ class MinClassCohesionRuleWalker extends ErrorTolerantWalker {
         }
         const { cohesionScore } = classNode;
         // console.log('Cohesion:', cohesionScore); // tslint:disable-line no-console
-        return (cohesionScore >= this.minClassCohesion);
+        return cohesionScore >= this.minClassCohesion;
     }
 
     private parseOptions(): void {
         this.getOptions().forEach((opt: any) => {
-            if (typeof (opt) === 'boolean') {
+            if (typeof opt === 'boolean') {
                 return;
             }
-            if (typeof (opt) === 'number') {
+            if (typeof opt === 'number') {
                 this.minClassCohesion = opt;
                 return;
             }
             throw new Error(`Rule min-class-cohesion only supports option of type number, not ${typeof opt}.`);
         });
     }
-
 }
 
 class ClassDeclarationHelper {
-    constructor(private node: ts.ClassDeclaration) {
-    }
+    constructor(private node: ts.ClassDeclaration) {}
 
     public get cohesionScore(): number {
         const { fieldNames, methods } = this;
@@ -138,18 +135,20 @@ class ClassDeclarationHelper {
         const ctor: ts.ConstructorDeclaration = this.constructorDeclaration;
         if (ctor) {
             return ctor.parameters.filter((param: ts.ParameterDeclaration): boolean => {
-                return AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.PublicKeyword)
-                    || AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.PrivateKeyword)
-                    || AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.ProtectedKeyword)
-                    || AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.ReadonlyKeyword);
+                return (
+                    AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.PublicKeyword) ||
+                    AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.PrivateKeyword) ||
+                    AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.ProtectedKeyword) ||
+                    AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.ReadonlyKeyword)
+                );
             });
         }
         return [];
     }
 
     private get constructorDeclaration(): ts.ConstructorDeclaration | undefined {
-        return <ts.ConstructorDeclaration>this.node.members.find((element: ts.ClassElement): boolean =>
-            (element.kind === ts.SyntaxKind.Constructor),
+        return <ts.ConstructorDeclaration>this.node.members.find(
+            (element: ts.ClassElement): boolean => element.kind === ts.SyntaxKind.Constructor
         );
     }
 
@@ -158,8 +157,8 @@ class ClassDeclarationHelper {
     }
 
     private get instanceFields(): ts.PropertyDeclaration[] {
-        return <ts.PropertyDeclaration[]>this.node.members.filter((classElement: ts.ClassElement): boolean =>
-            (classElement.kind === ts.SyntaxKind.PropertyDeclaration),
+        return <ts.PropertyDeclaration[]>this.node.members.filter(
+            (classElement: ts.ClassElement): boolean => classElement.kind === ts.SyntaxKind.PropertyDeclaration
         );
     }
 
@@ -178,11 +177,9 @@ class ClassDeclarationHelper {
     public get name() {
         return this.node.name == null ? '<unknown>' : this.node.name.text;
     }
-
 }
 
 class ClassMethodWalker extends Lint.SyntaxWalker {
-
     public fieldsUsed: FieldsUsageMap = {};
 
     protected visitPropertyAccessExpression(node: ts.PropertyAccessExpression): void {
@@ -194,7 +191,6 @@ class ClassMethodWalker extends Lint.SyntaxWalker {
         }
         super.visitPropertyAccessExpression(node);
     }
-
 }
 
 interface FieldsUsageMap {

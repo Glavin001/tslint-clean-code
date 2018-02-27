@@ -33,8 +33,9 @@ describe('noFeatureEnvyRule', (): void => {
 
                 TestHelper.assertViolations(ruleName, stripIndent(script), [
                     {
-                        failure: 'Method "salePrice" uses "item" more than its own class "Warehouse". ' +
-                        'Extract or Move Method from "salePrice" into "item".',
+                        failure:
+                            'Method "salePrice" uses "item" more than its own class "Warehouse". ' +
+                            'Extract or Move Method from "salePrice" into "item".',
                         name: 'file.ts',
                         ruleName: ruleName,
                         startPosition: { character: 5, line: 3 },
@@ -67,7 +68,6 @@ describe('noFeatureEnvyRule', (): void => {
             });
 
             context('when multiple instances of feature envy', () => {
-
                 it('should fail on class method with the highest feature envy', (): void => {
                     const script: string = `
                     class SocialNetwork {
@@ -81,17 +81,16 @@ describe('noFeatureEnvyRule', (): void => {
 
                     TestHelper.assertViolations(ruleName, stripIndent(script), [
                         {
-                            failure: 'Method "connectMessage" uses "person1" more than its own class "SocialNetwork". ' +
-                            'Extract or Move Method from "connectMessage" into "person1".',
+                            failure:
+                                'Method "connectMessage" uses "person1" more than its own class "SocialNetwork". ' +
+                                'Extract or Move Method from "connectMessage" into "person1".',
                             name: 'file.ts',
                             ruleName: ruleName,
                             startPosition: { character: 5, line: 3 },
                         },
                     ]);
                 });
-
             });
-
         });
 
         context('when using super', () => {
@@ -118,21 +117,19 @@ describe('noFeatureEnvyRule', (): void => {
 
                 TestHelper.assertViolations(ruleName, stripIndent(script), [
                     {
-                        failure: 'Method "salePrice" uses "item" more than its own class "CustomWarehouse". ' +
-                        'Extract or Move Method from "salePrice" into "item".',
+                        failure:
+                            'Method "salePrice" uses "item" more than its own class "CustomWarehouse". ' +
+                            'Extract or Move Method from "salePrice" into "item".',
                         name: 'file.ts',
                         ruleName: ruleName,
                         startPosition: { character: 5, line: 3 },
                     },
                 ]);
             });
-
         });
-
     });
 
     context('when threshold option changed', () => {
-
         it('should pass on class method which calls item more than this within the threshold', (): void => {
             const options = [1];
             const script: string = `
@@ -144,11 +141,9 @@ describe('noFeatureEnvyRule', (): void => {
             `;
             TestHelper.assertViolationsWithOptions(ruleName, options, stripIndent(script), []);
         });
-
     });
 
     context('when exclude option changed', () => {
-
         it('should pass on class method which calls excluded item more than this', (): void => {
             const options = [['item']];
             const script: string = `
@@ -160,7 +155,5 @@ describe('noFeatureEnvyRule', (): void => {
             `;
             TestHelper.assertViolationsWithOptions(ruleName, options, stripIndent(script), []);
         });
-
     });
-
 });

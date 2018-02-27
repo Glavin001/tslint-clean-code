@@ -5,7 +5,8 @@ import { ErrorTolerantWalker } from './utils/ErrorTolerantWalker';
 import { ExtendedMetadata } from './utils/ExtendedMetadata';
 
 export const FAILURE_STRING: string = 'Exceeds maximum function argument list length of ';
-export const FAILURE_RECOMMENDATION_STRING: string = '\nConsider these two solutions for refactoring:\n' +
+export const FAILURE_RECOMMENDATION_STRING: string =
+    '\nConsider these two solutions for refactoring:\n' +
     '1) Create a Class and pass common arguments into the constructor as instance properties. ' +
     'Move this function to the new Class with a reduced arguments list.\n' +
     '2) Instantiate an object containing each of the arguments and pass in the object instance as a single argument.';
@@ -15,7 +16,6 @@ export const DEFAULT_MAX_ARGS_LENGTH: number = 3;
  * Implementation of the newspaper-order rule.
  */
 export class Rule extends Lint.Rules.AbstractRule {
-
     public static metadata: ExtendedMetadata = {
         ruleName: 'max-func-args',
         type: 'maintainability',
@@ -38,7 +38,6 @@ export class Rule extends Lint.Rules.AbstractRule {
 }
 
 class MaxFunctionArgsRuleWalker extends ErrorTolerantWalker {
-
     private maxArgs: number = DEFAULT_MAX_ARGS_LENGTH;
 
     constructor(sourceFile: ts.SourceFile, options: Lint.IOptions) {
@@ -85,10 +84,10 @@ class MaxFunctionArgsRuleWalker extends ErrorTolerantWalker {
 
     private parseOptions(): void {
         this.getOptions().forEach((opt: any) => {
-            if (typeof (opt) === 'boolean') {
+            if (typeof opt === 'boolean') {
                 return;
             }
-            if (typeof (opt) === 'number') {
+            if (typeof opt === 'number') {
                 this.maxArgs = opt;
                 return;
             }

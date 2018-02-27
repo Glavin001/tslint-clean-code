@@ -28,23 +28,15 @@ export class Rule extends Lint.Rules.AbstractRule {
     };
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
-        return this.applyWithWalker(
-            new NoCommentedOutCodeRuleWalker(sourceFile, this.getOptions()),
-        );
+        return this.applyWithWalker(new NoCommentedOutCodeRuleWalker(sourceFile, this.getOptions()));
     }
 }
 
 class NoCommentedOutCodeRuleWalker extends ErrorTolerantWalker {
     public visitSourceFile(node: ts.SourceFile) {
         forEachTokenWithTrivia(node, (text, tokenSyntaxKind, range) => {
-            if (
-                tokenSyntaxKind === ts.SyntaxKind.SingleLineCommentTrivia ||
-                tokenSyntaxKind === ts.SyntaxKind.MultiLineCommentTrivia
-            ) {
-                this.scanCommentForCode(
-                    range.pos,
-                    text.substring(range.pos, range.end),
-                );
+            if (tokenSyntaxKind === ts.SyntaxKind.SingleLineCommentTrivia || tokenSyntaxKind === ts.SyntaxKind.MultiLineCommentTrivia) {
+                this.scanCommentForCode(range.pos, text.substring(range.pos, range.end));
             }
         });
     }
@@ -84,9 +76,7 @@ class NoCommentedOutCodeRuleWalker extends ErrorTolerantWalker {
     private cleanComment(text: string): string {
         const pattern = /^([^a-zA-Z0-9]+)/;
         const lines = text.split('\n');
-        return lines.map(line =>
-            line.replace(pattern, '').trim(),
-        ).join('\n');
+        return lines.map(line => line.replace(pattern, '').trim()).join('\n');
     }
 
     private foundSuspiciousComment(startPosition: number, commentText: string) {

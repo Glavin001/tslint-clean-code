@@ -216,15 +216,11 @@ describe('minClassCohesionRule', (): void => {
     });
 
     context('reading options', (): void => {
-
         context('90% cohesion', (): void => {
-
             let options: any[];
 
             beforeEach((): void => {
-                options = [true,
-                    0.9,
-                ];
+                options = [true, 0.9];
             });
 
             it('should fail on Stack class', (): void => {
@@ -257,17 +253,13 @@ describe('minClassCohesionRule', (): void => {
                     },
                 ]);
             });
-
         });
 
         context('80% cohesion', (): void => {
-
             let options: any[];
 
             beforeEach((): void => {
-                options = [true,
-                    0.8,
-                ];
+                options = [true, 0.8];
             });
 
             it('should pass on Stack class', (): void => {
@@ -293,8 +285,6 @@ describe('minClassCohesionRule', (): void => {
                             `;
                 TestHelper.assertViolationsWithOptions(ruleName, options, script, []);
             });
-
         });
     });
-
 });

@@ -6,7 +6,6 @@ const { FAILURE_STRING } = Rule;
  * Unit tests.
  */
 describe('noMapWithoutUsageRule', (): void => {
-
     const ruleName: string = 'no-map-without-usage';
 
     it('should pass on Array.forEach', (): void => {
@@ -184,5 +183,4 @@ describe('noMapWithoutUsageRule', (): void => {
             TestHelper.assertViolations(ruleName, file, []);
         });
     });
-
 });

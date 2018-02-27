@@ -3,8 +3,7 @@ import * as ts from 'typescript';
 /**
  * General utility class.
  */
-export module AstUtils {
-
+export namespace AstUtils {
     export function getLanguageVariant(node: ts.SourceFile): ts.LanguageVariant {
         if (/.*\.tsx/i.test(node.fileName)) {
             return ts.LanguageVariant.JSX;
@@ -13,18 +12,18 @@ export module AstUtils {
         }
     }
 
-    export function getFunctionName(node : ts.CallExpression | ts.NewExpression) : string {
+    export function getFunctionName(node: ts.CallExpression | ts.NewExpression): string {
         const expression: ts.Expression = node.expression;
-        let functionName : string = (<any>expression).text;
+        let functionName: string = (<any>expression).text;
         if (functionName === undefined && (<any>expression).name) {
             functionName = (<any>expression).name.text;
         }
         return functionName;
     }
 
-    export function getFunctionTarget(expression: ts.CallExpression) : string {
+    export function getFunctionTarget(expression: ts.CallExpression): string {
         if (expression.expression.kind === ts.SyntaxKind.PropertyAccessExpression) {
-            const propExp : ts.PropertyAccessExpression = <ts.PropertyAccessExpression>expression.expression;
+            const propExp: ts.PropertyAccessExpression = <ts.PropertyAccessExpression>expression.expression;
             return propExp.expression.getText();
         }
         return null;
@@ -34,12 +33,12 @@ export module AstUtils {
         return functionTarget === '$' || /^(jquery)$/i.test(functionTarget);
     }
 
-    export function hasModifier(modifiers : ts.ModifiersArray, modifierKind : number) : boolean {
+    export function hasModifier(modifiers: ts.ModifiersArray, modifierKind: number): boolean {
         if (modifiers == null) {
             return false;
         }
-        let result : boolean = false;
-        modifiers.forEach((modifier : ts.Node) : void => {
+        let result: boolean = false;
+        modifiers.forEach((modifier: ts.Node): void => {
             if (modifier.kind === modifierKind) {
                 result = true;
             }
@@ -47,44 +46,43 @@ export module AstUtils {
         return result;
     }
 
-    export function dumpTypeInfo(expression : ts.Expression, languageServices: ts.LanguageService, typeChecker : ts.TypeChecker) : void {
+    export function dumpTypeInfo(expression: ts.Expression, languageServices: ts.LanguageService, typeChecker: ts.TypeChecker): void {
         /* tslint:disable:no-console */
         console.log(expression.getFullText());
         console.log('\tkind: ' + expression.kind);
 
-        if (expression.kind === ts.SyntaxKind.Identifier
-            || expression.kind === ts.SyntaxKind.PropertyAccessExpression) {
-            const definitionInfo : ts.DefinitionInfo[] = languageServices.getDefinitionAtPosition('file.ts', expression.getStart());
+        if (expression.kind === ts.SyntaxKind.Identifier || expression.kind === ts.SyntaxKind.PropertyAccessExpression) {
+            const definitionInfo: ts.DefinitionInfo[] = languageServices.getDefinitionAtPosition('file.ts', expression.getStart());
             if (definitionInfo) {
-                definitionInfo.forEach((info : ts.DefinitionInfo, index : number) : void => {
+                definitionInfo.forEach((info: ts.DefinitionInfo, index: number): void => {
                     console.log('\tdefinitionInfo-' + index);
                     console.log('\t\tkind: ' + info.kind);
                     console.log('\t\tname: ' + info.name);
                 });
             }
 
-            const typeInfo : ts.DefinitionInfo[] = languageServices.getTypeDefinitionAtPosition('file.ts', expression.getStart());
+            const typeInfo: ts.DefinitionInfo[] = languageServices.getTypeDefinitionAtPosition('file.ts', expression.getStart());
             if (typeInfo) {
-                typeInfo.forEach((info : ts.DefinitionInfo, index : number) : void => {
+                typeInfo.forEach((info: ts.DefinitionInfo, index: number): void => {
                     console.log('\ttypeDefinitionInfo-' + index);
                     console.log('\t\tkind: ' + info.kind);
                     console.log('\t\tname: ' + info.name);
                 });
             }
 
-            const quickInfo : ts.QuickInfo = languageServices.getQuickInfoAtPosition('file.ts', expression.getStart());
+            const quickInfo: ts.QuickInfo = languageServices.getQuickInfoAtPosition('file.ts', expression.getStart());
             console.log('\tquickInfo.kind         = ' + quickInfo.kind);
             console.log('\tquickInfo.kindModifiers= ' + quickInfo.kindModifiers);
             console.log('\tquickInfo.textSpan     = ' + quickInfo.textSpan.start);
             console.log('\tquickInfo.displayParts = ' + quickInfo.displayParts[0].text);
             console.log('\tquickInfo.displayParts = ' + quickInfo.displayParts[0].kind);
 
-            const expressionType : ts.Type = typeChecker.getTypeAtLocation(expression);
+            const expressionType: ts.Type = typeChecker.getTypeAtLocation(expression);
             console.log('\ttypeChecker.typeToString : ' + typeChecker.typeToString(expressionType));
             console.log('\ttype.flags: ' + expressionType.flags);
             console.log('\ttype.symbol: ' + expressionType.symbol);
 
-            const expressionSymbol : ts.Symbol = typeChecker.getSymbolAtLocation(expression);
+            const expressionSymbol: ts.Symbol = typeChecker.getSymbolAtLocation(expression);
             if (expressionSymbol == null) {
                 console.log('\tsymbol: ' + expressionSymbol);
             } else {
@@ -93,7 +91,7 @@ export module AstUtils {
                 console.log('\tsymbol.declarations: ' + expressionSymbol.declarations);
             }
 
-            const contextualType : ts.Type = typeChecker.getContextualType(expression);
+            const contextualType: ts.Type = typeChecker.getContextualType(expression);
             if (contextualType == null) {
                 console.log('\tcontextualType: ' + contextualType);
             } else {
@@ -104,7 +102,7 @@ export module AstUtils {
         /* tslint:enable:no-console */
     }
 
-    export function isPrivate(node: ts.Node) : boolean {
+    export function isPrivate(node: ts.Node): boolean {
         /* tslint:disable:no-bitwise */
         if ((<any>ts).NodeFlags.Private != null) {
             return !!(node.flags & (<any>ts).NodeFlags.Private);
@@ -114,7 +112,7 @@ export module AstUtils {
         /* tslint:enable:no-bitwise */
     }
 
-    export function isProtected(node: ts.Node) : boolean {
+    export function isProtected(node: ts.Node): boolean {
         /* tslint:disable:no-bitwise */
         if ((<any>ts).NodeFlags.Protected != null) {
             return !!(node.flags & (<any>ts).NodeFlags.Protected);
@@ -124,7 +122,7 @@ export module AstUtils {
         /* tslint:enable:no-bitwise */
     }
 
-    export function isPublic(node: ts.Node) : boolean {
+    export function isPublic(node: ts.Node): boolean {
         /* tslint:disable:no-bitwise */
         if ((<any>ts).NodeFlags.Public != null) {
             return !!(node.flags & (<any>ts).NodeFlags.Public);
@@ -134,7 +132,7 @@ export module AstUtils {
         /* tslint:enable:no-bitwise */
     }
 
-    export function isStatic(node: ts.Node) : boolean {
+    export function isStatic(node: ts.Node): boolean {
         /* tslint:disable:no-bitwise */
         if ((<any>ts).NodeFlags.Static != null) {
             return !!(node.flags & (<any>ts).NodeFlags.Static);
@@ -145,8 +143,7 @@ export module AstUtils {
     }
 
     function isBindingPattern(node: ts.Node): node is ts.BindingPattern {
-        return node != null && (node.kind === ts.SyntaxKind.ArrayBindingPattern ||
-            node.kind === ts.SyntaxKind.ObjectBindingPattern);
+        return node != null && (node.kind === ts.SyntaxKind.ArrayBindingPattern || node.kind === ts.SyntaxKind.ObjectBindingPattern);
     }
 
     function walkUpBindingElementsAndPatterns(node: ts.Node): ts.Node {
@@ -194,9 +191,11 @@ export module AstUtils {
         } else {
             // typescript 2.1.4 introduces a new edge case for when
             // top level variables are exported from a source file
-            if (node.kind === ts.SyntaxKind.VariableDeclaration
-                && node.parent.kind === ts.SyntaxKind.VariableDeclarationList
-                && node.parent.parent.kind === ts.SyntaxKind.VariableStatement) {
+            if (
+                node.kind === ts.SyntaxKind.VariableDeclaration &&
+                node.parent.kind === ts.SyntaxKind.VariableDeclarationList &&
+                node.parent.parent.kind === ts.SyntaxKind.VariableStatement
+            ) {
                 if (AstUtils.hasModifier(node.parent.parent.modifiers, ts.SyntaxKind.ExportKeyword)) {
                     return true;
                 }
@@ -210,13 +209,12 @@ export module AstUtils {
         return token >= ts.SyntaxKind.FirstAssignment && token <= ts.SyntaxKind.LastAssignment;
     }
 
-    export function isBindingLiteralExpression(node: ts.Node): node is (ts.ArrayLiteralExpression | ts.ObjectLiteralExpression) {
-        return (!!node) &&
-            (node.kind === ts.SyntaxKind.ObjectLiteralExpression || node.kind === ts.SyntaxKind.ArrayLiteralExpression);
+    export function isBindingLiteralExpression(node: ts.Node): node is ts.ArrayLiteralExpression | ts.ObjectLiteralExpression {
+        return !!node && (node.kind === ts.SyntaxKind.ObjectLiteralExpression || node.kind === ts.SyntaxKind.ArrayLiteralExpression);
     }
 
-    export function findParentBlock(child: ts.Node) : ts.Node {
-        let parent : ts.Node = child.parent;
+    export function findParentBlock(child: ts.Node): ts.Node {
+        let parent: ts.Node = child.parent;
         while (parent != null) {
             if (parent.kind === ts.SyntaxKind.Block) {
                 return parent;
@@ -226,7 +224,7 @@ export module AstUtils {
         throw new Error('Could not determine parent block of node: ' + child);
     }
 
-    export function isSameIdentifer(source : ts.Node, target: ts.Node) : boolean {
+    export function isSameIdentifer(source: ts.Node, target: ts.Node): boolean {
         if (source == null || target == null) {
             return false;
         }
@@ -256,8 +254,7 @@ export module AstUtils {
             }
             return node.type.kind === ts.SyntaxKind.FunctionType;
         } else if (node.initializer != null) {
-            return (node.initializer.kind === ts.SyntaxKind.ArrowFunction
-            || node.initializer.kind === ts.SyntaxKind.FunctionExpression);
+            return node.initializer.kind === ts.SyntaxKind.ArrowFunction || node.initializer.kind === ts.SyntaxKind.FunctionExpression;
         }
         return false;
     }
@@ -275,15 +272,16 @@ export module AstUtils {
         if (node == null) {
             return false;
         }
-        return node.kind === ts.SyntaxKind.NullKeyword
-            || node.kind === ts.SyntaxKind.StringLiteral
-            || node.kind === ts.SyntaxKind.FalseKeyword
-            || node.kind === ts.SyntaxKind.TrueKeyword
-            || node.kind === ts.SyntaxKind.NumericLiteral;
+        return (
+            node.kind === ts.SyntaxKind.NullKeyword ||
+            node.kind === ts.SyntaxKind.StringLiteral ||
+            node.kind === ts.SyntaxKind.FalseKeyword ||
+            node.kind === ts.SyntaxKind.TrueKeyword ||
+            node.kind === ts.SyntaxKind.NumericLiteral
+        );
     }
 
     export function isConstantExpression(node: ts.Expression): boolean {
-
         if (node.kind === ts.SyntaxKind.BinaryExpression) {
             const expression: ts.BinaryExpression = <ts.BinaryExpression>node;
             const kind: ts.SyntaxKind = expression.operatorToken.kind;
@@ -292,8 +290,9 @@ export module AstUtils {
             }
         }
         if (node.kind === ts.SyntaxKind.PrefixUnaryExpression || node.kind === ts.SyntaxKind.PostfixUnaryExpression) {
-            const expression: ts.PostfixUnaryExpression | ts.PrefixUnaryExpression =
-                <ts.PostfixUnaryExpression | ts.PrefixUnaryExpression>node;
+            const expression: ts.PostfixUnaryExpression | ts.PrefixUnaryExpression = <
+                | ts.PostfixUnaryExpression
+                | ts.PrefixUnaryExpression>node;
             return isConstantExpression(expression.operand);
         }
         return isConstant(node);
