@@ -8,7 +8,7 @@ const { FAILURE_STRING } = Rule;
 describe('noForEachPushRule', (): void => {
     const ruleName: string = 'no-for-each-push';
 
-    it('should pass using Array.map', (): void => {
+    it('should pass using Array.prototype.map', (): void => {
         const script: string = `
             const arr1 = [1,2,3];
             const results = arr1.map(item => item * 2);
@@ -16,7 +16,7 @@ describe('noForEachPushRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should fail using Array.push nested within Array.forEach', (): void => {
+    it('should fail using Array.prototype.push nested within Array.prototype.forEach', (): void => {
         const script: string = `
             const arr1 = [1,2,3];
             const results = [];
@@ -39,7 +39,7 @@ describe('noForEachPushRule', (): void => {
         ]);
     });
 
-    it('should pass using Array.push nested within Array.forEach with an If Statement', (): void => {
+    it('should pass using Array.prototype.push nested within Array.prototype.forEach with an If Statement', (): void => {
         const script: string = `
             const arr1 = [1,2,3];
             const results = [];

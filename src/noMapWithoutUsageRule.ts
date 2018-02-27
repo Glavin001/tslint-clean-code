@@ -12,7 +12,7 @@ export class Rule extends Lint.Rules.AbstractRule {
     public static metadata: ExtendedMetadata = {
         ruleName: 'no-map-without-usage',
         type: 'maintainability',    // one of: 'functionality' | 'maintainability' | 'style' | 'typescript'
-        description: 'Prevent Array.map from being called and results not used.',
+        description: 'Prevent Array.prototype.map from being called and results not used.',
         options: null,
         optionsDescription: '',
         optionExamples: [],         //Remove this property if the rule has no options
@@ -25,8 +25,8 @@ export class Rule extends Lint.Rules.AbstractRule {
         commonWeaknessEnumeration: '' // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
     };
 
-    public static FAILURE_STRING: string = 'Return value from Array.map should be assigned to a variable. ' +
-    'Consider using Array.forEach instead.';
+    public static FAILURE_STRING: string = 'Return value from Array.prototype.map should be assigned to a variable. ' +
+    'Consider using Array.prototype.forEach instead.';
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(new NoMapWithoutAssignmentRuleWalker(sourceFile, this.getOptions()));

@@ -63,9 +63,9 @@ Rule Name   | Description | Since
 `min-class-cohesion` | The more variables a method manipulates the more cohesive that method is to its class. A class in which each variable is used by each method is maximally cohesive. We would like cohesion to be high. When cohesion is high, it means that the methods and variables of the class are co-dependent and hang together as a logical whole. | 0.1.0
 `newspaper-order` | We would like a source file to be like a newspaper article. Detail should increase as we move downward, until at the end we find the lowest level functions and details in the source file. | 0.1.0
 `no-flag-args` | Functions should only do one thing, therefore passing a boolean into a function is a bad practice. The function does one thing if the flag is true and another if the flag is false! | 0.1.0
-`no-for-each-push` | Enforce using Array.map instead of Array.forEach and Array.push. | 0.1.0
+`no-for-each-push` | Enforce using `Array.prototype.map` instead of `Array.prototype.forEach` and `Array.prototype.push`. | 0.1.0
 `no-feature-envy` | A method accesses the data of another object more than its own data. | 0.1.8
-`no-map-without-usage` | Ensure results of Array.map is either assigned to variable or returned | 0.1.0
+`no-map-without-usage` | Ensure results of `Array.prototype.map` is either assigned to variable or returned | 0.1.0
 `no-complex-conditionals` | Enforce the maximum complexity of conditional expressions. | 0.1.0
 `prefer-dry-conditionals` | Don't-Repeat-Yourself in if statement conditionals, instead use Switch statements. | 0.1.0
 `no-commented-out-code` | Code must not be commented out. | 0.2.0

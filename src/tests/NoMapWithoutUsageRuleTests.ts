@@ -17,7 +17,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map with assignment', (): void => {
+    it('should pass on Array.prototype.map with assignment', (): void => {
         const script: string = `
         const results = arr.map(item => doStuff(item));
         `;
@@ -25,7 +25,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map with assignment to an existing variable', (): void => {
+    it('should pass on Array.prototype.map with assignment to an existing variable', (): void => {
         const script: string = `
         let results;
         results = arr.map(item => doStuff(item));
@@ -34,7 +34,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map with assignment to object property', (): void => {
+    it('should pass on Array.prototype.map with assignment to object property', (): void => {
         const script: string = `
         const obj = {
             key: arr.map(item => doStuff(item))
@@ -44,7 +44,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map with additional access on result', (): void => {
+    it('should pass on Array.prototype.map with additional access on result', (): void => {
         const script: string = `
         arr.map(item => doStuff(item))
             .forEach();
@@ -53,7 +53,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map with results returned', (): void => {
+    it('should pass on Array.prototype.map with results returned', (): void => {
         const script: string = `
         function () {
             return arr.map(item => doStuff(item));
@@ -63,7 +63,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map with results used in parent call', (): void => {
+    it('should pass on Array.prototype.map with results used in parent call', (): void => {
         const script: string = `
         doStuff(arr.map(item => doStuff(item)))
         `;
@@ -71,7 +71,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map with spread', (): void => {
+    it('should pass on Array.prototype.map with spread', (): void => {
         const script: string = `
         doOtherStuff(...arr.map(item => doStuff(item)))
         `;
@@ -79,7 +79,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map within true case of ternary/conditional expression', (): void => {
+    it('should pass on Array.prototype.map within true case of ternary/conditional expression', (): void => {
         const script: string = `
         b ? arr.map(curr => curr * 2) : [];
         `;
@@ -87,7 +87,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map within false case of ternary/conditional expression', (): void => {
+    it('should pass on Array.prototype.map within false case of ternary/conditional expression', (): void => {
         const script: string = `
         b ? [] : arr.map(curr => curr * 2);
         `;
@@ -95,7 +95,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map as array value', (): void => {
+    it('should pass on Array.prototype.map as array value', (): void => {
         const script: string = `
         const arr2 = [1, arr.map(curr => curr * 2), 3];
         `;
@@ -103,7 +103,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map within Binary Expression after &&', (): void => {
+    it('should pass on Array.prototype.map within Binary Expression after &&', (): void => {
         const script: string = `
         arr && arr.map(curr => curr * 2);
         `;
@@ -111,7 +111,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map within Binary Expression after ||', (): void => {
+    it('should pass on Array.prototype.map within Binary Expression after ||', (): void => {
         const script: string = `
         b && firstThing() || arr.map(curr => curr * 2);
         `;
@@ -119,7 +119,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map within arrow function return shorthand', (): void => {
+    it('should pass on Array.prototype.map within arrow function return shorthand', (): void => {
         const script: string = `
         this.getFiles()
             .then(files => files.map(file => path.join(this.basePath, file)))
@@ -128,7 +128,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should pass on Array.map with assignment to a property initializer', (): void => {
+    it('should pass on Array.prototype.map with assignment to a property initializer', (): void => {
         const script: string = `
         class Example {
             items = [1, 2].map(item => doStuff(item));
@@ -137,7 +137,7 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    it('should fail on Array.map within arrow function block without return statement', (): void => {
+    it('should fail on Array.prototype.map within arrow function block without return statement', (): void => {
         const script: string = `
         this.getFiles()
             .then(files => {
@@ -159,7 +159,7 @@ describe('noMapWithoutUsageRule', (): void => {
         ]);
     });
 
-    it('should fail on Array.map without assignment', (): void => {
+    it('should fail on Array.prototype.map without assignment', (): void => {
         const script: string = `
         arr.map(item => doStuff(item));
         `;

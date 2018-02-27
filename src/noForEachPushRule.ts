@@ -12,7 +12,7 @@ export class Rule extends Lint.Rules.AbstractRule {
     public static metadata: ExtendedMetadata = {
         ruleName: 'no-for-each-push',
         type: 'maintainability',
-        description: 'Enforce using Array.map instead of Array.forEach and Array.push.',
+        description: 'Enforce using Array.prototype.map instead of Array.prototype.forEach and Array.prototype.push.',
         options: null,
         optionsDescription: '',
         typescriptOnly: true,
@@ -29,7 +29,8 @@ export class Rule extends Lint.Rules.AbstractRule {
         return this.applyWithWalker(new NoForeachPushRuleWalker(sourceFile, this.getOptions()));
     }
 
-    public static FAILURE_STRING: string = 'Do not use Array.push inside of Array.forEach. Use Array.map instead to replace both.';
+    public static FAILURE_STRING: string = 'Do not use Array.prototype.push inside of Array.prototype.forEach. ' +
+    'Use Array.prototype.map instead to replace both.';
 
 }
 
