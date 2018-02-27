@@ -275,7 +275,14 @@
       true,
       {
         "singleline": "never",
-        "multiline": "always"
+        "multiline": {
+          "objects": "always",
+          "arrays": "always",
+          "functions": "always",
+          "imports": "always",
+          "exports": "always",
+          "typeLiterals": "always"
+        }
       }
     ],
     "triple-equals": [

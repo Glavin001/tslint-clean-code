@@ -234,7 +234,10 @@ module.exports = function(grunt) {
             },
             tests: {
                 options: {
-                    configuration: grunt.file.readJSON("src/tests/tslint.json", { encoding: 'UTF-8' })
+                    configuration: Object.assign({},
+                        grunt.file.readJSON("tslint.json", { encoding: 'UTF-8' }),
+                        grunt.file.readJSON("src/tests/tslint.json", { encoding: 'UTF-8' })
+                    ),
                 },
                 files: {
                     src: [
