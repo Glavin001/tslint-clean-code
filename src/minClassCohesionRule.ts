@@ -175,7 +175,7 @@ class ClassDeclarationHelper {
         });
     }
 
-    private get name() {
+    public get name() {
         return this.node.name == null ? '<unknown>' : this.node.name.text;
     }
 
