@@ -32,9 +32,9 @@ describe('noFlagArgsRule', (): void => {
                     ruleSeverity: 'ERROR',
                     startPosition: {
                         character: 23,
-                        line: 2
-                    }
-                }
+                        line: 2,
+                    },
+                },
             ]);
         });
 
@@ -64,9 +64,9 @@ describe('noFlagArgsRule', (): void => {
                     ruleSeverity: 'ERROR',
                     startPosition: {
                         character: 23,
-                        line: 2
-                    }
-                }
+                        line: 2,
+                    },
+                },
             ]);
         });
 
@@ -96,9 +96,9 @@ describe('noFlagArgsRule', (): void => {
                     ruleSeverity: 'ERROR',
                     startPosition: {
                         character: 30,
-                        line: 2
-                    }
-                }
+                        line: 2,
+                    },
+                },
             ]);
         });
 
@@ -128,9 +128,9 @@ describe('noFlagArgsRule', (): void => {
                     ruleSeverity: 'ERROR',
                     startPosition: {
                         character: 22,
-                        line: 2
-                    }
-                }
+                        line: 2,
+                    },
+                },
             ]);
         });
 

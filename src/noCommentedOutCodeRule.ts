@@ -24,12 +24,12 @@ export class Rule extends Lint.Rules.AbstractRule {
         severity: 'Low', // one of: 'Critical' | 'Important' | 'Moderate' | 'Low'
         level: 'Opportunity for Excellence', // one of 'Mandatory' | 'Opportunity for Excellence'
         group: 'Clarity', // one of 'Ignored' | 'Security' | 'Correctness' | 'Clarity' | 'Whitespace' | 'Configurable' | 'Deprecated'
-        commonWeaknessEnumeration: '' // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
+        commonWeaknessEnumeration: '', // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
     };
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(
-            new NoCommentedOutCodeRuleWalker(sourceFile, this.getOptions())
+            new NoCommentedOutCodeRuleWalker(sourceFile, this.getOptions()),
         );
     }
 }
@@ -43,7 +43,7 @@ class NoCommentedOutCodeRuleWalker extends ErrorTolerantWalker {
             ) {
                 this.scanCommentForCode(
                     range.pos,
-                    text.substring(range.pos, range.end)
+                    text.substring(range.pos, range.end),
                 );
             }
         });
@@ -85,7 +85,7 @@ class NoCommentedOutCodeRuleWalker extends ErrorTolerantWalker {
         const pattern = /^([^a-zA-Z0-9]+)/;
         const lines = text.split('\n');
         return lines.map(line =>
-            line.replace(pattern, '').trim()
+            line.replace(pattern, '').trim(),
         ).join('\n');
     }
 

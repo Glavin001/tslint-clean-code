@@ -22,7 +22,7 @@ export class Rule extends Lint.Rules.AbstractRule {
         severity: 'Low',            // one of: 'Critical' | 'Important' | 'Moderate' | 'Low'
         level: 'Opportunity for Excellence',  // one of 'Mandatory' | 'Opportunity for Excellence'
         group: 'Correctness', // one of 'Ignored' | 'Security' | 'Correctness' | 'Clarity' | 'Whitespace' | 'Configurable' | 'Deprecated'
-        commonWeaknessEnumeration: '' // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
+        commonWeaknessEnumeration: '', // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
     };
 
     public static FAILURE_STRING: string = 'Return value from Array.prototype.map should be assigned to a variable. ' +

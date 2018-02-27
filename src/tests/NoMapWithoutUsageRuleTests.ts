@@ -153,9 +153,9 @@ describe('noMapWithoutUsageRule', (): void => {
                 ruleSeverity: 'ERROR',
                 startPosition: {
                     character: 17,
-                    line: 4
-                }
-            }
+                    line: 4,
+                },
+            },
         ]);
     });
 
@@ -172,9 +172,9 @@ describe('noMapWithoutUsageRule', (): void => {
                 ruleSeverity: 'ERROR',
                 startPosition: {
                     character: 9,
-                    line: 2
-                }
-            }
+                    line: 2,
+                },
+            },
         ]);
     });
 

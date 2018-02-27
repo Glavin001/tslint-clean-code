@@ -26,7 +26,7 @@ export class Rule extends Lint.Rules.AbstractRule {
         level: 'Opportunity for Excellence',
         group: 'Correctness',
         recommendation: '[true, 0.5],',
-        commonWeaknessEnumeration: ''
+        commonWeaknessEnumeration: '',
     };
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
@@ -149,7 +149,7 @@ class ClassDeclarationHelper {
 
     private get constructorDeclaration(): ts.ConstructorDeclaration | undefined {
         return <ts.ConstructorDeclaration>this.node.members.find((element: ts.ClassElement): boolean =>
-            (element.kind === ts.SyntaxKind.Constructor)
+            (element.kind === ts.SyntaxKind.Constructor),
         );
     }
 
@@ -159,7 +159,7 @@ class ClassDeclarationHelper {
 
     private get instanceFields(): ts.PropertyDeclaration[] {
         return <ts.PropertyDeclaration[]>this.node.members.filter((classElement: ts.ClassElement): boolean =>
-            (classElement.kind === ts.SyntaxKind.PropertyDeclaration)
+            (classElement.kind === ts.SyntaxKind.PropertyDeclaration),
         );
     }
 

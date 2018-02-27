@@ -29,7 +29,7 @@ export class Rule extends Lint.Rules.AbstractRule {
         level: 'Opportunity for Excellence',
         group: 'Correctness',
         recommendation: '[true, 3],',
-        commonWeaknessEnumeration: ''
+        commonWeaknessEnumeration: '',
     };
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
@@ -75,7 +75,7 @@ class MaxFunctionArgsRuleWalker extends ErrorTolerantWalker {
         const width = end - pos;
         return {
             start,
-            width
+            width,
         };
     }
 

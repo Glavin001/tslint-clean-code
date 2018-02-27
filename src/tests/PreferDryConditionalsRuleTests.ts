@@ -85,9 +85,9 @@ describe('preferDryConditionalsRule', (): void => {
                 ruleSeverity: 'ERROR',
                 startPosition: {
                     character: 9,
-                    line: 2
-                }
-            }
+                    line: 2,
+                },
+            },
         ]);
     });
 
@@ -110,9 +110,9 @@ describe('preferDryConditionalsRule', (): void => {
                 ruleSeverity: 'ERROR',
                 startPosition: {
                     character: 9,
-                    line: 2
-                }
-            }
+                    line: 2,
+                },
+            },
         ]);
     });
 
@@ -135,9 +135,9 @@ describe('preferDryConditionalsRule', (): void => {
                 ruleSeverity: 'ERROR',
                 startPosition: {
                     character: 11,
-                    line: 2
-                }
-            }
+                    line: 2,
+                },
+            },
         ]);
     });
 
@@ -185,9 +185,9 @@ describe('preferDryConditionalsRule', (): void => {
                         ruleSeverity: 'ERROR',
                         startPosition: {
                             character: 19,
-                            line: 2
-                        }
-                    }
+                            line: 2,
+                        },
+                    },
                 ]);
             });
 

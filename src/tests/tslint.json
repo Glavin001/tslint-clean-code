@@ -3,6 +3,9 @@
         "../../tslint.json"
     ],
     "rules": {
-        "no-multiline-string": false
+        "no-multiline-string": false,
+        "quotemark": false,
+        "object-literal-key-quotes": false,
+        "max-func-body-length": false
     }
 }

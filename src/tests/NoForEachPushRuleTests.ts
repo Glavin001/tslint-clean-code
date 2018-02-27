@@ -33,9 +33,9 @@ describe('noForEachPushRule', (): void => {
                 ruleSeverity: 'ERROR',
                 startPosition: {
                     character: 13,
-                    line: 4
-                }
-            }
+                    line: 4,
+                },
+            },
         ]);
     });
 

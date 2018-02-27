@@ -32,7 +32,7 @@ export class Rule extends Lint.Rules.AbstractRule {
         level: 'Opportunity for Excellence',
         group: 'Correctness',
         recommendation: 'true,',
-        commonWeaknessEnumeration: ''
+        commonWeaknessEnumeration: '',
     };
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
@@ -265,7 +265,7 @@ abstract class BlockLikeHelper extends NewspaperHelper {
             .map(node => node.declarationList.declarations)
             .map(declarations =>
                 declarations.map(this.createFuncDeclarFromVarDeclar)
-                    .filter(node => node)
+                    .filter(node => node),
             )
             .reduce((result, item) => [...result, ...item], [])
             ;

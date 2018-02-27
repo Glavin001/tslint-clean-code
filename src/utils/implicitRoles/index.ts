@@ -101,5 +101,5 @@ export {
     th,
     thead,
     tr,
-    ul
+    ul,
 };

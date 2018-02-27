@@ -1,6 +1,6 @@
 import { TestHelper } from './TestHelper';
 import {
-    FAILURE_STRING
+    FAILURE_STRING,
 } from '../tryCatchFirstRule';
 
 /**
@@ -97,9 +97,9 @@ describe('tryCatchFirstRule', (): void => {
                 ruleSeverity: 'ERROR',
                 startPosition: {
                     character: 21,
-                    line: 4
-                }
-            }
+                    line: 4,
+                },
+            },
         ]);
     });
 
@@ -121,9 +121,9 @@ describe('tryCatchFirstRule', (): void => {
                 ruleSeverity: 'ERROR',
                 startPosition: {
                     character: 21,
-                    line: 4
-                }
-            }
+                    line: 4,
+                },
+            },
         ]);
     });
 

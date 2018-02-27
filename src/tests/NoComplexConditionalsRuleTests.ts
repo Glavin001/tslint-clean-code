@@ -53,9 +53,9 @@ describe('noComplexConditionalsRule', () : void => {
                 ruleSeverity: 'ERROR',
                 startPosition: {
                     character: 13,
-                    line: 3
-                }
-            }
+                    line: 3,
+                },
+            },
          ]);
     });
 

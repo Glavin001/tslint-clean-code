@@ -37,8 +37,8 @@ describe('noFeatureEnvyRule', (): void => {
                         'Extract or Move Method from "salePrice" into "item".',
                         name: 'file.ts',
                         ruleName: ruleName,
-                        startPosition: { character: 5, line: 3 }
-                    }
+                        startPosition: { character: 5, line: 3 },
+                    },
                 ]);
             });
 
@@ -85,8 +85,8 @@ describe('noFeatureEnvyRule', (): void => {
                             'Extract or Move Method from "connectMessage" into "person1".',
                             name: 'file.ts',
                             ruleName: ruleName,
-                            startPosition: { character: 5, line: 3 }
-                        }
+                            startPosition: { character: 5, line: 3 },
+                        },
                     ]);
                 });
 
@@ -122,8 +122,8 @@ describe('noFeatureEnvyRule', (): void => {
                         'Extract or Move Method from "salePrice" into "item".',
                         name: 'file.ts',
                         ruleName: ruleName,
-                        startPosition: { character: 5, line: 3 }
-                    }
+                        startPosition: { character: 5, line: 3 },
+                    },
                 ]);
             });
 

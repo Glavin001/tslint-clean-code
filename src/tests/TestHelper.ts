@@ -84,18 +84,18 @@ export module TestHelper {
             jsRules: new Map<string, Partial<Lint.IOptions>>(),
             linterOptions: {},
             rules: new Map<string, Partial<Lint.IOptions>>(),
-            rulesDirectory: []
+            rulesDirectory: [],
         };
 
         if (userOptions != null && userOptions.length > 0) {
             //options like `[4, 'something', false]` were passed, so prepend `true` to make the array like `[true, 4, 'something', false]`
             configuration.rules.set(ruleName, {
                 ruleName,
-                ruleArguments: userOptions
+                ruleArguments: userOptions,
             });
         } else {
             configuration.rules.set(ruleName, {
-                ruleName
+                ruleName,
             });
         }
 
@@ -103,7 +103,7 @@ export module TestHelper {
             formatter: 'json',
             fix: false,
             rulesDirectory: RULES_DIRECTORY,
-            formattersDirectory: FORMATTER_DIRECTORY
+            formattersDirectory: FORMATTER_DIRECTORY,
         };
 
         const debug: boolean = ErrorTolerantWalker.DEBUG;

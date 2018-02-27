@@ -22,7 +22,7 @@ export class Rule extends Lint.Rules.AbstractRule {
         severity: 'Low',            // one of: 'Critical' | 'Important' | 'Moderate' | 'Low'
         level: 'Opportunity for Excellence',  // one of 'Mandatory' | 'Opportunity for Excellence'
         group: 'Clarity',  // one of 'Ignored' | 'Security' | 'Correctness' | 'Clarity' | 'Whitespace' | 'Configurable' | 'Deprecated'
-        commonWeaknessEnumeration: '' // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
+        commonWeaknessEnumeration: '', // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
     };
 
     public static FAILURE_STRING(switchExpression: string, caseExpressions: string[]): string {
@@ -105,12 +105,12 @@ class PreferDryConditionalsRuleWalker extends ErrorTolerantWalker {
         if (hasSameLeft) {
             this.addFailureAtNode(firstExpression.parent, Rule.FAILURE_STRING(
                 expectedLeft.getText(),
-                rightExpressions.map(expression => expression.getText()))
+                rightExpressions.map(expression => expression.getText())),
             );
         } else if (hasSameRight) {
             this.addFailureAtNode(firstExpression.parent, Rule.FAILURE_STRING(
                 expectedRight.getText(),
-                leftExpressions.map(expression => expression.getText()))
+                leftExpressions.map(expression => expression.getText())),
             );
         }
     }

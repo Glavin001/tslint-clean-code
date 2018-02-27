@@ -31,6 +31,8 @@
   },
   "scripts": {
     "test": "grunt all",
+    "lint": "tslint 'src/**/*.ts' -e 'src/tests/references.ts'",
+    "lint-fix": "tslint --fix 'src/**/*.ts' -e 'src/tests/references.ts'",
     "build": "grunt ts",
     "prepublishOnly": "npm run test"
   },

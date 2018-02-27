@@ -2,7 +2,7 @@ import { TestHelper } from './TestHelper';
 import {
     FAILURE_STRING,
     FAILURE_RECOMMENDATION_STRING,
-    DEFAULT_MAX_ARGS_LENGTH
+    DEFAULT_MAX_ARGS_LENGTH,
 } from '../maxFuncArgsRule';
 
 /**
@@ -36,9 +36,9 @@ describe('maxFuncArgsRule', (): void => {
                     ruleSeverity: 'ERROR',
                     startPosition: {
                         character: 31,
-                        line: 2
-                    }
-                }
+                        line: 2,
+                    },
+                },
             ]);
         });
 
@@ -69,9 +69,9 @@ describe('maxFuncArgsRule', (): void => {
                     ruleSeverity: 'ERROR',
                     startPosition: {
                         character: 30,
-                        line: 2
-                    }
-                }
+                        line: 2,
+                    },
+                },
             ]);
         });
 
@@ -112,9 +112,9 @@ describe('maxFuncArgsRule', (): void => {
                     ruleSeverity: 'ERROR',
                     startPosition: {
                         character: 32,
-                        line: 3
-                    }
-                }
+                        line: 3,
+                    },
+                },
             ]);
         });
     });

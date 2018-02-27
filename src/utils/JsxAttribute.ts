@@ -12,7 +12,7 @@ import {
     isJsxSelfClosingElement,
     isJsxOpeningElement,
     isFalseKeyword,
-    isTrueKeyword
+    isTrueKeyword,
 } from './TypeGuard';
 
 /**

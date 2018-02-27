@@ -14,4 +14,4 @@ TypeScript:
   object_curly_spacing: true
   quotes: "single"
   space_after_anon_function: false
-  wrap_line_length: 80
+  wrap_line_length: 140

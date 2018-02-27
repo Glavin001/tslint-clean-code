@@ -46,11 +46,11 @@ describe('minClassCohesionRule', (): void => {
         `;
         TestHelper.assertViolations(ruleName, script, [
             {
-                "failure": FAILURE_STRING + "ClassWithoutFields",
-                "name": "file.ts",
-                "ruleName": "min-class-cohesion",
-                "startPosition": { "character": 13, "line": 3 }
-            }
+                failure: FAILURE_STRING + 'ClassWithoutFields',
+                name: 'file.ts',
+                ruleName: 'min-class-cohesion',
+                startPosition: { character: 13, line: 3 },
+            },
         ]);
     });
 
@@ -105,11 +105,11 @@ describe('minClassCohesionRule', (): void => {
         `;
         TestHelper.assertViolations(ruleName, script, [
             {
-                "failure": FAILURE_STRING + "ThirdCohesiveClass",
-                "name": "file.ts",
-                "ruleName": "min-class-cohesion",
-                "startPosition": { "character": 13, "line": 2 }
-            }
+                failure: FAILURE_STRING + 'ThirdCohesiveClass',
+                name: 'file.ts',
+                ruleName: 'min-class-cohesion',
+                startPosition: { character: 13, line: 2 },
+            },
         ]);
     });
 
@@ -215,15 +215,15 @@ describe('minClassCohesionRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    context("reading options", (): void => {
+    context('reading options', (): void => {
 
-        context("90% cohesion", (): void => {
+        context('90% cohesion', (): void => {
 
             let options: any[];
 
             beforeEach((): void => {
                 options = [true,
-                    0.9
+                    0.9,
                 ];
             });
 
@@ -250,23 +250,23 @@ describe('minClassCohesionRule', (): void => {
                 `;
                 TestHelper.assertViolationsWithOptions(ruleName, options, script, [
                     {
-                        "failure": FAILURE_STRING + "Stack",
-                        "name": "file.ts",
-                        "ruleName": "min-class-cohesion",
-                        "startPosition": { "character": 17, "line": 2 }
-                    }
+                        failure: FAILURE_STRING + 'Stack',
+                        name: 'file.ts',
+                        ruleName: 'min-class-cohesion',
+                        startPosition: { character: 17, line: 2 },
+                    },
                 ]);
             });
 
         });
 
-        context("80% cohesion", (): void => {
+        context('80% cohesion', (): void => {
 
             let options: any[];
 
             beforeEach((): void => {
                 options = [true,
-                    0.8
+                    0.8,
                 ];
             });
 

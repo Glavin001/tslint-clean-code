@@ -1,6 +1,6 @@
 import { TestHelper } from './TestHelper';
 import {
-    FAILURE_MIN_STRING
+    FAILURE_MIN_STRING,
 } from '../idLengthRule';
 
 /**
@@ -36,8 +36,8 @@ describe('idLengthRule', (): void => {
                     ruleSeverity: 'ERROR',
                     startPosition: {
                         character: 21,
-                        line: 2
-                    }
+                        line: 2,
+                    },
                 },
                 {
                     failure: FAILURE_MIN_STRING + ': y',
@@ -46,8 +46,8 @@ describe('idLengthRule', (): void => {
                     ruleSeverity: 'ERROR',
                     startPosition: {
                         character: 23,
-                        line: 3
-                    }
+                        line: 3,
+                    },
                 },
                 {
                     failure: FAILURE_MIN_STRING + ': f',
@@ -56,8 +56,8 @@ describe('idLengthRule', (): void => {
                     ruleSeverity: 'ERROR',
                     startPosition: {
                         character: 26,
-                        line: 4
-                    }
+                        line: 4,
+                    },
                 },
                 {
                     failure: FAILURE_MIN_STRING + ': c',
@@ -66,9 +66,9 @@ describe('idLengthRule', (): void => {
                     ruleSeverity: 'ERROR',
                     startPosition: {
                         character: 23,
-                        line: 5
-                    }
-                }
+                        line: 5,
+                    },
+                },
             ]);
         });
 
@@ -88,8 +88,8 @@ describe('idLengthRule', (): void => {
                 beforeEach((): void => {
                     options = [true,
                         {
-                            exceptions: ['x', 'y', 'f', 'c']
-                        }
+                            exceptions: ['x', 'y', 'f', 'c'],
+                        },
                     ];
                 });
 
@@ -110,8 +110,8 @@ describe('idLengthRule', (): void => {
                 beforeEach((): void => {
                     options = [true,
                         {
-                            min: 0
-                        }
+                            min: 0,
+                        },
                     ];
                 });
 

@@ -97,9 +97,9 @@ describe('noCommentedOutCodeRule', (): void => {
                 ruleSeverity: 'ERROR',
                 startPosition: {
                     character: 13,
-                    line: 2
-                }
-            }
+                    line: 2,
+                },
+            },
         ]);
     });
 });

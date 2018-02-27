@@ -25,7 +25,7 @@ export class Rule extends Lint.Rules.AbstractRule {
         level: 'Opportunity for Excellence',
         group: 'Correctness',
         recommendation: 'true,',
-        commonWeaknessEnumeration: ''
+        commonWeaknessEnumeration: '',
     };
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
@@ -42,7 +42,7 @@ class TryCatchFirstRuleWalker extends ErrorTolerantWalker {
         ts.SyntaxKind.SourceFile,
         ts.SyntaxKind.MethodDeclaration,
         ts.SyntaxKind.GetAccessor,
-        ts.SyntaxKind.SetAccessor
+        ts.SyntaxKind.SetAccessor,
     ];
 
     protected visitTryStatement(node: ts.TryStatement): void {
