@@ -1,20 +1,15 @@
 tslint-clean-code [![Build Status](https://travis-ci.org/Glavin001/tslint-clean-code.svg?branch=master)](https://travis-ci.org/Glavin001/tslint-clean-code) [![Build status](https://ci.appveyor.com/api/projects/status/8femxsete95is18a/branch/master?svg=true)](https://ci.appveyor.com/project/Glavin001/tslint-clean-code/branch/master)
 ======
 
-A set of [TSLint](https://github.com/palantir/tslint) rules used to enforce [Clean Code](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) practices. Inspired by [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882).
+> A set of [TSLint](https://github.com/palantir/tslint) rules used to enforce [Clean Code](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) practices. Inspired by [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882).
 
-Version 0.2.4 (In-Development)
--------------
-The [Latest Development Version](https://github.com/Glavin001/tslint-clean-code/tree/releases) is available online.
-To use the nightly build set your npm version to `git://github.com/Glavin001/tslint-clean-code.git#releases`
+## Installation
 
-Installation
-------------
+```bash
+npm install tslint-clean-code
+```
 
-    npm install tslint-clean-code
-
-Configuration
--------------
+## Configuration
 
 ##### Configure `tslint.json`
 
@@ -52,8 +47,7 @@ Add the new rulesDirectory to your tslint task:
 
 The tslint.json file does not change format when using this package. Just add our rule definitions to your existing tslint.json file.
 
-Supported Rules
------
+## Supported Rules
 
 Rule Name   | Description | Since
 :---------- | :------------ | -------------
@@ -70,32 +64,36 @@ Rule Name   | Description | Since
 `prefer-dry-conditionals` | Don't-Repeat-Yourself in if statement conditionals, instead use Switch statements. | 0.1.0
 `no-commented-out-code` | Code must not be commented out. | 0.2.0
 
-Development
------------
+## Development
 
 To develop tslint-clean-code simply clone the repository, install dependencies and run grunt:
 
-    git clone git@github.com:Glavin001/tslint-clean-code.git --config core.autocrlf=input --config core.eol=lf
-    cd tslint-clean-code
-    npm install
-    grunt all
-    grunt create-rule --rule-name=no-something-or-other
+```
+git clone git@github.com:Glavin001/tslint-clean-code.git --config core.autocrlf=input --config core.eol=lf
+cd tslint-clean-code
+npm install
+grunt all
+grunt create-rule --rule-name=no-something-or-other
+```
 
-Debug code
------------
+## Debug code
+
 If command fails because of file access permissions, prefix it with sudo.
 
-    npm install -g node-inspector
+```bash
+npm install -g node-inspector
+```
 
 Then run:
 
-    node-debug grunt mochaTest
+```bash
+node-debug grunt mochaTest
+```
 
 The `node-debug` command will load Node Inspector in your default browser (works in Chrome and Opera only).
 
 Set a breakpoint somewhere in your code and resume execution. Your breakpoint should be hit.
 
-Thank you
----------
+## Thank you
 
 Thank you to maintainers of [tslint-microsoft-contrib](https://github.com/Microsoft/tslint-microsoft-contrib), from which this repository was forked. The initial structure was kept and new rules were added, this would not have been possible without Microsoft's awesome work!
