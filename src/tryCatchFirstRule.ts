@@ -10,11 +10,11 @@ export const FAILURE_STRING: string = 'Try-catch blocks must be at the top of th
  * Implementation of the newspaper-order rule.
  */
 export class Rule extends Lint.Rules.AbstractRule {
-
     public static metadata: ExtendedMetadata = {
         ruleName: 'try-catch-first',
         type: 'maintainability',
-        description: 'Try-catch blocks must be first within the scope. ' +
+        description:
+            'Try-catch blocks must be first within the scope. ' +
             'Try-catch blocks are transactions and should leave your program in a consistent state, no matter what happens in the try.',
         options: null,
         optionsDescription: '',
@@ -31,11 +31,9 @@ export class Rule extends Lint.Rules.AbstractRule {
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(new TryCatchFirstRuleWalker(sourceFile, this.getOptions()));
     }
-
 }
 
 class TryCatchFirstRuleWalker extends ErrorTolerantWalker {
-
     private scopeKinds: ts.SyntaxKind[] = [
         ts.SyntaxKind.FunctionDeclaration,
         ts.SyntaxKind.ArrowFunction,
@@ -64,5 +62,4 @@ class TryCatchFirstRuleWalker extends ErrorTolerantWalker {
     private makeFailureMessage(): string {
         return FAILURE_STRING;
     }
-
 }

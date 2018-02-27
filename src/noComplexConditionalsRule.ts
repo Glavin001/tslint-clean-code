@@ -8,25 +8,24 @@ import { ExtendedMetadata } from './utils/ExtendedMetadata';
  * Implementation of the no-complex-conditionals rule.
  */
 export class Rule extends Lint.Rules.AbstractRule {
-
     public static metadata: ExtendedMetadata = {
         ruleName: 'no-complex-conditionals',
-        type: 'maintainability',    // one of: 'functionality' | 'maintainability' | 'style' | 'typescript'
+        type: 'maintainability', // one of: 'functionality' | 'maintainability' | 'style' | 'typescript'
         description: 'Enforce the maximum complexity of conditional expressions.',
         options: null,
         optionsDescription: '',
-        optionExamples: [],         //Remove this property if the rule has no options
+        optionExamples: [], //Remove this property if the rule has no options
         typescriptOnly: false,
-        issueClass: 'Non-SDL',      // one of: 'SDL' | 'Non-SDL' | 'Ignored'
-        issueType: 'Warning',       // one of: 'Error' | 'Warning'
-        severity: 'Moderate',            // one of: 'Critical' | 'Important' | 'Moderate' | 'Low'
-        level: 'Opportunity for Excellence',  // one of 'Mandatory' | 'Opportunity for Excellence'
+        issueClass: 'Non-SDL', // one of: 'SDL' | 'Non-SDL' | 'Ignored'
+        issueType: 'Warning', // one of: 'Error' | 'Warning'
+        severity: 'Moderate', // one of: 'Critical' | 'Important' | 'Moderate' | 'Low'
+        level: 'Opportunity for Excellence', // one of 'Mandatory' | 'Opportunity for Excellence'
         group: 'Clarity', // one of 'Ignored' | 'Security' | 'Correctness' | 'Clarity' | 'Whitespace' | 'Configurable' | 'Deprecated'
-        commonWeaknessEnumeration: '',   // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
+        commonWeaknessEnumeration: '', // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
     };
 
     public static FAILURE_STRING: string = 'Conditional expression is too complex. ' +
-    'Consider moving expression to a variable or function with a meaningful name.';
+        'Consider moving expression to a variable or function with a meaningful name.';
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(new NoComplexConditionalsRuleWalker(sourceFile, this.getOptions()));
@@ -34,7 +33,6 @@ export class Rule extends Lint.Rules.AbstractRule {
 }
 
 class NoComplexConditionalsRuleWalker extends ErrorTolerantWalker {
-
     private threshold: number = 3;
 
     constructor(sourceFile: ts.SourceFile, options: Lint.IOptions) {
@@ -97,14 +95,13 @@ class NoComplexConditionalsRuleWalker extends ErrorTolerantWalker {
 
     private parseOptions(): void {
         this.getOptions().forEach((opt: any) => {
-            if (typeof (opt) === 'boolean') {
+            if (typeof opt === 'boolean') {
                 return;
             }
-            if (typeof (opt) === 'number') {
+            if (typeof opt === 'number') {
                 this.threshold = opt;
                 return;
             }
         });
     }
-
 }

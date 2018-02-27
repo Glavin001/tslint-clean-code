@@ -15,7 +15,7 @@ export class BannedTermWalker extends ErrorTolerantWalker {
         this.failureString = failureString;
         this.bannedTerms = bannedTerms;
         this.getOptions().forEach((opt: any) => {
-            if (typeof (opt) === 'object') {
+            if (typeof opt === 'object') {
                 this.allowQuotedProperties = opt['allow-quoted-properties'] === true;
             }
         });
@@ -87,5 +87,4 @@ export class BannedTermWalker extends ErrorTolerantWalker {
     private isBannedTerm(text: string): boolean {
         return this.bannedTerms.indexOf(text) !== -1;
     }
-
 }

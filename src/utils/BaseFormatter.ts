@@ -1,14 +1,13 @@
 'use strict';
 
 import * as fs from 'fs';
-import {Formatters} from 'tslint';
-import {RuleFailure} from 'tslint';
+import { Formatters } from 'tslint';
+import { RuleFailure } from 'tslint';
 
 /**
  * A base class for formatters that fix linting issues.
  */
 export class BaseFormatter extends Formatters.AbstractFormatter {
-
     private ruleName: string;
     private applyFix: (this: BaseFormatter, failure: RuleFailure) => void;
 
@@ -47,5 +46,4 @@ export class BaseFormatter extends Formatters.AbstractFormatter {
     protected writeFile(fileName: string, fileContents: string): void {
         fs.writeFileSync(fileName, fileContents, { encoding: 'UTF-8' });
     }
-
 }

@@ -53,5 +53,4 @@ describe('noForEachPushRule', (): void => {
         `;
         TestHelper.assertViolations(ruleName, script, []);
     });
-
 });

@@ -9,7 +9,6 @@ describe('noFlagArgsRule', (): void => {
     const ruleName: string = 'no-flag-args';
 
     context('Anonymous Function', () => {
-
         it('should pass on string parameter', (): void => {
             const script: string = `
             function (arg1: string) {
@@ -25,8 +24,7 @@ describe('noFlagArgsRule', (): void => {
             `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_STRING + 'arg1' +
-                        '\nSplit the function into two.',
+                    failure: FAILURE_STRING + 'arg1' + '\nSplit the function into two.',
                     name: 'file.ts',
                     ruleName: 'no-flag-args',
                     ruleSeverity: 'ERROR',
@@ -37,11 +35,9 @@ describe('noFlagArgsRule', (): void => {
                 },
             ]);
         });
-
     });
 
     context('Anonymous Function', () => {
-
         it('should pass on string parameter', (): void => {
             const script: string = `
             function (arg1: string) {
@@ -57,8 +53,7 @@ describe('noFlagArgsRule', (): void => {
             `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_STRING + 'arg1' +
-                        '\nSplit the function into two.',
+                    failure: FAILURE_STRING + 'arg1' + '\nSplit the function into two.',
                     name: 'file.ts',
                     ruleName: 'no-flag-args',
                     ruleSeverity: 'ERROR',
@@ -69,11 +64,9 @@ describe('noFlagArgsRule', (): void => {
                 },
             ]);
         });
-
     });
 
     context('Named Function', () => {
-
         it('should pass on string parameter', (): void => {
             const script: string = `
             function doStuff(stuff: string) {
@@ -89,7 +82,9 @@ describe('noFlagArgsRule', (): void => {
             `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_STRING + 'shouldDoStuff' +
+                    failure:
+                        FAILURE_STRING +
+                        'shouldDoStuff' +
                         '\nSplit the function into two, such as doStuffWhenShouldDoStuff and doStuffWhenNotShouldDoStuff.',
                     name: 'file.ts',
                     ruleName: 'no-flag-args',
@@ -101,11 +96,9 @@ describe('noFlagArgsRule', (): void => {
                 },
             ]);
         });
-
     });
 
     context('Arrow Function', () => {
-
         it('should pass on string parameter', (): void => {
             const script: string = `
                     (arg1: string) => {
@@ -121,8 +114,7 @@ describe('noFlagArgsRule', (): void => {
                     `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_STRING + 'arg1' +
-                        '\nSplit the function into two.',
+                    failure: FAILURE_STRING + 'arg1' + '\nSplit the function into two.',
                     name: 'file.ts',
                     ruleName: 'no-flag-args',
                     ruleSeverity: 'ERROR',
@@ -133,11 +125,9 @@ describe('noFlagArgsRule', (): void => {
                 },
             ]);
         });
-
     });
 
     context('Class Methods', () => {
-
         it('should pass on setter method', (): void => {
             const script: string = `
             class MyClass {
@@ -161,7 +151,5 @@ describe('noFlagArgsRule', (): void => {
             `;
             TestHelper.assertViolations(ruleName, script, []);
         });
-
     });
-
 });

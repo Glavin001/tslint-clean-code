@@ -11,7 +11,6 @@ export const FAILURE_MAX_STRING: string = 'Too long; difficult to read and poten
  * Implementation of the id-length rule.
  */
 export class Rule extends Lint.Rules.AbstractRule {
-
     public static metadata: ExtendedMetadata = {
         ruleName: 'id-length',
         type: 'maintainability',
@@ -31,11 +30,9 @@ export class Rule extends Lint.Rules.AbstractRule {
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(new IdLengthRuleWalker(sourceFile, this.getOptions()));
     }
-
 }
 
 class IdLengthRuleWalker extends ErrorTolerantWalker {
-
     private min: number = 2;
     private max: number = Infinity;
     private exceptions: string[] = [];
@@ -64,10 +61,10 @@ class IdLengthRuleWalker extends ErrorTolerantWalker {
 
     private parseOptions(): void {
         this.getOptions().forEach((opt: any) => {
-            if (typeof (opt) === 'boolean') {
+            if (typeof opt === 'boolean') {
                 return;
             }
-            if (typeof (opt) === 'number') {
+            if (typeof opt === 'number') {
                 this.min = opt;
                 return;
             }
@@ -75,7 +72,7 @@ class IdLengthRuleWalker extends ErrorTolerantWalker {
                 this.exceptions = opt;
                 return;
             }
-            if (typeof (opt) === 'object') {
+            if (typeof opt === 'object') {
                 this.min = typeof opt.min === 'number' ? opt.min : this.min;
                 this.max = typeof opt.max === 'number' ? opt.max : this.max;
                 this.exceptions = opt.exceptions || this.exceptions;
@@ -83,5 +80,4 @@ class IdLengthRuleWalker extends ErrorTolerantWalker {
             }
         });
     }
-
 }

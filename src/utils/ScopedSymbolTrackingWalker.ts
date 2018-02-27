@@ -23,17 +23,15 @@ export class ScopedSymbolTrackingWalker extends ErrorTolerantWalker {
     }
 
     protected isExpressionEvaluatingToFunction(expression: ts.Expression): boolean {
-        if (expression.kind === ts.SyntaxKind.ArrowFunction
-            || expression.kind === ts.SyntaxKind.FunctionExpression) {
+        if (expression.kind === ts.SyntaxKind.ArrowFunction || expression.kind === ts.SyntaxKind.FunctionExpression) {
             return true; // arrow function literals and arrow functions are definitely functions
         }
 
-        const isString = (
-            expression.kind === ts.SyntaxKind.StringLiteral
-            || expression.kind === ts.SyntaxKind.NoSubstitutionTemplateLiteral
-            || expression.kind === ts.SyntaxKind.TemplateExpression
-            || expression.kind === ts.SyntaxKind.TaggedTemplateExpression
-        );
+        const isString =
+            expression.kind === ts.SyntaxKind.StringLiteral ||
+            expression.kind === ts.SyntaxKind.NoSubstitutionTemplateLiteral ||
+            expression.kind === ts.SyntaxKind.TemplateExpression ||
+            expression.kind === ts.SyntaxKind.TaggedTemplateExpression;
         if (isString || expression.kind === ts.SyntaxKind.BinaryExpression) {
             return false; // strings and binary expressions are definitely not functions
         }
@@ -100,9 +98,7 @@ export class ScopedSymbolTrackingWalker extends ErrorTolerantWalker {
     protected visitClassDeclaration(node: ts.ClassDeclaration): void {
         this.scope = new Scope(this.scope);
         node.members.forEach((element: ts.ClassElement): void => {
-            const prefix: string = AstUtils.isStatic(element)
-                ? node.name.getText() + '.'
-                : 'this.';
+            const prefix: string = AstUtils.isStatic(element) ? node.name.getText() + '.' : 'this.';
 
             if (element.kind === ts.SyntaxKind.MethodDeclaration) {
                 // add all declared methods as valid functions

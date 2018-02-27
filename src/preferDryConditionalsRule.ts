@@ -8,27 +8,28 @@ import { ExtendedMetadata } from './utils/ExtendedMetadata';
  * Implementation of the prefer-dry-conditionals rule.
  */
 export class Rule extends Lint.Rules.AbstractRule {
-
     public static metadata: ExtendedMetadata = {
         ruleName: 'prefer-dry-conditionals',
-        type: 'maintainability',    // one of: 'functionality' | 'maintainability' | 'style' | 'typescript'
-        description: 'Don\'t-Repeat-Yourself in if statement conditionals, instead use Switch statements.',
+        type: 'maintainability', // one of: 'functionality' | 'maintainability' | 'style' | 'typescript'
+        description: "Don't-Repeat-Yourself in if statement conditionals, instead use Switch statements.",
         options: null,
         optionsDescription: '',
-        optionExamples: [],         //Remove this property if the rule has no options
+        optionExamples: [], //Remove this property if the rule has no options
         typescriptOnly: false,
-        issueClass: 'Non-SDL',      // one of: 'SDL' | 'Non-SDL' | 'Ignored'
-        issueType: 'Warning',       // one of: 'Error' | 'Warning'
-        severity: 'Low',            // one of: 'Critical' | 'Important' | 'Moderate' | 'Low'
-        level: 'Opportunity for Excellence',  // one of 'Mandatory' | 'Opportunity for Excellence'
-        group: 'Clarity',  // one of 'Ignored' | 'Security' | 'Correctness' | 'Clarity' | 'Whitespace' | 'Configurable' | 'Deprecated'
+        issueClass: 'Non-SDL', // one of: 'SDL' | 'Non-SDL' | 'Ignored'
+        issueType: 'Warning', // one of: 'Error' | 'Warning'
+        severity: 'Low', // one of: 'Critical' | 'Important' | 'Moderate' | 'Low'
+        level: 'Opportunity for Excellence', // one of 'Mandatory' | 'Opportunity for Excellence'
+        group: 'Clarity', // one of 'Ignored' | 'Security' | 'Correctness' | 'Clarity' | 'Whitespace' | 'Configurable' | 'Deprecated'
         commonWeaknessEnumeration: '', // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
     };
 
     public static FAILURE_STRING(switchExpression: string, caseExpressions: string[]): string {
         const cases: string[] = caseExpressions.map(text => `    case ${text}:\n      // ...\n      break;`);
-        return 'Don\'t Repeat Yourself in If statements. Try using a Switch statement instead:\n' +
-            `  switch (${switchExpression}) {\n${cases.join('\n')}\n    default:\n      // ...\n}`;
+        return (
+            "Don't Repeat Yourself in If statements. Try using a Switch statement instead:\n" +
+            `  switch (${switchExpression}) {\n${cases.join('\n')}\n    default:\n      // ...\n}`
+        );
     }
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
@@ -37,7 +38,6 @@ export class Rule extends Lint.Rules.AbstractRule {
 }
 
 class PreferDryConditionalsRuleWalker extends ErrorTolerantWalker {
-
     private threshold: number = 1;
 
     constructor(sourceFile: ts.SourceFile, options: Lint.IOptions) {
@@ -83,8 +83,9 @@ class PreferDryConditionalsRuleWalker extends ErrorTolerantWalker {
         }
         const firstExpression = expressions[0];
         const expectedOperatorToken = firstExpression.operatorToken;
-        const isEqualityCheck = (expectedOperatorToken.kind === ts.SyntaxKind.EqualsEqualsToken ||
-            expectedOperatorToken.kind === ts.SyntaxKind.EqualsEqualsEqualsToken);
+        const isEqualityCheck =
+            expectedOperatorToken.kind === ts.SyntaxKind.EqualsEqualsToken ||
+            expectedOperatorToken.kind === ts.SyntaxKind.EqualsEqualsEqualsToken;
         if (!isEqualityCheck) {
             return;
         }
@@ -103,28 +104,27 @@ class PreferDryConditionalsRuleWalker extends ErrorTolerantWalker {
         const hasSameLeft = leftExpressions.every(expression => expression.getText() === expectedLeft.getText());
         const hasSameRight = rightExpressions.every(expression => expression.getText() === expectedRight.getText());
         if (hasSameLeft) {
-            this.addFailureAtNode(firstExpression.parent, Rule.FAILURE_STRING(
-                expectedLeft.getText(),
-                rightExpressions.map(expression => expression.getText())),
+            this.addFailureAtNode(
+                firstExpression.parent,
+                Rule.FAILURE_STRING(expectedLeft.getText(), rightExpressions.map(expression => expression.getText()))
             );
         } else if (hasSameRight) {
-            this.addFailureAtNode(firstExpression.parent, Rule.FAILURE_STRING(
-                expectedRight.getText(),
-                leftExpressions.map(expression => expression.getText())),
+            this.addFailureAtNode(
+                firstExpression.parent,
+                Rule.FAILURE_STRING(expectedRight.getText(), leftExpressions.map(expression => expression.getText()))
             );
         }
     }
 
     private parseOptions(): void {
         this.getOptions().forEach((opt: any) => {
-            if (typeof (opt) === 'boolean') {
+            if (typeof opt === 'boolean') {
                 return;
             }
-            if (typeof (opt) === 'number') {
+            if (typeof opt === 'number') {
                 this.threshold = Math.max(1, opt);
                 return;
             }
         });
     }
-
 }

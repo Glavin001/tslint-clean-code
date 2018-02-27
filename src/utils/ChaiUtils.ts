@@ -3,8 +3,7 @@ import * as ts from 'typescript';
 /**
  * Utility methods for the chai.related rules.
  */
-export module ChaiUtils {
-
+export namespace ChaiUtils {
     export function isExpectInvocation(node: ts.PropertyAccessExpression | ts.CallExpression): boolean {
         const callExpression: ts.CallExpression = getLeftMostCallExpression(node);
         if (callExpression == null) {
@@ -18,7 +17,7 @@ export module ChaiUtils {
         while (leftSide != null) {
             if (leftSide.kind === ts.SyntaxKind.CallExpression) {
                 return <ts.CallExpression>leftSide;
-            } else if (leftSide.kind === (ts.SyntaxKind.PropertyAccessExpression)) {
+            } else if (leftSide.kind === ts.SyntaxKind.PropertyAccessExpression) {
                 leftSide = (<ts.PropertyAccessExpression>leftSide).expression;
             } else {
                 return null; // cannot walk any further left in the property expression

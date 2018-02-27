@@ -6,7 +6,6 @@ const { FAILURE_STRING } = Rule;
  * Unit tests.
  */
 describe('preferDryConditionalsRule', (): void => {
-
     const ruleName: string = 'prefer-dry-conditionals';
 
     it('should pass on switch statement', (): void => {
@@ -145,7 +144,6 @@ describe('preferDryConditionalsRule', (): void => {
         let options: any[] = [true];
 
         context('threshold = 3', () => {
-
             beforeEach(() => {
                 options = [true, 3];
             });
@@ -190,9 +188,6 @@ describe('preferDryConditionalsRule', (): void => {
                     },
                 ]);
             });
-
         });
-
     });
-
 });

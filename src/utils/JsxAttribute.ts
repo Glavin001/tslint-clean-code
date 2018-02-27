@@ -22,7 +22,7 @@ import {
 export function getJsxAttributesFromJsxElement(node: ts.Node): { [propName: string]: ts.JsxAttribute } {
     const attributesDictionary: { [propName: string]: ts.JsxAttribute } = {};
 
-    getAllAttributesFromJsxElement(node).forEach((attr) => {
+    getAllAttributesFromJsxElement(node).forEach(attr => {
         if (isJsxAttribute(attr)) {
             attributesDictionary[getPropName(attr).toLowerCase()] = attr;
         }
@@ -39,7 +39,7 @@ export function getAllAttributesFromJsxElement(node: ts.Node): ts.NodeArray<ts.J
     let attributes: ts.NodeArray<ts.JsxAttributeLike>;
 
     if (node == null) {
-        return <ts.NodeArray<ts.JsxAttributeLike>> (<any> []);
+        return <ts.NodeArray<ts.JsxAttributeLike>>(<any>[]);
     } else if (isJsxElement(node)) {
         attributes = node.openingElement.attributes.properties;
     } else if (isJsxSelfClosingElement(node)) {
@@ -58,9 +58,7 @@ export function getPropName(node: ts.JsxAttribute): string {
         throw new Error('The node must be a JsxAttribute collected by the AST parser.');
     }
 
-    return node.name
-        ? node.name.text
-        : undefined;
+    return node.name ? node.name.text : undefined;
 }
 
 /**
@@ -182,13 +180,17 @@ export function getStringLiteral(node: ts.JsxAttribute | ts.JsxSpreadAttribute):
 
     const initializer: ts.Expression = node == null ? null : node.initializer;
 
-    if (!initializer) { // <tag attribute/>
+    if (!initializer) {
+        // <tag attribute/>
         return '';
-    } else if (isStringLiteral(initializer)) { // <tag attribute='value' />
+    } else if (isStringLiteral(initializer)) {
+        // <tag attribute='value' />
         return initializer.text.trim();
-    } else if (isJsxExpression(initializer) && isStringLiteral(initializer.expression)) { // <tag attribute={'value'} />
+    } else if (isJsxExpression(initializer) && isStringLiteral(initializer.expression)) {
+        // <tag attribute={'value'} />
         return (<ts.StringLiteral>initializer.expression).text;
-    } else if (isJsxExpression(initializer) && !initializer.expression) { // <tag attribute={} />
+    } else if (isJsxExpression(initializer) && !initializer.expression) {
+        // <tag attribute={} />
         return '';
     } else {
         return undefined;

@@ -9,7 +9,6 @@ describe('newspaperOrderRule', (): void => {
     const ruleName: string = 'newspaper-order';
 
     context('ClassDeclaration', () => {
-
         it('should pass on empty class', (): void => {
             const script: string = `
             class EmptyClass {
@@ -68,8 +67,7 @@ describe('newspaperOrderRule', (): void => {
         `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_CLASS_STRING + 'BadClass' +
-                    '\n\nMethods order:\n1. x firstMethod\n2. x secondMethod',
+                    failure: FAILURE_CLASS_STRING + 'BadClass' + '\n\nMethods order:\n1. x firstMethod\n2. x secondMethod',
                     name: 'file.ts',
                     ruleName: ruleName,
                     startPosition: { character: 17, line: 3 },
@@ -118,8 +116,7 @@ describe('newspaperOrderRule', (): void => {
         `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_CLASS_STRING + 'BadClass' +
-                    '\n\nMethods order:\n1. x firstMethod\n2. x secondMethod',
+                    failure: FAILURE_CLASS_STRING + 'BadClass' + '\n\nMethods order:\n1. x firstMethod\n2. x secondMethod',
                     name: 'file.ts',
                     ruleName: ruleName,
                     startPosition: { character: 17, line: 3 },
@@ -164,8 +161,7 @@ describe('newspaperOrderRule', (): void => {
         `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_CLASS_STRING + 'SubClass' +
-                    '\n\nMethods order:\n1. x firstMethod\n2. x secondMethod',
+                    failure: FAILURE_CLASS_STRING + 'SubClass' + '\n\nMethods order:\n1. x firstMethod\n2. x secondMethod',
                     name: 'file.ts',
                     ruleName: ruleName,
                     startPosition: { character: 17, line: 8 },
@@ -206,8 +202,7 @@ describe('newspaperOrderRule', (): void => {
         `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_CLASS_STRING + 'CountDownClass' +
-                    '\n\nMethods order:\n1. x startCountDown\n2. x countDown',
+                    failure: FAILURE_CLASS_STRING + 'CountDownClass' + '\n\nMethods order:\n1. x startCountDown\n2. x countDown',
                     name: 'file.ts',
                     ruleName: 'newspaper-order',
                     ruleSeverity: 'ERROR',
@@ -278,8 +273,7 @@ describe('newspaperOrderRule', (): void => {
         `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_CLASS_STRING + 'CountDownClass' +
-                    '\n\nMethods order:\n1. x startCountDown\n2. ✓ countDown\n3. x step',
+                    failure: FAILURE_CLASS_STRING + 'CountDownClass' + '\n\nMethods order:\n1. x startCountDown\n2. ✓ countDown\n3. x step',
                     name: 'file.ts',
                     ruleName: 'newspaper-order',
                     ruleSeverity: 'ERROR',
@@ -323,19 +317,17 @@ describe('newspaperOrderRule', (): void => {
         `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_CLASS_STRING + 'BadClass' +
-                    '\n\nMethods order:\n1. ✓ firstMethod\n2. x secondMethod\n3. x thirdMethod',
+                    failure:
+                        FAILURE_CLASS_STRING + 'BadClass' + '\n\nMethods order:\n1. ✓ firstMethod\n2. x secondMethod\n3. x thirdMethod',
                     name: 'file.ts',
                     ruleName: ruleName,
                     startPosition: { character: 17, line: 6 },
                 },
             ]);
         });
-
     });
 
     context('SourceFile', () => {
-
         it('should pass on correctly ordered functions', (): void => {
             const script: string = `
             function firstMethod(): number {
@@ -389,8 +381,7 @@ describe('newspaperOrderRule', (): void => {
             `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_FILE_STRING + 'file.ts' +
-                    '\n\nMethods order:\n1. x firstMethod\n2. x secondMethod',
+                    failure: FAILURE_FILE_STRING + 'file.ts' + '\n\nMethods order:\n1. x firstMethod\n2. x secondMethod',
                     name: 'file.ts',
                     ruleName: 'newspaper-order',
                     ruleSeverity: 'ERROR',
@@ -416,8 +407,7 @@ describe('newspaperOrderRule', (): void => {
             `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_FILE_STRING + 'file.ts' +
-                    '\n\nMethods order:\n1. ✓ firstMethod\n2. x secondMethod\n3. x thirdMethod',
+                    failure: FAILURE_FILE_STRING + 'file.ts' + '\n\nMethods order:\n1. ✓ firstMethod\n2. x secondMethod\n3. x thirdMethod',
                     name: 'file.ts',
                     ruleName: 'newspaper-order',
                     ruleSeverity: 'ERROR',
@@ -458,8 +448,7 @@ describe('newspaperOrderRule', (): void => {
             `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_FILE_STRING + 'file.ts' +
-                    '\n\nMethods order:\n1. x myFunc1\n2. x myFunc2\n3. ✓ myFunc3',
+                    failure: FAILURE_FILE_STRING + 'file.ts' + '\n\nMethods order:\n1. x myFunc1\n2. x myFunc2\n3. ✓ myFunc3',
                     name: 'file.ts',
                     ruleName: 'newspaper-order',
                     ruleSeverity: 'ERROR',
@@ -470,11 +459,9 @@ describe('newspaperOrderRule', (): void => {
                 },
             ]);
         });
-
     });
 
     context('Block', () => {
-
         it('should pass on correctly ordered functions within named function', (): void => {
             const script: string = `
                     function doStuff() {
@@ -502,8 +489,7 @@ describe('newspaperOrderRule', (): void => {
                     `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_BLOCK_STRING + 'doStuff' +
-                    '\n\nMethods order:\n1. x firstMethod\n2. x secondMethod',
+                    failure: FAILURE_BLOCK_STRING + 'doStuff' + '\n\nMethods order:\n1. x firstMethod\n2. x secondMethod',
                     name: 'file.ts',
                     ruleName: 'newspaper-order',
                     ruleSeverity: 'ERROR',
@@ -528,8 +514,7 @@ describe('newspaperOrderRule', (): void => {
                     `;
             TestHelper.assertViolations(ruleName, script, [
                 {
-                    failure: FAILURE_BLOCK_STRING + '<anonymous>' +
-                    '\n\nMethods order:\n1. x firstMethod\n2. x secondMethod',
+                    failure: FAILURE_BLOCK_STRING + '<anonymous>' + '\n\nMethods order:\n1. x firstMethod\n2. x secondMethod',
                     name: 'file.ts',
                     ruleName: 'newspaper-order',
                     ruleSeverity: 'ERROR',
@@ -540,7 +525,5 @@ describe('newspaperOrderRule', (): void => {
                 },
             ]);
         });
-
     });
-
 });

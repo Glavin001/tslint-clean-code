@@ -3,13 +3,12 @@ import * as Lint from 'tslint';
 import * as fs from 'fs';
 import * as chai from 'chai';
 import * as ts from 'typescript';
-import {ErrorTolerantWalker} from '../utils/ErrorTolerantWalker';
+import { ErrorTolerantWalker } from '../utils/ErrorTolerantWalker';
 
 /**
  * Test Utilities.
  */
-export module TestHelper {
-
+export namespace TestHelper {
     let program: ts.Program;
 
     /* tslint:disable:prefer-const */
@@ -43,42 +42,44 @@ export module TestHelper {
         startPosition: FailurePosition;
     }
 
-    export function assertNoViolation(ruleName: string,
-                                      inputFileOrScript: string,
-                                      useTypeChecker: boolean = false) {
+    export function assertNoViolation(ruleName: string, inputFileOrScript: string, useTypeChecker: boolean = false) {
         runRuleAndEnforceAssertions(ruleName, null, inputFileOrScript, [], useTypeChecker);
     }
-    export function assertNoViolationWithOptions(ruleName: string,
-                                                 options: any[],
-                                                 inputFileOrScript: string,
-                                                 useTypeChecker: boolean = false) {
+    export function assertNoViolationWithOptions(
+        ruleName: string,
+        options: any[],
+        inputFileOrScript: string,
+        useTypeChecker: boolean = false
+    ) {
         runRuleAndEnforceAssertions(ruleName, options, inputFileOrScript, [], useTypeChecker);
     }
-    export function assertViolationsWithOptions(ruleName: string,
-                                                options: any[],
-                                                inputFileOrScript: string,
-                                                expectedFailures: ExpectedFailure[],
-                                                useTypeChecker: boolean = false) {
+    export function assertViolationsWithOptions(
+        ruleName: string,
+        options: any[],
+        inputFileOrScript: string,
+        expectedFailures: ExpectedFailure[],
+        useTypeChecker: boolean = false
+    ) {
         runRuleAndEnforceAssertions(ruleName, options, inputFileOrScript, expectedFailures, useTypeChecker);
     }
-    export function assertViolations(ruleName: string,
-                                     inputFileOrScript: string,
-                                     expectedFailures: ExpectedFailure[],
-                                     useTypeChecker: boolean = false) {
+    export function assertViolations(
+        ruleName: string,
+        inputFileOrScript: string,
+        expectedFailures: ExpectedFailure[],
+        useTypeChecker: boolean = false
+    ) {
         runRuleAndEnforceAssertions(ruleName, null, inputFileOrScript, expectedFailures, useTypeChecker);
     }
-    export function assertViolationsWithTypeChecker(ruleName: string,
-                                     inputFileOrScript: string,
-                                     expectedFailures: ExpectedFailure[]) {
+    export function assertViolationsWithTypeChecker(ruleName: string, inputFileOrScript: string, expectedFailures: ExpectedFailure[]) {
         runRuleAndEnforceAssertions(ruleName, null, inputFileOrScript, expectedFailures, true);
     }
 
     export function runRule(
-        ruleName : string,
+        ruleName: string,
         userOptions: string[],
-        inputFileOrScript : string,
-        useTypeChecker : boolean = false): Lint.LintResult {
-
+        inputFileOrScript: string,
+        useTypeChecker: boolean = false
+    ): Lint.LintResult {
         const configuration: Lint.Configuration.IConfigurationFile = {
             extends: [],
             jsRules: new Map<string, Partial<Lint.IOptions>>(),
@@ -99,7 +100,7 @@ export module TestHelper {
             });
         }
 
-        const options : Lint.ILinterOptions = {
+        const options: Lint.ILinterOptions = {
             formatter: 'json',
             fix: false,
             rulesDirectory: RULES_DIRECTORY,
@@ -111,7 +112,7 @@ export module TestHelper {
         let result: Lint.LintResult;
         if (useTypeChecker) {
             //program = Lint.Linter.createProgram([ ], './dist/test-data');
-            program = ts.createProgram([inputFileOrScript], { });
+            program = ts.createProgram([inputFileOrScript], {});
         }
         if (inputFileOrScript.match(/.*\.ts(x)?$/)) {
             const contents = fs.readFileSync(inputFileOrScript, FILE_ENCODING);
@@ -134,9 +135,13 @@ export module TestHelper {
         return result;
     }
 
-    function runRuleAndEnforceAssertions(ruleName : string, userOptions: string[], inputFileOrScript : string,
-                                         expectedFailures : ExpectedFailure[], useTypeChecker: boolean = false) {
-
+    function runRuleAndEnforceAssertions(
+        ruleName: string,
+        userOptions: string[],
+        inputFileOrScript: string,
+        expectedFailures: ExpectedFailure[],
+        useTypeChecker: boolean = false
+    ) {
         const lintResult: Lint.LintResult = runRule(ruleName, userOptions, inputFileOrScript, useTypeChecker);
         const actualFailures: ExpectedFailure[] = JSON.parse(lintResult.output);
 
