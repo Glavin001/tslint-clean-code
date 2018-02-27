@@ -95,14 +95,6 @@ The `node-debug` command will load Node Inspector in your default browser (works
 
 Set a breakpoint somewhere in your code and resume execution. Your breakpoint should be hit.
 
-Creating a new Release
-----------------------
-
-Refer to the [Releases Wiki Page](https://github.com/Microsoft/tslint-clean-code/wiki/Releases)
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
 Thank you
 ---------
 
