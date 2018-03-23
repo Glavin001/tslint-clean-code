@@ -187,6 +187,9 @@ class ClassMethodWalker extends Lint.SyntaxWalker {
         if (expression.kind === ts.SyntaxKind.SuperKeyword) {
             return 'this';
         }
+        if (this.classNode.name.getText() === expression.getText()) {
+            return 'this';
+        }
         return expression.getText();
     }
 }

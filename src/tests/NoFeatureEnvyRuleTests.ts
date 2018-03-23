@@ -127,6 +127,78 @@ describe('noFeatureEnvyRule', (): void => {
                 ]);
             });
         });
+
+        context('when using static properties / methods', () => {
+            it('should pass on method using static properties instead of this', (): void => {
+                const script: string = `
+                class CustomWarehouse {
+                    private static readonly vat: number = 1.2;
+                    salePrice(item) {
+                        return item.salePrice * CustomWarehouse.vat;
+                    }
+                }
+                `;
+
+                TestHelper.assertViolations(ruleName, stripIndent(script), []);
+            });
+
+            it('should pass on method using static methods instead of this', (): void => {
+                const script: string = `
+                class CustomWarehouse {
+                    private static getVat() { return 1.2; }
+                    salePrice(item) {
+                        return item.salePrice * CustomWarehouse.getVat();
+                    }
+                }
+                `;
+
+                TestHelper.assertViolations(ruleName, stripIndent(script), []);
+            });
+
+            it('should fail on class method which calls item more than static properties', (): void => {
+                const script: string = `
+                class CustomWarehouse {
+                    private static readonly vat: number = 1.2;
+                    salePrice(item) {
+                        return (item.price - item.rebate) * CustomWarehouse.vat;
+                    }
+                }
+                `;
+
+                TestHelper.assertViolations(ruleName, stripIndent(script), [
+                    {
+                        failure:
+                            'Method "salePrice" uses "item" more than its own class "CustomWarehouse". ' +
+                            'Extract or Move Method from "salePrice" into "item".',
+                        name: 'file.ts',
+                        ruleName: ruleName,
+                        startPosition: { character: 5, line: 4 },
+                    },
+                ]);
+            });
+
+            it('should fail on class method which calls item more than static methods', (): void => {
+                const script: string = `
+                class CustomWarehouse {
+                    private static getVat() { return 1.2; }
+                    salePrice(item) {
+                        return (item.price - item.rebate) * CustomWarehouse.getVat();
+                    }
+                }
+                `;
+
+                TestHelper.assertViolations(ruleName, stripIndent(script), [
+                    {
+                        failure:
+                            'Method "salePrice" uses "item" more than its own class "CustomWarehouse". ' +
+                            'Extract or Move Method from "salePrice" into "item".',
+                        name: 'file.ts',
+                        ruleName: ruleName,
+                        startPosition: { character: 5, line: 4 },
+                    },
+                ]);
+            });
+        });
     });
 
     context('when threshold option changed', () => {
