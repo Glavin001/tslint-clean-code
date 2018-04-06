@@ -127,6 +127,17 @@ describe('noMapWithoutUsageRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
+    it('should pass on Array.prototype.map within arrow function return shorthand inside a constructor', (): void => {
+        const script: string = `
+        new Map(
+            [{ id: 0, name: 'John' }]
+                .map<[number, string]>(entity => [entity.id, entity.name])
+        );
+        `;
+
+        TestHelper.assertViolations(ruleName, script, []);
+    });
+
     it('should pass on Array.prototype.map with assignment to a property initializer', (): void => {
         const script: string = `
         class Example {
