@@ -82,7 +82,7 @@ class NoMapWithoutAssignmentRuleWalker extends ErrorTolerantWalker {
             (ts.isPropertyAccessExpression(parent) ||
                 ts.isPropertyDeclaration(parent) ||
                 ts.isReturnStatement(parent) ||
-                ts.isCallExpression(parent) ||
+                ts.isCallOrNewExpression(parent) ||
                 ts.isSpreadElement(parent) ||
                 ts.isJsxExpression(parent) ||
                 ts.isConditionalExpression(parent) ||
