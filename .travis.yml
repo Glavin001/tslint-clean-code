@@ -1,9 +1,10 @@
 language: node_js
 
 node_js:
+  - '10'
   - '8'
-  - '6'
-  - '4'
+#  - '6'
+#  - '4'
 
 before_script:
   - npm install -g grunt-cli
