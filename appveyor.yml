@@ -1,6 +1,6 @@
 # Test against the latest version of this Node.js version
 environment:
-  nodejs_version: "4"
+  nodejs_version: "8"
 
 install:
   # Get the latest stable version of Node.js
