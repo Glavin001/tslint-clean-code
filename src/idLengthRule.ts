@@ -7,6 +7,10 @@ import { ExtendedMetadata } from './utils/ExtendedMetadata';
 export const FAILURE_MIN_STRING: string = 'Too short; difficult to understand its purpose without context';
 export const FAILURE_MAX_STRING: string = 'Too long; difficult to read and potentially less maintainable';
 
+const OPTION_MIN_STRING: string = 'min';
+const OPTION_MAX_STRING: string = 'max';
+const OPTION_EXCEPTIONS_STRING: string = 'exceptions';
+
 /**
  * Implementation of the id-length rule.
  */
@@ -65,7 +69,16 @@ export class Rule extends Lint.Rules.AbstractRule {
                 maxItems: 1,
             },
         },
-        optionsDescription: '',
+        optionsDescription: `
+            One of the following combinations can be provided:
+            * Minimum desired length.
+            * An array of exceptions.
+            * Minimum desired length and an exceptions array.
+            * A configuration object containing at least one of the following properties:
+                * \`"${OPTION_MIN_STRING}"\`
+                * \`"${OPTION_MAX_STRING}"\`
+                * \`"${OPTION_EXCEPTIONS_STRING}"\`
+        `,
         typescriptOnly: true,
         issueClass: 'Non-SDL',
         issueType: 'Warning',
@@ -122,9 +135,9 @@ class IdLengthRuleWalker extends ErrorTolerantWalker {
                 return;
             }
             if (typeof opt === 'object') {
-                this.min = typeof opt.min === 'number' ? opt.min : this.min;
-                this.max = typeof opt.max === 'number' ? opt.max : this.max;
-                this.exceptions = opt.exceptions || this.exceptions;
+                this.min = typeof opt[OPTION_MIN_STRING] === 'number' ? opt[OPTION_MIN_STRING] : this.min;
+                this.max = typeof opt[OPTION_MAX_STRING] === 'number' ? opt[OPTION_MAX_STRING] : this.max;
+                this.exceptions = opt[OPTION_EXCEPTIONS_STRING] || this.exceptions;
                 return;
             }
         });
