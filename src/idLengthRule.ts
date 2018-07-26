@@ -79,6 +79,20 @@ export class Rule extends Lint.Rules.AbstractRule {
                 * \`"${OPTION_MAX_STRING}"\`
                 * \`"${OPTION_EXCEPTIONS_STRING}"\`
         `,
+        optionExamples: <any>[
+            [true],
+            [true, 2],
+            [true, ['x', 'y', 'f', 'c']],
+            [true, 2, ['x', 'y', 'f', 'c']],
+            [
+                true,
+                {
+                    min: 2,
+                    max: 10,
+                    exceptions: ['x', 'y', 'f', 'c'],
+                },
+            ],
+        ],
         typescriptOnly: true,
         issueClass: 'Non-SDL',
         issueType: 'Warning',
