@@ -29,7 +29,7 @@ export class Rule extends Lint.Rules.AbstractRule {
     }
 
     public static FAILURE_STRING: string = 'Do not use Array.prototype.push inside of Array.prototype.forEach. ' +
-        'Use Array.prototype.map instead to replace both.';
+    'Use Array.prototype.map instead to replace both.';
 }
 
 class NoForeachPushRuleWalker extends ErrorTolerantWalker {
