@@ -25,7 +25,7 @@ export class Rule extends Lint.Rules.AbstractRule {
     };
 
     public static FAILURE_STRING: string = 'Return value from Array.prototype.map should be assigned to a variable. ' +
-        'Consider using Array.prototype.forEach instead.';
+    'Consider using Array.prototype.forEach instead.';
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(new NoMapWithoutAssignmentRuleWalker(sourceFile, this.getOptions()));

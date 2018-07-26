@@ -25,7 +25,7 @@ export class Rule extends Lint.Rules.AbstractRule {
     };
 
     public static FAILURE_STRING: string = 'Conditional expression is too complex. ' +
-        'Consider moving expression to a variable or function with a meaningful name.';
+    'Consider moving expression to a variable or function with a meaningful name.';
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(new NoComplexConditionalsRuleWalker(sourceFile, this.getOptions()));
