@@ -15,7 +15,56 @@ export class Rule extends Lint.Rules.AbstractRule {
         ruleName: 'id-length',
         type: 'maintainability',
         description: 'This rule enforces a minimum and/or maximum identifier length convention.',
-        options: null,
+        options: {
+            definitions: {
+                'minimum-length': {
+                    type: 'integer',
+                    minimum: 1,
+                    default: 2,
+                },
+                'maximum-length': {
+                    type: 'integer',
+                    minimum: 1,
+                },
+                exceptions: {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                    },
+                    minLength: 0,
+                    uniqueItems: true,
+                },
+            },
+            type: 'array',
+            items: {
+                type: 'array',
+                items: {
+                    oneOf: [
+                        {
+                            title: 'Only the minimum length',
+                            $ref: '#/definitions/minimum-length',
+                        },
+                        {
+                            title: 'Only the exceptions array',
+                            $ref: '#/definitions/exceptions',
+                        },
+                        {
+                            title: 'Configuration object',
+                            type: 'object',
+                            properties: {
+                                min: { $ref: '#/definitions/minimum-length' },
+                                max: { $ref: '#/definitions/maximum-length' },
+                                exceptions: { $ref: '#/definitions/exceptions' },
+                            },
+                            additionalProperties: false,
+                            minProperties: 1,
+                        },
+                    ],
+                },
+                minItems: 1,
+                maxItems: 1,
+            },
+        },
         optionsDescription: '',
         typescriptOnly: true,
         issueClass: 'Non-SDL',
