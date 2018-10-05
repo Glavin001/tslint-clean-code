@@ -97,22 +97,24 @@ export class ScopedSymbolTrackingWalker extends ErrorTolerantWalker {
 
     protected visitClassDeclaration(node: ts.ClassDeclaration): void {
         this.scope = new Scope(this.scope);
-        node.members.forEach((element: ts.ClassElement): void => {
-            const prefix: string = AstUtils.isStatic(element) ? node.name.getText() + '.' : 'this.';
+        node.members.forEach(
+            (element: ts.ClassElement): void => {
+                const prefix: string = AstUtils.isStatic(element) ? node.name.getText() + '.' : 'this.';
 
-            if (element.kind === ts.SyntaxKind.MethodDeclaration) {
-                // add all declared methods as valid functions
-                this.scope.addFunctionSymbol(prefix + (<ts.MethodDeclaration>element).name.getText());
-            } else if (element.kind === ts.SyntaxKind.PropertyDeclaration) {
-                const prop: ts.PropertyDeclaration = <ts.PropertyDeclaration>element;
-                // add all declared function properties as valid functions
-                if (AstUtils.isDeclarationFunctionType(prop)) {
+                if (element.kind === ts.SyntaxKind.MethodDeclaration) {
+                    // add all declared methods as valid functions
                     this.scope.addFunctionSymbol(prefix + (<ts.MethodDeclaration>element).name.getText());
-                } else {
-                    this.scope.addNonFunctionSymbol(prefix + (<ts.MethodDeclaration>element).name.getText());
+                } else if (element.kind === ts.SyntaxKind.PropertyDeclaration) {
+                    const prop: ts.PropertyDeclaration = <ts.PropertyDeclaration>element;
+                    // add all declared function properties as valid functions
+                    if (AstUtils.isDeclarationFunctionType(prop)) {
+                        this.scope.addFunctionSymbol(prefix + (<ts.MethodDeclaration>element).name.getText());
+                    } else {
+                        this.scope.addNonFunctionSymbol(prefix + (<ts.MethodDeclaration>element).name.getText());
+                    }
                 }
             }
-        });
+        );
         super.visitClassDeclaration(node);
         this.scope = this.scope.parent;
     }

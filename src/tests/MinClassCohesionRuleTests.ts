@@ -215,16 +215,20 @@ describe('minClassCohesionRule', (): void => {
         TestHelper.assertViolations(ruleName, script, []);
     });
 
-    context('reading options', (): void => {
-        context('90% cohesion', (): void => {
-            let options: any[];
+    context(
+        'reading options',
+        (): void => {
+            context(
+                '90% cohesion',
+                (): void => {
+                    let options: any[];
 
-            beforeEach((): void => {
-                options = [true, 0.9];
-            });
+                    beforeEach((): void => {
+                        options = [true, 0.9];
+                    });
 
-            it('should fail on Stack class', (): void => {
-                const script: string = `
+                    it('should fail on Stack class', (): void => {
+                        const script: string = `
                 class Stack {
                     private topOfStack: number = 0;
                     private elements: number[] = [];
@@ -244,26 +248,29 @@ describe('minClassCohesionRule', (): void => {
                     }
                 }
                 `;
-                TestHelper.assertViolationsWithOptions(ruleName, options, script, [
-                    {
-                        failure: FAILURE_STRING + 'Stack',
-                        name: 'file.ts',
-                        ruleName: 'min-class-cohesion',
-                        startPosition: { character: 17, line: 2 },
-                    },
-                ]);
-            });
-        });
+                        TestHelper.assertViolationsWithOptions(ruleName, options, script, [
+                            {
+                                failure: FAILURE_STRING + 'Stack',
+                                name: 'file.ts',
+                                ruleName: 'min-class-cohesion',
+                                startPosition: { character: 17, line: 2 },
+                            },
+                        ]);
+                    });
+                }
+            );
 
-        context('80% cohesion', (): void => {
-            let options: any[];
+            context(
+                '80% cohesion',
+                (): void => {
+                    let options: any[];
 
-            beforeEach((): void => {
-                options = [true, 0.8];
-            });
+                    beforeEach((): void => {
+                        options = [true, 0.8];
+                    });
 
-            it('should pass on Stack class', (): void => {
-                const script: string = `
+                    it('should pass on Stack class', (): void => {
+                        const script: string = `
                             class Stack {
                                 private topOfStack: number = 0;
                                 private elements: number[] = [];
@@ -283,8 +290,10 @@ describe('minClassCohesionRule', (): void => {
                                 }
                             }
                             `;
-                TestHelper.assertViolationsWithOptions(ruleName, options, script, []);
-            });
-        });
-    });
+                        TestHelper.assertViolationsWithOptions(ruleName, options, script, []);
+                    });
+                }
+            );
+        }
+    );
 });

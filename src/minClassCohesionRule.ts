@@ -105,16 +105,18 @@ class ClassDeclarationHelper {
     }
 
     private get methods(): ts.MethodDeclaration[] {
-        return <ts.MethodDeclaration[]>this.node.members.filter((classElement: ts.ClassElement): boolean => {
-            switch (classElement.kind) {
-                case ts.SyntaxKind.MethodDeclaration:
-                case ts.SyntaxKind.GetAccessor:
-                case ts.SyntaxKind.SetAccessor:
-                    return !AstUtils.isStatic(classElement);
-                default:
-                    return false;
+        return <ts.MethodDeclaration[]>this.node.members.filter(
+            (classElement: ts.ClassElement): boolean => {
+                switch (classElement.kind) {
+                    case ts.SyntaxKind.MethodDeclaration:
+                    case ts.SyntaxKind.GetAccessor:
+                    case ts.SyntaxKind.SetAccessor:
+                        return !AstUtils.isStatic(classElement);
+                    default:
+                        return false;
+                }
             }
-        });
+        );
     }
 
     private numberOfFieldsUsedByMethod(fieldNames: string[], method: ts.MethodDeclaration): number {
@@ -134,21 +136,23 @@ class ClassDeclarationHelper {
     private get constructorParameters(): ts.ParameterDeclaration[] {
         const ctor: ts.ConstructorDeclaration = this.constructorDeclaration;
         if (ctor) {
-            return ctor.parameters.filter((param: ts.ParameterDeclaration): boolean => {
-                return (
-                    AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.PublicKeyword) ||
-                    AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.PrivateKeyword) ||
-                    AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.ProtectedKeyword) ||
-                    AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.ReadonlyKeyword)
-                );
-            });
+            return ctor.parameters.filter(
+                (param: ts.ParameterDeclaration): boolean => {
+                    return (
+                        AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.PublicKeyword) ||
+                        AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.PrivateKeyword) ||
+                        AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.ProtectedKeyword) ||
+                        AstUtils.hasModifier(param.modifiers, ts.SyntaxKind.ReadonlyKeyword)
+                    );
+                }
+            );
         }
         return [];
     }
 
     private get constructorDeclaration(): ts.ConstructorDeclaration | undefined {
-        return <ts.ConstructorDeclaration>this.node.members.find(
-            (element: ts.ClassElement): boolean => element.kind === ts.SyntaxKind.Constructor
+        return <ts.ConstructorDeclaration>(
+            this.node.members.find((element: ts.ClassElement): boolean => element.kind === ts.SyntaxKind.Constructor)
         );
     }
 
@@ -157,8 +161,8 @@ class ClassDeclarationHelper {
     }
 
     private get instanceFields(): ts.PropertyDeclaration[] {
-        return <ts.PropertyDeclaration[]>this.node.members.filter(
-            (classElement: ts.ClassElement): boolean => classElement.kind === ts.SyntaxKind.PropertyDeclaration
+        return <ts.PropertyDeclaration[]>(
+            this.node.members.filter((classElement: ts.ClassElement): boolean => classElement.kind === ts.SyntaxKind.PropertyDeclaration)
         );
     }
 
@@ -169,9 +173,12 @@ class ClassDeclarationHelper {
     }
 
     public get extendsSomething(): boolean {
-        return Utils.exists(this.node.heritageClauses, (clause: ts.HeritageClause): boolean => {
-            return clause.token === ts.SyntaxKind.ExtendsKeyword;
-        });
+        return Utils.exists(
+            this.node.heritageClauses,
+            (clause: ts.HeritageClause): boolean => {
+                return clause.token === ts.SyntaxKind.ExtendsKeyword;
+            }
+        );
     }
 
     public get name() {

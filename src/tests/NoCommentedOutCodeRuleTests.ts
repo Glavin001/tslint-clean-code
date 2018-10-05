@@ -133,5 +133,5 @@ function noCommentedOutCodeError(startPosition: TestHelper.FailurePosition): Tes
         ruleName: 'no-commented-out-code',
         ruleSeverity: 'ERROR',
         startPosition,
-    }
+    };
 }
