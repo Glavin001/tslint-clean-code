@@ -55,6 +55,9 @@ class NoCommentedOutCodeRuleWalker extends ErrorTolerantWalker {
         if (this.textIsTslintFlag(text)) {
             return false;
         }
+        if (this.textIsNote(text)) {
+            return false;
+        }
         const sourceFile = ts.createSourceFile('', text, ts.ScriptTarget.ES5, true);
         if (sourceFile) {
             const { statements } = sourceFile;
@@ -71,6 +74,10 @@ class NoCommentedOutCodeRuleWalker extends ErrorTolerantWalker {
 
     private textIsTslintFlag(text: string): boolean {
         return text.startsWith('tslint:');
+    }
+
+    private textIsNote(text: string): boolean {
+        return /^(NOTE|TODO|FIXME|BUG|HACK|XXX)(\([^:]+\))?:/.test(text);
     }
 
     private cleanComment(text: string): string {
