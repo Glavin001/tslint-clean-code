@@ -8,119 +8,187 @@ describe('noCommentedOutCodeRule', (): void => {
 
     it('should pass on single word', (): void => {
         const script: string = `
-            // todo
+            // lorem
         `;
 
-        TestHelper.assertViolations(ruleName, script, []);
+        TestHelper.assertNoViolation(ruleName, script);
     });
 
-    it('should pass on single line', (): void => {
+    it('should pass on inline comment', (): void => {
         const script: string = `
-            // todo: add passing example
+            // Lorem ipsum dolor sit
+
+            const obj = {
+                foo: "bar", // Lorem ipsum dolor sit
+                fooz: 42,  // Lorem ipsum dolor sit
+
+                // Lorem ipsum dolor sit
+                baz: true
+            }
         `;
 
-        TestHelper.assertViolations(ruleName, script, []);
+        TestHelper.assertNoViolation(ruleName, script);
     });
 
-    it('should pass on long single line', (): void => {
+    it('should fail on commented-out code with inline comment', (): void => {
         const script: string = `
-            // todo: add failing example and update assertions
-        `;
-
-        TestHelper.assertViolations(ruleName, script, []);
-    });
-
-    it('should pass on long single line', (): void => {
-        const script: string = `
-        /**
-         * Implementation of the no-commented-out-code rule.
-         */
-        `;
-
-        TestHelper.assertViolations(ruleName, script, []);
-    });
-
-    it('should pass on long single line', (): void => {
-        const script: string = `
-        /**
-        Beautifier
-        */
-        `;
-        TestHelper.assertViolations(ruleName, script, []);
-    });
-
-    it('should pass on tslint:disable comment', (): void => {
-        const script: string = `
-        // tslint:disable:no-reserved-keywords
-        `;
-        TestHelper.assertViolations(ruleName, script, []);
-    });
-
-    it('should pass on tslint:enable comment', (): void => {
-        const script: string = `
-        // tslint:enable:no-reserved-keywords
-        `;
-        TestHelper.assertViolations(ruleName, script, []);
-    });
-
-    it('should pass on TODO-like comments', (): void => {
-        const script: string = `
-        // TODO: foo
-        // TODO foo
-        // NOTE: foo
-        // Note: foo
-        // XXX: foo + bar
-        // xxx: foo + bar
-        // FIXME(foo) bar
-        // FIXME(foo): bar
-        // FIXME({foo: bar})
-        `;
-        TestHelper.assertViolations(ruleName, script, [
-            noCommentedOutCodeError({
-                character: 9,
-                line: 5,
-            }),
-            noCommentedOutCodeError({
-                character: 9,
-                line: 7,
-            }),
-            noCommentedOutCodeError({
-                character: 9,
-                line: 10,
-            }),
-        ]);
-    });
-
-    it('should pass on code with inline comments', (): void => {
-        const script: string = `
-        const obj = {
-            ruleName: "no-commented-out-code",
-            type: "maintainability", // one of: 'functionality' | 'maintainability' | 'style' | 'typescript'
-            description: "... add a meaningful one line description",
-            options: null,
-            optionsDescription: "",
-            optionExamples: [], //Remove this property if the rule has no options
-            typescriptOnly: false,
-            issueClass: "Non-SDL", // one of: 'SDL' | 'Non-SDL' | 'Ignored'
-            issueType: "Warning", // one of: 'Error' | 'Warning'
-            severity: "Low", // one of: 'Critical' | 'Important' | 'Moderate' | 'Low'
-            level: "Opportunity for Excellence", // one of 'Mandatory' | 'Opportunity for Excellence'
-            group: "Clarity", // one of 'Ignored' | 'Security' | 'Correctness' | 'Clarity' | 'Whitespace' | 'Configurable' | 'Deprecated'
-          };
-        `;
-
-        TestHelper.assertViolations(ruleName, script, []);
-    });
-
-    it('should fail on console.log', (): void => {
-        const script: string = `
-            // console.log("hello world");
+            // console.log("Lorem ipsum");
         `;
 
         TestHelper.assertViolations(ruleName, script, [
             noCommentedOutCodeError({
                 character: 13,
                 line: 2,
+            }),
+        ]);
+    });
+
+    it('should pass on block comments', (): void => {
+        const script: string = `
+            /*
+                Lorem ipsum dolor sit
+            */
+
+            /* Lorem ipsum dolor sit */
+        `;
+
+        TestHelper.assertNoViolation(ruleName, script);
+    });
+
+    it('should fail on commented-out code with block comments', (): void => {
+        const script: string = `
+            /*
+            console.log("Lorem ipsum");
+            */
+
+            /* console.log("Lorem ipsum"); */
+        `;
+
+        TestHelper.assertViolations(ruleName, script, [
+            noCommentedOutCodeError({
+                character: 13,
+                line: 2,
+            }),
+            noCommentedOutCodeError({
+                character: 13,
+                line: 6,
+            }),
+        ]);
+    });
+
+    it('should pass on JSDoc-style block comment', (): void => {
+        const script: string = `
+            /**
+             *  Lorem ipsum dolor sit
+             */
+
+            /** Lorem ipsum dolor sit */
+        `;
+
+        TestHelper.assertNoViolation(ruleName, script);
+    });
+
+    it('should pass on JSDoc with tags', (): void => {
+        const script: string = `
+            /**
+             * @constructor
+             */
+
+            /**
+             * @param {string} foo
+             * @param {number} bar
+             */
+
+            /**
+             * @param {string} foo
+             * @return {string}
+             */
+
+            /**
+             * @return {string}
+             */
+        `;
+
+        TestHelper.assertNoViolation(ruleName, script);
+    });
+
+    it('should fail on commented-out code with JSDoc-style block comment', (): void => {
+        const script: string = `
+            /**
+             * console.log("Lorem ipsum");
+             */
+
+            /** console.log("Lorem ipsum"); */
+        `;
+
+        TestHelper.assertViolations(ruleName, script, [
+            noCommentedOutCodeError({
+                character: 13,
+                line: 2,
+            }),
+            noCommentedOutCodeError({
+                character: 13,
+                line: 6,
+            }),
+        ]);
+    });
+
+    it('should pass on tslint:disable comment', (): void => {
+        const script: string = `
+            // tslint:disable:no-reserved-keywords
+        `;
+
+        TestHelper.assertNoViolation(ruleName, script);
+    });
+
+    it('should pass on tslint:enable comment', (): void => {
+        const script: string = `
+            // tslint:enable:no-reserved-keywords
+        `;
+
+        TestHelper.assertNoViolation(ruleName, script);
+    });
+
+    it('should allow commenting-out code if prefixed with uppercase TODO-like note', (): void => {
+        const script: string = `
+            // TODO: a + b
+            // NOTE: a + b
+            // FIXME: a + b
+            // BUG: a + b
+            // HACK: a + b
+            // XXX: a + b
+        `;
+
+        TestHelper.assertNoViolation(ruleName, script);
+    });
+
+    it('should validate as usual if prefixed with unexpected TODO-like note', (): void => {
+        const script: string = `
+            // todo: a + b
+            // ToDo: a + b
+            // Foo: a + b
+
+            // TODO a + b
+            // TODO() a + b
+            // TODO(): a + b
+            // TODO(foo) a + b
+            // TODO(foo): a + b
+            // TODO({foo: "bar"}) a + b
+            // TODO({foo: "bar"}): a + b
+        `;
+
+        TestHelper.assertViolations(ruleName, script, [
+            noCommentedOutCodeError({
+                character: 13,
+                line: 2,
+            }),
+            noCommentedOutCodeError({
+                character: 13,
+                line: 3,
+            }),
+            noCommentedOutCodeError({
+                character: 13,
+                line: 4,
             }),
         ]);
     });
@@ -133,5 +201,5 @@ function noCommentedOutCodeError(startPosition: TestHelper.FailurePosition): Tes
         ruleName: 'no-commented-out-code',
         ruleSeverity: 'ERROR',
         startPosition,
-    }
+    };
 }
