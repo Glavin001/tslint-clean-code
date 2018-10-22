@@ -42,51 +42,100 @@ class NoCommentedOutCodeRuleWalker extends ErrorTolerantWalker {
     }
 
     private scanCommentForCode(startPosition: number, commentText: string) {
-        if (this.textIsCode(this.cleanComment(commentText))) {
-            this.foundSuspiciousComment(startPosition, commentText);
+        const trimmedCommentText = this.trimTextLines(commentText);
+
+        if (this.isTextCode(trimmedCommentText)) {
+            this.handleSuspiciousComment(startPosition, commentText);
         }
     }
 
-    private textIsCode(text: string): boolean {
-        text = text.trim();
-        if (this.textIsSingleWord(text)) {
-            return false;
-        }
-        if (this.textIsTslintFlag(text)) {
-            return false;
-        }
-        if (this.textIsNote(text)) {
-            return false;
-        }
-        const sourceFile = ts.createSourceFile('', text, ts.ScriptTarget.ES5, true);
-        if (sourceFile) {
-            const { statements } = sourceFile;
-            const diagnostics: any[] = (<any>sourceFile).parseDiagnostics;
-            return statements.length > 0 && diagnostics.length === 0;
-        }
-        return false;
+    /**
+     * Removes spaces and comment delimiters at beginning
+     * and end of each line
+     */
+    private trimTextLines(text: string): string {
+        const lines = text.split('\n');
+
+        const trimAtStart = /^\s*\/*\**\s*/;
+        const trimAtEnd = /\s*\**\/*\s*$/;
+
+        const trimmedLines = lines.map(line => {
+            return line.replace(trimAtStart, '').replace(trimAtEnd, '');
+        });
+
+        return trimmedLines.join('\n');
     }
 
-    private textIsSingleWord(text: string): boolean {
+    private isTextCode(text: string): boolean {
+        if (this.isTextSingleWord(text)) {
+            return false;
+        }
+        if (this.isTextTsLintFlag(text)) {
+            return false;
+        }
+        if (this.isTextToDoLikeNote(text)) {
+            return false;
+        }
+
+        return this.isTextCodeWithoutErrors(text);
+    }
+
+    private isTextSingleWord(text: string): boolean {
         const pattern = new RegExp('^[\\w-]*$');
         return pattern.test(text);
     }
 
-    private textIsTslintFlag(text: string): boolean {
+    /**
+     * TSLint flags will be will be parsed as labeled statements and thus
+     * may result in valid code, so they need to be handled separately
+     */
+    private isTextTsLintFlag(text: string): boolean {
         return text.startsWith('tslint:');
     }
 
-    private textIsNote(text: string): boolean {
-        return /^(NOTE|TODO|FIXME|BUG|HACK|XXX)(\([^:]+\))?:/.test(text);
+    /**
+     * These notes followed by a colon will be parsed as labeled statements
+     * and thus may result in valid code, so they need to be handled separately
+     */
+    private isTextToDoLikeNote(text: string): boolean {
+        return /^(NOTE|TODO|FIXME|BUG|HACK|XXX):/.test(text);
     }
 
-    private cleanComment(text: string): string {
-        const pattern = /^([^a-zA-Z0-9]+)/;
-        const lines = text.split('\n');
-        return lines.map(line => line.replace(pattern, '').trim()).join('\n');
+    /**
+     * If text contains statements but not one error, it must be code
+     */
+    private isTextCodeWithoutErrors(text: string) {
+        const sourceFile = this.createSourceFileFromText(text);
+
+        if (!this.hasSourceFileStatements(sourceFile)) {
+            return false;
+        }
+
+        const sourceFileDiagnostics = this.getSourceFileDiagnostics(sourceFile);
+
+        return sourceFileDiagnostics.length === 0;
     }
 
-    private foundSuspiciousComment(startPosition: number, commentText: string) {
+    private createSourceFileFromText(text: string): ts.SourceFile {
+        return ts.createSourceFile('', text, ts.ScriptTarget.ES5, true);
+    }
+
+    private hasSourceFileStatements(sourceFile: ts.SourceFile): boolean {
+        return sourceFile && sourceFile.statements.length > 0;
+    }
+
+    /**
+     * The most efficient way to get a source file's diagnostics is from parseDiagnostics,
+     * which isn't exposed in the API, since the cast to any.
+     * @see https://github.com/Microsoft/TypeScript/issues/21940
+     * Tried using ts.Program.getSyntacticDiagnostics + getDeclarationDiagnostics, which
+     * wasn't quiet as fast.
+     */
+    private getSourceFileDiagnostics(sourceFile: ts.SourceFile): ts.Diagnostic[] {
+        return (<any>sourceFile).parseDiagnostics;
+    }
+
+    private handleSuspiciousComment(startPosition: number, commentText: string) {
         this.addFailureAt(startPosition, commentText.length, FAILURE_STRING);
     }
 }
