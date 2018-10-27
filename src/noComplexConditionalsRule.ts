@@ -24,8 +24,8 @@ export class Rule extends Lint.Rules.AbstractRule {
         commonWeaknessEnumeration: '', // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
     };
 
-    public static FAILURE_STRING: string = 'Conditional expression is too complex. ' +
-    'Consider moving expression to a variable or function with a meaningful name.';
+    public static FAILURE_STRING: string =
+        'Conditional expression is too complex. ' + 'Consider moving expression to a variable or function with a meaningful name.';
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(new NoComplexConditionalsRuleWalker(sourceFile, this.getOptions()));

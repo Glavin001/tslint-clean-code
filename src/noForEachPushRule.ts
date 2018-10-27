@@ -28,8 +28,8 @@ export class Rule extends Lint.Rules.AbstractRule {
         return this.applyWithWalker(new NoForeachPushRuleWalker(sourceFile, this.getOptions()));
     }
 
-    public static FAILURE_STRING: string = 'Do not use Array.prototype.push inside of Array.prototype.forEach. ' +
-    'Use Array.prototype.map instead to replace both.';
+    public static FAILURE_STRING: string =
+        'Do not use Array.prototype.push inside of Array.prototype.forEach. ' + 'Use Array.prototype.map instead to replace both.';
 }
 
 class NoForeachPushRuleWalker extends ErrorTolerantWalker {
