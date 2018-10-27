@@ -238,16 +238,18 @@ class ClassDeclarationHelper extends NewspaperHelper {
 
     @Memoize
     protected get methods(): ts.MethodDeclaration[] {
-        return <ts.MethodDeclaration[]>this.node.members.filter((classElement: ts.ClassElement): boolean => {
-            switch (classElement.kind) {
-                case ts.SyntaxKind.MethodDeclaration:
-                case ts.SyntaxKind.GetAccessor:
-                case ts.SyntaxKind.SetAccessor:
-                    return !AstUtils.isStatic(classElement);
-                default:
-                    return false;
+        return <ts.MethodDeclaration[]>this.node.members.filter(
+            (classElement: ts.ClassElement): boolean => {
+                switch (classElement.kind) {
+                    case ts.SyntaxKind.MethodDeclaration:
+                    case ts.SyntaxKind.GetAccessor:
+                    case ts.SyntaxKind.SetAccessor:
+                        return !AstUtils.isStatic(classElement);
+                    default:
+                        return false;
+                }
             }
-        });
+        );
     }
 
     @Memoize
@@ -263,11 +265,11 @@ abstract class BlockLikeHelper extends NewspaperHelper {
 
     @Memoize
     protected get methods(): ts.FunctionDeclaration[] {
-        const functionDeclarations = <ts.FunctionDeclaration[]>this.node.statements.filter((node: ts.Statement): boolean =>
-            ts.isFunctionDeclaration(node)
+        const functionDeclarations = <ts.FunctionDeclaration[]>(
+            this.node.statements.filter((node: ts.Statement): boolean => ts.isFunctionDeclaration(node))
         );
-        const variableStatements = <ts.VariableStatement[]>this.node.statements.filter((node: ts.Statement): boolean =>
-            ts.isVariableStatement(node)
+        const variableStatements = <ts.VariableStatement[]>(
+            this.node.statements.filter((node: ts.Statement): boolean => ts.isVariableStatement(node))
         );
         const variableFunctionDeclarations: ts.FunctionDeclaration[] = variableStatements
             .map(node => node.declarationList.declarations)

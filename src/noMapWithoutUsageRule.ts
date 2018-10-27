@@ -24,8 +24,8 @@ export class Rule extends Lint.Rules.AbstractRule {
         commonWeaknessEnumeration: '', // if possible, please map your rule to a CWE (see cwe_descriptions.json and https://cwe.mitre.org)
     };
 
-    public static FAILURE_STRING: string = 'Return value from Array.prototype.map should be assigned to a variable. ' +
-    'Consider using Array.prototype.forEach instead.';
+    public static FAILURE_STRING: string =
+        'Return value from Array.prototype.map should be assigned to a variable. ' + 'Consider using Array.prototype.forEach instead.';
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(new NoMapWithoutAssignmentRuleWalker(sourceFile, this.getOptions()));

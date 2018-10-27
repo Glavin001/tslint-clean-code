@@ -148,28 +148,34 @@ export namespace TestHelper {
         // All the information we need is line and character of start position. For JSON comparison
         // to work, we will delete the information that we are not interested in from both actual and
         // expected failures.
-        actualFailures.forEach((actual: ExpectedFailure): void => {
-            delete actual.startPosition.position;
-            delete actual.endPosition;
-            // Editors start counting lines and characters from 1, but tslint does it from 0.
-            // To make thing easier to debug, align to editor values.
-            actual.startPosition.line = actual.startPosition.line + 1;
-            actual.startPosition.character = actual.startPosition.character + 1;
-        });
-        expectedFailures.forEach((expected: ExpectedFailure): void => {
-            delete expected.startPosition.position;
-            delete expected.endPosition;
-            if (!expected.ruleSeverity) {
-                expected.ruleSeverity = 'ERROR';
+        actualFailures.forEach(
+            (actual: ExpectedFailure): void => {
+                delete actual.startPosition.position;
+                delete actual.endPosition;
+                // Editors start counting lines and characters from 1, but tslint does it from 0.
+                // To make thing easier to debug, align to editor values.
+                actual.startPosition.line = actual.startPosition.line + 1;
+                actual.startPosition.character = actual.startPosition.character + 1;
             }
-        });
+        );
+        expectedFailures.forEach(
+            (expected: ExpectedFailure): void => {
+                delete expected.startPosition.position;
+                delete expected.endPosition;
+                if (!expected.ruleSeverity) {
+                    expected.ruleSeverity = 'ERROR';
+                }
+            }
+        );
 
         const errorMessage = `Wrong # of failures: \n${JSON.stringify(actualFailures, null, 2)}`;
         chai.assert.equal(actualFailures.length, expectedFailures.length, errorMessage);
 
-        expectedFailures.forEach((expected: ExpectedFailure, index: number): void => {
-            const actual = actualFailures[index];
-            chai.assert.deepEqual(actual, expected);
-        });
+        expectedFailures.forEach(
+            (expected: ExpectedFailure, index: number): void => {
+                const actual = actualFailures[index];
+                chai.assert.deepEqual(actual, expected);
+            }
+        );
     }
 }
