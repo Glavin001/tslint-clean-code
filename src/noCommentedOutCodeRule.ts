@@ -17,7 +17,7 @@ export class Rule extends Lint.Rules.AbstractRule {
         description: 'Code must not be commented out.',
         options: null,
         optionsDescription: '',
-        optionExamples: [], //Remove this property if the rule has no options
+        optionExamples: [], // Remove this property if the rule has no options
         typescriptOnly: false,
         issueClass: 'Non-SDL', // one of: 'SDL' | 'Non-SDL' | 'Ignored'
         issueType: 'Warning', // one of: 'Error' | 'Warning'
@@ -81,8 +81,8 @@ class NoCommentedOutCodeRuleWalker extends ErrorTolerantWalker {
     }
 
     private isTextSingleWord(text: string): boolean {
-        const pattern = new RegExp('^[\\w-]*$');
-        return pattern.test(text);
+        const pattern = new RegExp('^([\\w-]*)$');
+        return pattern.test(text.trim());
     }
 
     /**
