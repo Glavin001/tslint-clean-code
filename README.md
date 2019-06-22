@@ -3,6 +3,8 @@ tslint-clean-code [![Build Status](https://travis-ci.org/Glavin001/tslint-clean-
 
 > A set of [TSLint](https://github.com/palantir/tslint) rules used to enforce [Clean Code](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) practices. Inspired by [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882).
 
+:point_right: Sign up for [**CodePass**, *the Quickest Way To Solve Your Coding Errors*](https://codepass.ca/)! :boom:
+
 ## Installation
 
 ```bash
