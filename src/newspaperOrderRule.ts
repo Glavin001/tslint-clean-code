@@ -158,7 +158,11 @@ abstract class NewspaperHelper {
         const { methodGraph, methodNames } = this;
         try {
             const top = new TopologicalSortUtil(methodGraph);
-            return top.closestList(methodNames);
+            const ordered = top.closestList(methodNames);
+            if (ordered[ordered.length - 1] === '--end-of-dependencies-marker--') {
+                ordered.pop();
+            }
+            return ordered;
         } catch (error) {
             return [];
         }
@@ -182,6 +186,7 @@ abstract class NewspaperHelper {
                         const edge = [methodName, depName];
                         graph.push(edge);
                     });
+                    graph.push([methodName, '--end-of-dependencies-marker--']);
                     // console.log('graph:', graph); // tslint:disable-line no-console
                     return graph;
                 },
