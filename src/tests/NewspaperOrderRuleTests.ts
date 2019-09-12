@@ -434,6 +434,54 @@ describe('newspaperOrderRule', (): void => {
             TestHelper.assertViolations(ruleName, script, []);
         });
 
+        it('should pass with 5 functions (3 independent, 2 related)', (): void => {
+            const script: string = `
+            function independentMethod1() {
+                return true;
+            }
+            function relatedMethod1() {
+                return relatedMethod2();
+            }
+            function independentMethod2() {
+                return true;
+            }
+            function relatedMethod2() {
+                return true;
+            }
+            function independentMethod3() {
+                return true;
+            }
+        `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
+        it('should pass with 5 functions (4 independent, 3 related)', (): void => {
+            const script: string = `
+            function independentMethod1() {
+                return true;
+            }
+            function relatedMethod1() {
+                return relatedMethod2();
+            }
+            function independentMethod2() {
+                return true;
+            }
+            function relatedMethod2() {
+                return true;
+            }
+            function independentMethod3() {
+                return true;
+            }
+            function relatedMethod3() {
+                return true;
+            }
+            function independentMethod4() {
+                return true;
+            }
+        `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
         it('should fail on incorrectly ordered functions', (): void => {
             const script: string = `
             function secondMethod(): number {
