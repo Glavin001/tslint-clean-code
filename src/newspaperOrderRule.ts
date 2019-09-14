@@ -11,6 +11,7 @@ import * as Memoize from 'memoize-decorator';
 export const FAILURE_CLASS_STRING: string = 'The class does not read like a Newspaper. Reorder the methods of the class: ';
 export const FAILURE_FILE_STRING: string = 'The functions in the file do not read like a Newspaper. Reorder the functions in the file: ';
 export const FAILURE_BLOCK_STRING: string = 'The functions in the block do not read like a Newspaper. Reorder the functions in the block: ';
+const END_OF_DEPENDENCIES_MARKER: string = '--end-of-dependencies-marker--';
 
 /**
  * Implementation of the newspaper-order rule.
@@ -158,7 +159,11 @@ abstract class NewspaperHelper {
         const { methodGraph, methodNames } = this;
         try {
             const top = new TopologicalSortUtil(methodGraph);
-            return top.closestList(methodNames);
+            const ordered = top.closestList(methodNames);
+            if (ordered[ordered.length - 1] === END_OF_DEPENDENCIES_MARKER) {
+                ordered.pop();
+            }
+            return ordered;
         } catch (error) {
             return [];
         }
@@ -182,6 +187,7 @@ abstract class NewspaperHelper {
                         const edge = [methodName, depName];
                         graph.push(edge);
                     });
+                    graph.push([methodName, END_OF_DEPENDENCIES_MARKER]);
                     // console.log('graph:', graph); // tslint:disable-line no-console
                     return graph;
                 },

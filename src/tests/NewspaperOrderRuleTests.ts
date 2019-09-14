@@ -77,7 +77,7 @@ describe('newspaperOrderRule', (): void => {
 
         it('should pass on correctly ordered class methods', (): void => {
             const script: string = `
-            class BadClass {
+            class GoodClass {
                 private firstMethod() {
                     return this.secondMethod();
                 }
@@ -91,11 +91,45 @@ describe('newspaperOrderRule', (): void => {
 
         it('should pass on correctly ordered class getter methods', (): void => {
             const script: string = `
-            class BadClass {
+            class GoodClass {
                 private get firstMethod() {
                     return this.secondMethod;
                 }
                 private get secondMethod() {
+                    return true;
+                }
+            }
+        `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
+        it('should pass with 3 methods (2 related, 1 independent)', (): void => {
+            const script: string = `
+            class GoodClass {
+                private firstRelatedMethod() {
+                    return this.secondRelatedMethod();
+                }
+                private secondRelatedMethod() {
+                    return true;
+                }
+                private independentMethod() {
+                    return true;
+                }
+            }
+        `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
+        it('should pass with 3 methods (1 independent, 2 related)', (): void => {
+            const script: string = `
+            class GoodClass {
+                private independentMethod() {
+                    return true;
+                }
+                private firstRelatedMethod() {
+                    return this.secondRelatedMethod();
+                }
+                private secondRelatedMethod() {
                     return true;
                 }
             }
@@ -367,6 +401,84 @@ describe('newspaperOrderRule', (): void => {
                 return 2;
             }
             `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
+        it('should pass with 3 functions (2 related, 1 independent)', (): void => {
+            const script: string = `
+            function firstRelatedMethod() {
+                return secondRelatedMethod();
+            }
+            function secondRelatedMethod() {
+                return true;
+            }
+            function independentMethod() {
+                return true;
+            }
+            `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
+        it('should pass with 3 functions (1 independent, 2 related)', (): void => {
+            const script: string = `
+            function independentMethod() {
+                return true;
+            }
+            function firstRelatedMethod() {
+                return secondRelatedMethod();
+            }
+            function secondRelatedMethod() {
+                return true;
+            }
+            `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
+        it('should pass with 5 functions (3 independent, 2 related)', (): void => {
+            const script: string = `
+            function independentMethod1() {
+                return true;
+            }
+            function relatedMethod1() {
+                return relatedMethod2();
+            }
+            function independentMethod2() {
+                return true;
+            }
+            function relatedMethod2() {
+                return true;
+            }
+            function independentMethod3() {
+                return true;
+            }
+        `;
+            TestHelper.assertViolations(ruleName, script, []);
+        });
+
+        it('should pass with 5 functions (4 independent, 3 related)', (): void => {
+            const script: string = `
+            function independentMethod1() {
+                return true;
+            }
+            function relatedMethod1() {
+                return relatedMethod2();
+            }
+            function independentMethod2() {
+                return true;
+            }
+            function relatedMethod2() {
+                return true;
+            }
+            function independentMethod3() {
+                return true;
+            }
+            function relatedMethod3() {
+                return true;
+            }
+            function independentMethod4() {
+                return true;
+            }
+        `;
             TestHelper.assertViolations(ruleName, script, []);
         });
 
