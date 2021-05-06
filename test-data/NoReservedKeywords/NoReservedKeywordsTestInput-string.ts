@@ -1,6 +1,6 @@
 // module names
 namespace WrapperString {
-    namespace string {  }
+    namespace string {}
 }
 
 namespace SampleString1 {
