@@ -38,13 +38,11 @@ export namespace AstUtils {
             return false;
         }
         let result: boolean = false;
-        modifiers.forEach(
-            (modifier: ts.Node): void => {
-                if (modifier.kind === modifierKind) {
-                    result = true;
-                }
+        modifiers.forEach((modifier: ts.Node): void => {
+            if (modifier.kind === modifierKind) {
+                result = true;
             }
-        );
+        });
         return result;
     }
 
@@ -56,24 +54,20 @@ export namespace AstUtils {
         if (expression.kind === ts.SyntaxKind.Identifier || expression.kind === ts.SyntaxKind.PropertyAccessExpression) {
             const definitionInfo: ts.DefinitionInfo[] = languageServices.getDefinitionAtPosition('file.ts', expression.getStart());
             if (definitionInfo) {
-                definitionInfo.forEach(
-                    (info: ts.DefinitionInfo, index: number): void => {
-                        console.log('\tdefinitionInfo-' + index);
-                        console.log('\t\tkind: ' + info.kind);
-                        console.log('\t\tname: ' + info.name);
-                    }
-                );
+                definitionInfo.forEach((info: ts.DefinitionInfo, index: number): void => {
+                    console.log('\tdefinitionInfo-' + index);
+                    console.log('\t\tkind: ' + info.kind);
+                    console.log('\t\tname: ' + info.name);
+                });
             }
 
             const typeInfo: ts.DefinitionInfo[] = languageServices.getTypeDefinitionAtPosition('file.ts', expression.getStart());
             if (typeInfo) {
-                typeInfo.forEach(
-                    (info: ts.DefinitionInfo, index: number): void => {
-                        console.log('\ttypeDefinitionInfo-' + index);
-                        console.log('\t\tkind: ' + info.kind);
-                        console.log('\t\tname: ' + info.name);
-                    }
-                );
+                typeInfo.forEach((info: ts.DefinitionInfo, index: number): void => {
+                    console.log('\ttypeDefinitionInfo-' + index);
+                    console.log('\t\tkind: ' + info.kind);
+                    console.log('\t\tname: ' + info.name);
+                });
             }
 
             const quickInfo: ts.QuickInfo = languageServices.getQuickInfoAtPosition('file.ts', expression.getStart());
@@ -242,16 +236,14 @@ export namespace AstUtils {
 
     export function getDeclaredMethodNames(node: ts.ClassDeclaration): string[] {
         const result: string[] = [];
-        node.members.forEach(
-            (classElement: ts.ClassElement): void => {
-                if (classElement.kind === ts.SyntaxKind.MethodDeclaration) {
-                    const methodDeclaration: ts.MethodDeclaration = <ts.MethodDeclaration>classElement;
-                    if (methodDeclaration.name.kind === ts.SyntaxKind.Identifier) {
-                        result.push((<ts.Identifier>methodDeclaration.name).text);
-                    }
+        node.members.forEach((classElement: ts.ClassElement): void => {
+            if (classElement.kind === ts.SyntaxKind.MethodDeclaration) {
+                const methodDeclaration: ts.MethodDeclaration = <ts.MethodDeclaration>classElement;
+                if (methodDeclaration.name.kind === ts.SyntaxKind.Identifier) {
+                    result.push((<ts.Identifier>methodDeclaration.name).text);
                 }
             }
-        );
+        });
         return result;
     }
 

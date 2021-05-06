@@ -8,12 +8,9 @@ import { Utils } from './Utils';
  */
 export namespace MochaUtils {
     export function isMochaTest(node: ts.SourceFile): boolean {
-        return Utils.exists(
-            node.statements,
-            (statement: ts.Statement): boolean => {
-                return isStatementDescribeCall(statement);
-            }
-        );
+        return Utils.exists(node.statements, (statement: ts.Statement): boolean => {
+            return isStatementDescribeCall(statement);
+        });
     }
 
     export function isStatementDescribeCall(statement: ts.Statement): boolean {

@@ -1,7 +1,5 @@
 // module names
-namespace public {
-
-}
+namespace public {}
 
 namespace SamplePublic1 {
     // module variables

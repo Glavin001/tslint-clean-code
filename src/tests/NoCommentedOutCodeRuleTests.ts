@@ -6,19 +6,17 @@ import { TestHelper } from './TestHelper';
 describe('noCommentedOutCodeRule', (): void => {
     const ruleName: string = 'no-commented-out-code';
 
-    context(
-        'when inside inline comment',
-        (): void => {
-            it('should pass on single word', (): void => {
-                const script: string = `
+    context('when inside inline comment', (): void => {
+        it('should pass on single word', (): void => {
+            const script: string = `
             // lorem
             `;
 
-                TestHelper.assertNoViolation(ruleName, script);
-            });
+            TestHelper.assertNoViolation(ruleName, script);
+        });
 
-            it('should pass on multiple words', (): void => {
-                const script: string = `
+        it('should pass on multiple words', (): void => {
+            const script: string = `
             // Lorem ipsum dolor sit
 
             const obj = {
@@ -30,40 +28,37 @@ describe('noCommentedOutCodeRule', (): void => {
             }
             `;
 
-                TestHelper.assertNoViolation(ruleName, script);
-            });
+            TestHelper.assertNoViolation(ruleName, script);
+        });
 
-            it('should fail on commented-out code', (): void => {
-                const script: string = `
+        it('should fail on commented-out code', (): void => {
+            const script: string = `
             // console.log("Lorem ipsum");
             `;
 
-                TestHelper.assertViolations(ruleName, script, [
-                    noCommentedOutCodeError({
-                        character: 13,
-                        line: 2,
-                    }),
-                ]);
-            });
-        }
-    );
+            TestHelper.assertViolations(ruleName, script, [
+                noCommentedOutCodeError({
+                    character: 13,
+                    line: 2,
+                }),
+            ]);
+        });
+    });
 
-    context(
-        'when inside block comment',
-        (): void => {
-            it('should pass on single word', (): void => {
-                const script: string = `
+    context('when inside block comment', (): void => {
+        it('should pass on single word', (): void => {
+            const script: string = `
             /*
             lorem
             */
 
            /* lorem */
         `;
-                TestHelper.assertNoViolation(ruleName, script);
-            });
+            TestHelper.assertNoViolation(ruleName, script);
+        });
 
-            it('should pass on multiple words', (): void => {
-                const script: string = `
+        it('should pass on multiple words', (): void => {
+            const script: string = `
             /*
             Lorem ipsum dolor sit
             */
@@ -71,11 +66,11 @@ describe('noCommentedOutCodeRule', (): void => {
            /* Lorem ipsum dolor sit */
            `;
 
-                TestHelper.assertNoViolation(ruleName, script);
-            });
+            TestHelper.assertNoViolation(ruleName, script);
+        });
 
-            it('should fail on commented-out code', (): void => {
-                const script: string = `
+        it('should fail on commented-out code', (): void => {
+            const script: string = `
             /*
             console.log("Lorem ipsum");
             */
@@ -83,36 +78,33 @@ describe('noCommentedOutCodeRule', (): void => {
             /* console.log("Lorem ipsum"); */
             `;
 
-                TestHelper.assertViolations(ruleName, script, [
-                    noCommentedOutCodeError({
-                        character: 13,
-                        line: 2,
-                    }),
-                    noCommentedOutCodeError({
-                        character: 13,
-                        line: 6,
-                    }),
-                ]);
-            });
-        }
-    );
+            TestHelper.assertViolations(ruleName, script, [
+                noCommentedOutCodeError({
+                    character: 13,
+                    line: 2,
+                }),
+                noCommentedOutCodeError({
+                    character: 13,
+                    line: 6,
+                }),
+            ]);
+        });
+    });
 
-    context(
-        'when inside JSDoc-style block comment',
-        (): void => {
-            it('should pass on single word', (): void => {
-                const script: string = `
+    context('when inside JSDoc-style block comment', (): void => {
+        it('should pass on single word', (): void => {
+            const script: string = `
             /**
              * lorem
              */
 
             /** lorem */
             `;
-                TestHelper.assertNoViolation(ruleName, script);
-            });
+            TestHelper.assertNoViolation(ruleName, script);
+        });
 
-            it('should pass on multiple words', (): void => {
-                const script: string = `
+        it('should pass on multiple words', (): void => {
+            const script: string = `
              /**
              *  Lorem ipsum dolor sit
              */
@@ -120,11 +112,11 @@ describe('noCommentedOutCodeRule', (): void => {
             /** Lorem ipsum dolor sit */
             `;
 
-                TestHelper.assertNoViolation(ruleName, script);
-            });
+            TestHelper.assertNoViolation(ruleName, script);
+        });
 
-            it('should pass on JSDoc with tags', (): void => {
-                const script: string = `
+        it('should pass on JSDoc with tags', (): void => {
+            const script: string = `
             /**
              * @constructor
              */
@@ -144,11 +136,11 @@ describe('noCommentedOutCodeRule', (): void => {
              */
         `;
 
-                TestHelper.assertNoViolation(ruleName, script);
-            });
+            TestHelper.assertNoViolation(ruleName, script);
+        });
 
-            it('should fail on commented-out code', (): void => {
-                const script: string = `
+        it('should fail on commented-out code', (): void => {
+            const script: string = `
             /**
              * console.log("Lorem ipsum");
              */
@@ -156,46 +148,40 @@ describe('noCommentedOutCodeRule', (): void => {
             /** console.log("Lorem ipsum"); */
         `;
 
-                TestHelper.assertViolations(ruleName, script, [
-                    noCommentedOutCodeError({
-                        character: 13,
-                        line: 2,
-                    }),
-                    noCommentedOutCodeError({
-                        character: 13,
-                        line: 6,
-                    }),
-                ]);
-            });
-        }
-    );
+            TestHelper.assertViolations(ruleName, script, [
+                noCommentedOutCodeError({
+                    character: 13,
+                    line: 2,
+                }),
+                noCommentedOutCodeError({
+                    character: 13,
+                    line: 6,
+                }),
+            ]);
+        });
+    });
 
-    context(
-        'when tslint comment',
-        (): void => {
-            it('should pass on tslint:disable comment', (): void => {
-                const script: string = `
+    context('when tslint comment', (): void => {
+        it('should pass on tslint:disable comment', (): void => {
+            const script: string = `
             // tslint:disable:no-reserved-keywords
             `;
 
-                TestHelper.assertNoViolation(ruleName, script);
-            });
+            TestHelper.assertNoViolation(ruleName, script);
+        });
 
-            it('should pass on tslint:enable comment', (): void => {
-                const script: string = `
+        it('should pass on tslint:enable comment', (): void => {
+            const script: string = `
             // tslint:enable:no-reserved-keywords
             `;
 
-                TestHelper.assertNoViolation(ruleName, script);
-            });
-        }
-    );
+            TestHelper.assertNoViolation(ruleName, script);
+        });
+    });
 
-    context(
-        'when comment contains TODO-like note',
-        (): void => {
-            it('should allow commenting-out code if prefixed with uppercase TODO-like note', (): void => {
-                const script: string = `
+    context('when comment contains TODO-like note', (): void => {
+        it('should allow commenting-out code if prefixed with uppercase TODO-like note', (): void => {
+            const script: string = `
             // TODO: a + b
             // NOTE: a + b
             // FIXME: a + b
@@ -204,11 +190,11 @@ describe('noCommentedOutCodeRule', (): void => {
             // XXX: a + b
             `;
 
-                TestHelper.assertNoViolation(ruleName, script);
-            });
+            TestHelper.assertNoViolation(ruleName, script);
+        });
 
-            it('should validate as usual if prefixed with unexpected TODO-like note', (): void => {
-                const script: string = `
+        it('should validate as usual if prefixed with unexpected TODO-like note', (): void => {
+            const script: string = `
             // todo: a + b
             // ToDo: a + b
             // Foo: a + b
@@ -222,23 +208,22 @@ describe('noCommentedOutCodeRule', (): void => {
             // TODO({foo: "bar"}): a + b
             `;
 
-                TestHelper.assertViolations(ruleName, script, [
-                    noCommentedOutCodeError({
-                        character: 13,
-                        line: 2,
-                    }),
-                    noCommentedOutCodeError({
-                        character: 13,
-                        line: 3,
-                    }),
-                    noCommentedOutCodeError({
-                        character: 13,
-                        line: 4,
-                    }),
-                ]);
-            });
-        }
-    );
+            TestHelper.assertViolations(ruleName, script, [
+                noCommentedOutCodeError({
+                    character: 13,
+                    line: 2,
+                }),
+                noCommentedOutCodeError({
+                    character: 13,
+                    line: 3,
+                }),
+                noCommentedOutCodeError({
+                    character: 13,
+                    line: 4,
+                }),
+            ]);
+        });
+    });
 });
 
 function noCommentedOutCodeError(startPosition: TestHelper.FailurePosition): TestHelper.ExpectedFailure {
