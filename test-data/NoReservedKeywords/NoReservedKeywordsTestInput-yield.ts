@@ -1,7 +1,5 @@
 // module names
-namespace yield {
-
-}
+namespace yield {}
 
 namespace SampleYield1 {
     // module variables

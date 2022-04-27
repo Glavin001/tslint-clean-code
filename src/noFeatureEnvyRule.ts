@@ -94,18 +94,16 @@ class NoFeatureEnvyRuleWalker extends ErrorTolerantWalker {
     }
 
     protected methodsForClass(classNode: ts.ClassDeclaration): ts.MethodDeclaration[] {
-        return <ts.MethodDeclaration[]>classNode.members.filter(
-            (classElement: ts.ClassElement): boolean => {
-                switch (classElement.kind) {
-                    case ts.SyntaxKind.MethodDeclaration:
-                    case ts.SyntaxKind.GetAccessor:
-                    case ts.SyntaxKind.SetAccessor:
-                        return !AstUtils.isStatic(classElement);
-                    default:
-                        return false;
-                }
+        return <ts.MethodDeclaration[]>classNode.members.filter((classElement: ts.ClassElement): boolean => {
+            switch (classElement.kind) {
+                case ts.SyntaxKind.MethodDeclaration:
+                case ts.SyntaxKind.GetAccessor:
+                case ts.SyntaxKind.SetAccessor:
+                    return !AstUtils.isStatic(classElement);
+                default:
+                    return false;
             }
-        );
+        });
     }
 
     private parseOptions(): void {

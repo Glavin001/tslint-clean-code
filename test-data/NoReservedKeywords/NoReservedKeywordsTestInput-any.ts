@@ -1,7 +1,5 @@
 // module names
-namespace any {
-
-}
+namespace any {}
 
 namespace SampleAny1 {
     // module variables
