@@ -27,12 +27,7 @@ export class NoStringParameterToFunctionCallWalker extends ScopedSymbolTrackingW
         const firstArg: ts.Expression = node.arguments[0];
         if (functionName === this.targetFunctionName && firstArg != null) {
             if (!this.isExpressionEvaluatingToFunction(firstArg)) {
-                const msg: string =
-                    this.failureString +
-                    firstArg
-                        .getFullText()
-                        .trim()
-                        .substring(0, 40);
+                const msg: string = this.failureString + firstArg.getFullText().trim().substring(0, 40);
                 this.addFailureAt(node.getStart(), node.getWidth(), msg);
             }
         }

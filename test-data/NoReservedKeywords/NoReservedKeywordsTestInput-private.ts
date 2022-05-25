@@ -1,7 +1,5 @@
 // module names
-namespace private {
-
-}
+namespace private {}
 
 namespace SamplePrivate1 {
     // module variables

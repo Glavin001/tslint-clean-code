@@ -106,12 +106,18 @@ class PreferDryConditionalsRuleWalker extends ErrorTolerantWalker {
         if (hasSameLeft) {
             this.addFailureAtNode(
                 firstExpression.parent,
-                Rule.FAILURE_STRING(expectedLeft.getText(), rightExpressions.map(expression => expression.getText()))
+                Rule.FAILURE_STRING(
+                    expectedLeft.getText(),
+                    rightExpressions.map(expression => expression.getText())
+                )
             );
         } else if (hasSameRight) {
             this.addFailureAtNode(
                 firstExpression.parent,
-                Rule.FAILURE_STRING(expectedRight.getText(), leftExpressions.map(expression => expression.getText()))
+                Rule.FAILURE_STRING(
+                    expectedRight.getText(),
+                    leftExpressions.map(expression => expression.getText())
+                )
             );
         }
     }

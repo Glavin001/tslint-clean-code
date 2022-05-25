@@ -1,6 +1,6 @@
 // module names
 namespace WrapperSymbol {
-    namespace symbol {  }
+    namespace symbol {}
 }
 
 namespace SampleSymbol1 {

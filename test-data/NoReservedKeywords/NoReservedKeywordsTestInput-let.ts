@@ -1,7 +1,5 @@
 // module names
-namespace let {
-
-}
+namespace let {}
 
 namespace SampleLet1 {
     // module variables
