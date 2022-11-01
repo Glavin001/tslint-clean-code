@@ -1,7 +1,5 @@
 // module names
-namespace implements {
-
-}
+namespace implements {}
 
 namespace SampleImplements1 {
     // module variables

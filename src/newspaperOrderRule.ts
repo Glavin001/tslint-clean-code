@@ -175,35 +175,29 @@ abstract class NewspaperHelper {
         // console.log('methodDependencies:', methodDependencies); // tslint:disable-line no-console
         return Object.keys(methodDependencies)
             .sort()
-            .reduce(
-                (graph: DependencyGraph, methodName: string) => {
-                    const deps = Object.keys(methodDependencies[methodName]).sort();
-                    deps.forEach(depName => {
-                        const shouldIgnore: boolean = !methodDependencies.hasOwnProperty(depName) || methodName === depName;
-                        // console.log('shouldIgnore:', shouldIgnore, methodName, depName); // tslint:disable-line no-console
-                        if (shouldIgnore) {
-                            return;
-                        }
-                        const edge = [methodName, depName];
-                        graph.push(edge);
-                    });
-                    graph.push([methodName, END_OF_DEPENDENCIES_MARKER]);
-                    // console.log('graph:', graph); // tslint:disable-line no-console
-                    return graph;
-                },
-                <DependencyGraph>[]
-            );
+            .reduce((graph: DependencyGraph, methodName: string) => {
+                const deps = Object.keys(methodDependencies[methodName]).sort();
+                deps.forEach(depName => {
+                    const shouldIgnore: boolean = !methodDependencies.hasOwnProperty(depName) || methodName === depName;
+                    // console.log('shouldIgnore:', shouldIgnore, methodName, depName); // tslint:disable-line no-console
+                    if (shouldIgnore) {
+                        return;
+                    }
+                    const edge = [methodName, depName];
+                    graph.push(edge);
+                });
+                graph.push([methodName, END_OF_DEPENDENCIES_MARKER]);
+                // console.log('graph:', graph); // tslint:disable-line no-console
+                return graph;
+            }, <DependencyGraph>[]);
     }
 
     @Memoize
     private get methodDependencies(): MethodDependenciesMap {
-        return this.methods.reduce(
-            (result, method) => {
-                result[method.name.getText()] = this.dependenciesForMethod(method);
-                return result;
-            },
-            <MethodDependenciesMap>{}
-        );
+        return this.methods.reduce((result, method) => {
+            result[method.name.getText()] = this.dependenciesForMethod(method);
+            return result;
+        }, <MethodDependenciesMap>{});
     }
 
     protected abstract dependenciesForMethod(method: ts.FunctionLikeDeclaration): MethodDependencies;
@@ -244,18 +238,16 @@ class ClassDeclarationHelper extends NewspaperHelper {
 
     @Memoize
     protected get methods(): ts.MethodDeclaration[] {
-        return <ts.MethodDeclaration[]>this.node.members.filter(
-            (classElement: ts.ClassElement): boolean => {
-                switch (classElement.kind) {
-                    case ts.SyntaxKind.MethodDeclaration:
-                    case ts.SyntaxKind.GetAccessor:
-                    case ts.SyntaxKind.SetAccessor:
-                        return !AstUtils.isStatic(classElement);
-                    default:
-                        return false;
-                }
+        return <ts.MethodDeclaration[]>this.node.members.filter((classElement: ts.ClassElement): boolean => {
+            switch (classElement.kind) {
+                case ts.SyntaxKind.MethodDeclaration:
+                case ts.SyntaxKind.GetAccessor:
+                case ts.SyntaxKind.SetAccessor:
+                    return !AstUtils.isStatic(classElement);
+                default:
+                    return false;
             }
-        );
+        });
     }
 
     @Memoize

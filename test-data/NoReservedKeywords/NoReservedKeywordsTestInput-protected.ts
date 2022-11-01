@@ -1,7 +1,5 @@
 // module names
-namespace protected {
-
-}
+namespace protected {}
 
 namespace SampleProtected1 {
     // module variables
