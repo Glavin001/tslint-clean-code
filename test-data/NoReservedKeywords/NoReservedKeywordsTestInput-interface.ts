@@ -1,7 +1,5 @@
 // module names
-namespace interface {
-
-}
+namespace interface {}
 
 namespace SampleInterface1 {
     // module variables

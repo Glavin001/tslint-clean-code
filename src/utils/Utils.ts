@@ -23,12 +23,9 @@ export namespace Utils {
      * A contains function.
      */
     export function contains<T extends ts.Node>(list: ts.NodeArray<T>, element: T): boolean {
-        return exists(
-            list,
-            (item: T): boolean => {
-                return item === element;
-            }
-        );
+        return exists(list, (item: T): boolean => {
+            return item === element;
+        });
     }
 
     /**
@@ -42,11 +39,9 @@ export namespace Utils {
             return [].concat(source); // be sure to return a copy of the array
         }
 
-        return source.filter(
-            (sourceElement: T): boolean => {
-                return !contains(elementsToRemove, sourceElement);
-            }
-        );
+        return source.filter((sourceElement: T): boolean => {
+            return !contains(elementsToRemove, sourceElement);
+        });
     }
 
     /**

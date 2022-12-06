@@ -1,6 +1,6 @@
 // module names
 namespace WrapperBoolean {
-    namespace boolean {  }
+    namespace boolean {}
 }
 
 namespace SampleBoolean1 {

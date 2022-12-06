@@ -1,6 +1,6 @@
 // module names
 namespace WrapperNumber {
-    namespace number {  }
+    namespace number {}
 }
 
 namespace SampleNumber1 {

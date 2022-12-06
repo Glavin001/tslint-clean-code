@@ -1,7 +1,5 @@
 // module names
-namespace static {
-
-}
+namespace static {}
 
 namespace SampleStatic1 {
     // module variables
